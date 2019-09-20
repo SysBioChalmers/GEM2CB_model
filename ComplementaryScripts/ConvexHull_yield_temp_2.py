@@ -20,11 +20,10 @@ import math
 import scipy.io as sio
 
 
-def get_hull_cutoff(all_points,hull_all_index,cutoff_v,qhull_options = '',options = 1):
+def get_hull_cutoff(all_points,hull_all_index,ndim,cutoff_v,qhull_options = '',options = 1):
 
     # return hull_cutoff_index
     hull_all_points = all_points[hull_all_index,:]
-    ndim = hull_all_points.shape[1]
 
     if options == 1 :       # find ndim ymax and one max distant as base comb; add points one by one
 
@@ -298,28 +297,36 @@ points  = np.array([[0,0],[2.1,1.5],[2,2],[2,0],[0,2],[1.5,1.5]])
 # points =np.genfromtxt("../../../MATLAB/aumic-master/MYA_test_2/A_2d_rand.txt", delimiter=",")
 
 # %% <ConvexHull base>
+#from pyhull.convex_hull import ConvexHull
 qhull_options = ''      #'QG0'mean expect point 0(index)
 
 hull_all = ConvexHull(points,qhull_options)
 ndim = hull_all.ndim
 hull_all_index = hull_all.vertices
 hull_all_points = points[hull_all_index,:]
+volume = hull_all.volume
+
+# hull_all_index = set()
+# for i in hull.vertices:
+#     hull_all_index = hull_all_index | set(i)
+
+
 
 # %% <ConvexHull cutoff>
 
 persent = 0.90
 cutoff_v = persent*hull_all.volume
 
-hull_cutoff_index_1 = get_hull_cutoff(points,hull_all_index,cutoff_v,qhull_options = '',options = 1)
+hull_cutoff_index_1 = get_hull_cutoff(points,hull_all_index,ndim,cutoff_v,qhull_options = '',options = 1)
 print(hull_cutoff_index_1)
 
-hull_cutoff_index_2 = get_hull_cutoff(points,hull_all_index,cutoff_v,qhull_options = '',options = 2)
+hull_cutoff_index_2 = get_hull_cutoff(points,hull_all_index,ndim,cutoff_v,qhull_options = '',options = 2)
 print(hull_cutoff_index_2)
 
-hull_cutoff_index_3 = get_hull_cutoff(points,hull_all_index,cutoff_v,qhull_options = '',options = 3)
+hull_cutoff_index_3 = get_hull_cutoff(points,hull_all_index,ndim,cutoff_v,qhull_options = '',options = 3)
 print(hull_cutoff_index_3)
 
-hull_cutoff_index_4 = get_hull_cutoff(points,hull_all_index,cutoff_v,qhull_options = '',options = 4)
+hull_cutoff_index_4 = get_hull_cutoff(points,hull_all_index,ndim,cutoff_v,qhull_options = '',options = 4)
 print(hull_cutoff_index_4)
 
 hull_cutoff_1 = ConvexHull(points[hull_cutoff_index_1,:],qhull_options)
@@ -332,6 +339,8 @@ hull_plot(points, hulls,line_type = [],line_color = [])
 
 # %% <ConvexHull active>
 
+
+
 d_t = np.array([0.5,1.9])
 d_f = np.array([1,2.5])
 hull_cutoff = hull_cutoff_4
@@ -339,8 +348,27 @@ hull_cutoff = hull_cutoff_4
 C = points[hull_cutoff_index_4,:].T
 d = d_t
 
+
 get_hull_active(C,d,hull_cutoff, normalize = True)
 
+
+
+# Input arguments:
+#             C   is m x n dense or sparse matrix
+#             d   is n x 1 dense matrix
+#             reg is regularization parameter
+#             A   is p x n dense or sparse matrix
+#             b   is p x 1 dense matrix
+#             Aeq is q x n dense or sparse matrix
+#             beq is q x 1 dense matrix
+#             lb  is n x 1 matrix or scalar
+#             ub  is n x 1 matrix or scalar
+
+
+# out side of the hull
+
+# C, d, reg=0, A=None, b=None, Aeq=None, beq=None, \
+#         lb=None, ub=None, x0=None, opts=None
 
 
 
