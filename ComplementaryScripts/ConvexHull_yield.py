@@ -19,7 +19,7 @@ from mpl_toolkits.mplot3d import axes3d, Axes3D #<-- Note the capitalization!
 import math
 import scipy.io as sio
 
-
+#%%
 def get_hull_cutoff(all_points,hull_all_index,cutoff_v,qhull_options = '',options = 1):
 
     # return hull_cutoff_index
@@ -54,13 +54,13 @@ def get_hull_cutoff(all_points,hull_all_index,cutoff_v,qhull_options = '',option
         current_v = hull_cutoff.volume
 
         while current_v < cutoff_v:     #add point one by one (max volume)
-            # hull_temp = ConvexHull(points[list(hull_cutoff_index_set),:],qhull_options='Qt QJ Pp Qw Qx')
+            # hull_temp = ConvexHull(all_points[list(hull_cutoff_index_set),:],qhull_options='Qt QJ Pp Qw Qx')
             # temp_current_v = hull_temp.volume
 
             for i in add_list:
-                #hull_temp =hull_temp.add_points(points[i],False)
+                #hull_temp =hull_temp.add_points(all_points[i],False)
                 temp_selected_set = hull_cutoff_index_set | set([i])
-                hull_temp = ConvexHull(points[list(temp_selected_set),:],qhull_options)
+                hull_temp = ConvexHull(all_points[list(temp_selected_set),:],qhull_options)
 
                 if hull_temp.volume > current_v:
                     current_v = hull_temp.volume
@@ -80,8 +80,8 @@ def get_hull_cutoff(all_points,hull_all_index,cutoff_v,qhull_options = '',option
         current_v = 0
 
         combs = list(combinations(hull_all_index, ndim+1))
-        for comb in combs:      # frist selection max v base points
-            #base_points = np.array([points[i] for i in comb])
+        for comb in combs:      # frist selection max v base all_points
+            #base_points = np.array([all_points[i] for i in comb])
             base_points = all_points[list(comb),:]
             try:
                 hull_temp = ConvexHull(base_points,qhull_options)
@@ -100,9 +100,9 @@ def get_hull_cutoff(all_points,hull_all_index,cutoff_v,qhull_options = '',option
         while current_v < cutoff_v:
 
             for i in add_list:
-                #hull_temp =hull_temp.add_points(points[i],False)
+                #hull_temp =hull_temp.add_points(all_points[i],False)
                 temp_selected_set = hull_cutoff_index_set | set([i])
-                hull_temp = ConvexHull(points[list(temp_selected_set),:],qhull_options)
+                hull_temp = ConvexHull(all_points[list(temp_selected_set),:],qhull_options)
 
                 if hull_temp.volume > current_v:
                     current_v = hull_temp.volume
@@ -118,7 +118,7 @@ def get_hull_cutoff(all_points,hull_all_index,cutoff_v,qhull_options = '',option
             add_list.remove(temp_i)
         return list(hull_cutoff_index_set)
 
-    elif options == 3 :         # all comb for ndim+1 points to all len(points) points
+    elif options == 3 :         # all comb for ndim+1 points to all len(all_points) points
         current_v = 0
 
         for i in range(ndim+1,len(hull_all_index)+1):
@@ -133,7 +133,7 @@ def get_hull_cutoff(all_points,hull_all_index,cutoff_v,qhull_options = '',option
                 if hull_temp.volume > cutoff_v:
                     return list(set(comb))
 
-    elif options == 4 :         # remove points one by one
+    elif options == 4 :         # remove all_points one by one
         hull_cutoff_index_set = set(hull_all_index)
 
         while True :
@@ -183,45 +183,22 @@ def get_distance(V, p):
     dist=np.linalg.norm(v0-p+sum)
     return dist
 
-def hull_plot(points,hulls = [],line_type = [],line_color = []):
-    #hulls = [hull_1,]
-    ndim = points.shape[1]
-    if len(line_type) == 0:
-        line_type = ['-','-.','--','-.','--']
-
-    if len(line_color) == 0:
-        line_color = ['grey','red','green','blue','yellow']
-
-    if ndim ==2:
-        # fig = plt.figure()
-        plt.plot(points[:,0], points[:,1], 'o')
-        for index in range(0,len(hulls)):
-            hull = hulls[index]
-            for simplex in hull.simplices:
-                 plt.plot(hull.points[simplex, 0], hull.points[simplex, 1], line_type[index],color = line_color[index])
-        plt.show()
-
-
-    elif ndim ==3:
-        fig = plt.figure()
-        ax = fig.gca(projection='3d')
-        ax.plot(points[:,0], points[:,1], points[:,2], 'o')
-        for index in range(0,len(hulls)):
-            hull = hulls[index]
-            for simplex in hull.simplices:
-                ax.plot(points[simplex, 0], points[simplex, 1], points[simplex, 2], line_type[index],line_color[index])
-        plt.show()
 
 def point_in_hull(point, hull, tolerance=1e-12):
     return all(
         (np.dot(eq[:-1], point) + eq[-1] <= tolerance)
         for eq in hull.equations)
 
-def get_hull_active(C,d,hull_cutoff, normalize = True):
+def get_hull_active(all_points,d,hull_cutoff,hull_cutoff_index = [], normalize = True):
+
+    if len(hull_cutoff_index)==0:
+        hull_cutoff_index = np.arange(0,all_points.shape[0])
+
+    C = all_points[hull_cutoff_index,:].T
 
     in_hull = point_in_hull(d, hull_cutoff, tolerance=1e-12)
 
-    # C, d, reg=0, A=None, b=None, Aeq=None, beq=None, \
+    # ret = lsqlin.lsqlin(C_in, d_in, 0, None, None, Aeq, beq, \
     #         lb=None, ub=None, x0=None, opts=None
     (mC,nC) = C.shape
     lb = np.zeros(nC)
@@ -252,7 +229,7 @@ def get_hull_active(C,d,hull_cutoff, normalize = True):
 
             ret = lsqlin.lsqlin(C_in, d_in, 0, None, None, Aeq, beq, \
                       lb, ub, None, {'show_progress': False})
-            print (ret['x'].T)
+            #print (ret['x'].T)
             weights = ret['x'].T
 
         else:
@@ -264,7 +241,7 @@ def get_hull_active(C,d,hull_cutoff, normalize = True):
 
             ret0 = lsqlin.lsqlin(C_in, d_in, 0, None, None, Aeq0, beq0, \
                  lb, ub, None, {'show_progress': False})
-            print (ret0['x'].T)
+            #print (ret0['x'].T)
             weights = ret0['x'].T
 
     if  not in_hull:
@@ -282,66 +259,149 @@ def get_hull_active(C,d,hull_cutoff, normalize = True):
                  lb, ub, None, {'show_progress': False})
             print (ret0['x'].T)
             weights = ret0['x'].T
-    return list(weights)
+
+    weights = list(weights)
+    weights = np.around(weights, decimals=4)
 
 
-os.chdir('../ComplementaryData/')
+    hull_active_index = np.array(hull_cutoff_index)[[i for i in range(0,len(weights)) if weights[i] > 1e-4 ]]
+    estimated_data = C0@weights
 
-# %% load data
+    return hull_active_index,weights,estimated_data,in_hull
 
-print('load data')
-#points = np.random.rand(30, 2)
-points  = np.array([[0,0],[2.1,1.5],[2,2],[2,0],[0,2],[1.5,1.5]])
+def hull_plot(all_points,hulls = [],labels = [], markers = [],colors = [],alphas = []):
+    #hulls = [hull_1,]
+    #color='green', marker='o', linestyle='dashed'
 
-# A = sio.loadmat('../../../MATLAB/aumic-master/MYA_test_2/A_2d_rand.mat')
-# oct_a = A['A']
-# points =np.genfromtxt("../../../MATLAB/aumic-master/MYA_test_2/A_2d_rand.txt", delimiter=",")
+    if len(labels) == 0:
+        labels = ['all_points','hull_all','hull_cutoff','hull_active','data_5','data_6']
+    if len(markers) == 0:
+        markers = ['o','-','-.','--','-.','--']
+    if len(colors) == 0:
+        colors = ['tab:blue','grey','red','green','blue','yellow']
+    if len(alphas) == 0:
+        alphas = [0.8,0.8,0.8,0.8,0.8,0.8]
 
-# %% <ConvexHull base>
-qhull_options = ''      #'QG0'mean expect point 0(index)
+    ndim = all_points.shape[1]
+    if ndim ==2:
+        fig = plt.figure()
+        ax1 = fig.add_subplot(111)
+        lines_0 = ax1.plot(all_points[:,0], all_points[:,1], 'o',label = labels[0],color = colors[0],alpha = alphas[0])
+        #markersize=8
 
-hull_all = ConvexHull(points,qhull_options)
-ndim = hull_all.ndim
-hull_all_index = hull_all.vertices
-hull_all_points = points[hull_all_index,:]
+        for index in range(0,len(hulls)):
+            hull = hulls[index]
 
-# %% <ConvexHull cutoff>
+            if str(type(hull))=="<class 'numpy.ndarray'>":
+                lines_n = ax1.plot(hull[:,0], hull[:,1], "D",label = labels[index+1], color = colors[index+1], \
+                                   alpha = alphas[index+1])
 
-persent = 0.90
-cutoff_v = persent*hull_all.volume
+            else:
+                for simplex in hull.simplices:
+                    lines_n = ax1.plot(hull.points[simplex, 0], hull.points[simplex, 1], markers[index+1], \
+                                       color = colors[index+1],alpha = alphas[index+1])
+                lines_n[0].set_label(labels[index+1])
 
-hull_cutoff_index_1 = get_hull_cutoff(points,hull_all_index,cutoff_v,qhull_options = '',options = 1)
-print(hull_cutoff_index_1)
+    elif ndim ==3:
+        fig = plt.figure()
+        ax1 = fig.gca(projection='3d')
+        ax1.plot(all_points[:,0], all_points[:,1], all_points[:,2], 'o',label = labels[0],color = colors[0],\
+                 alpha = alphas[0])
 
-hull_cutoff_index_2 = get_hull_cutoff(points,hull_all_index,cutoff_v,qhull_options = '',options = 2)
-print(hull_cutoff_index_2)
+        for index in range(0,len(hulls)):
+            hull = hulls[index]
 
-hull_cutoff_index_3 = get_hull_cutoff(points,hull_all_index,cutoff_v,qhull_options = '',options = 3)
-print(hull_cutoff_index_3)
-
-hull_cutoff_index_4 = get_hull_cutoff(points,hull_all_index,cutoff_v,qhull_options = '',options = 4)
-print(hull_cutoff_index_4)
-
-hull_cutoff_1 = ConvexHull(points[hull_cutoff_index_1,:],qhull_options)
-hull_cutoff_2 = ConvexHull(points[hull_cutoff_index_2,:],qhull_options)
-hull_cutoff_3 = ConvexHull(points[hull_cutoff_index_3,:],qhull_options)
-hull_cutoff_4 = ConvexHull(points[hull_cutoff_index_4,:],qhull_options)
-
-hulls = [hull_all,hull_cutoff_1,hull_cutoff_2,hull_cutoff_3,hull_cutoff_4]
-hull_plot(points, hulls,line_type = [],line_color = [])
-
-# %% <ConvexHull active>
-
-d_t = np.array([0.5,1.9])
-d_f = np.array([1,2.5])
-hull_cutoff = hull_cutoff_4
-
-C = points[hull_cutoff_index_4,:].T
-d = d_t
-
-get_hull_active(C,d,hull_cutoff, normalize = True)
+            if str(type(hull))=="<class 'numpy.ndarray'>":
+                ax1.plot(hull[:,0], hull[:,1],  hull[:,2], "D", label = labels[index+1], color = colors[index+1], \
+                         alpha = alphas[index+1])
+            else:
+                for simplex in hull.simplices:
+                    lines_n = ax1.plot(hull.points[simplex, 0], hull.points[simplex, 1], hull.points[simplex, 2], \
+                                       markers[index],color = colors[index],alpha = alphas[index])
+                    lines_n[0].set_label(labels[index+1])
+    return fig,ax1
 
 
+#%%
+if __name__ == '__main__':
+    # %% <set data and pramaters>   all_points, qhull_options, cutoff_persent
+    os.chdir('../ComplementaryData/')
+    print('loading data ...')
+
+    #all_points = np.random.rand(30, 2)
+    # A = sio.loadmat('../../../MATLAB/aumic-master/MYA_test_2/A_2d_rand.mat')
+    # oct_a = A['A']
+    # all_points =np.genfromtxt("../../../MATLAB/aumic-master/MYA_test_2/A_2d_rand.txt", delimiter=",")
+    d_t = np.array([0.5,1.9])
+    d_f = np.array([1,2.5])
+    points_sq  = np.array([[0,0],[2.1,1.5],[2,2],[2,0],[0,2],[1.5,1.5]])
+
+    all_points = points_sq
+    experiment_data = d_t
+    qhull_options = ''      #'QG0'mean expect point 0(index)
+    cutoff_persent = 0.90
+
+    # %% <Setp1 ConvexHull base>
+    print('ConvexHull base ...')
+
+    hull_all = ConvexHull(all_points,qhull_options)
+    ndim = hull_all.ndim
+    hull_all_index = hull_all.vertices
+    print(hull_all_index)
+    #hull_all_points = all_points[hull_all_index,:]
+
+    # %% <ConvexHull cutoff>
+    print('ConvexHull cutoff ...')
+
+    cutoff_v = cutoff_persent*hull_all.volume
+    hull_cutoff_index = get_hull_cutoff(all_points,hull_all_index,cutoff_v,qhull_options = '',options = 4)
+    print(hull_cutoff_index)
+    hull_cutoff = ConvexHull(all_points[hull_cutoff_index,:],qhull_options)
+
+
+    compare_options = False
+    if compare_options == True:
+        hull_cutoff_index_1 = get_hull_cutoff(all_points,hull_all_index,cutoff_v,qhull_options = '',options = 1)
+        print(hull_cutoff_index_1)
+
+        hull_cutoff_index_2 = get_hull_cutoff(all_points,hull_all_index,cutoff_v,qhull_options = '',options = 2)
+        print(hull_cutoff_index_2)
+
+        hull_cutoff_index_3 = get_hull_cutoff(all_points,hull_all_index,cutoff_v,qhull_options = '',options = 3)
+        print(hull_cutoff_index_3)
+
+        hull_cutoff_index_4 = get_hull_cutoff(all_points,hull_all_index,cutoff_v,qhull_options = '',options = 4)
+        print(hull_cutoff_index_4)
+
+        hull_cutoff_1 = ConvexHull(all_points[hull_cutoff_index_1,:],qhull_options)
+        hull_cutoff_2 = ConvexHull(all_points[hull_cutoff_index_2,:],qhull_options)
+        hull_cutoff_3 = ConvexHull(all_points[hull_cutoff_index_3,:],qhull_options)
+        hull_cutoff_4 = ConvexHull(all_points[hull_cutoff_index_4,:],qhull_options)
+        hulls = [hull_all,hull_cutoff_1,hull_cutoff_2,hull_cutoff_3,hull_cutoff_4]
+        hull_plot(all_points, hulls,line_type = [],line_color = [])
+
+    # %% <ConvexHull active>
+    print('ConvexHull active ...')
+
+    hull_active_index,weights,estimated_data,in_hull = get_hull_active(all_points,experiment_data,hull_cutoff, \
+                                                                       hull_cutoff_index, normalize = True)
+    print(hull_active_index)
+
+    if in_hull:
+        hull_cutoff_active = ConvexHull(all_points[hull_active_index,:],qhull_options)
+    else:
+        hull_cutoff_active = all_points[hull_active_index,:]
+
+    # %%
+
+hulls = [hull_all,hull_cutoff,hull_cutoff_active]
+
+fig,ax1 = hull_plot(all_points, hulls,labels =['all_points','hull_all','hull_cutoff','hull_active'])
+ax1.plot(experiment_data[0], experiment_data[1], 'r*',label = 'experiment data')
+ax1.legend(loc='lower left',ncol=3,bbox_to_anchor=(0, -0.3,1,0),mode="expand", borderaxespad=0.)
+ax1.set_xlabel('Biomass/ Sourse')
+ax1.set_ylabel('Production_1/ Sourse')
+fig.show()
 
 
 
