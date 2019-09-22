@@ -3,8 +3,8 @@
 # Created by Hao Luo at 9/17/19
 
 """lsqlin.py
-:description : script
-:param : 
+:description : script download from http://maggotroot.blogspot.ch/2013/11/constrained-linear-least-squares-in.html
+:param :
 :returns: 
 :rtype: 
 """

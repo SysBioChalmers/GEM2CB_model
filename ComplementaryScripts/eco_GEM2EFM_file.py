@@ -3,9 +3,9 @@
 # Created by Hao Luo at 2019-09-16
 
 """eco_GEM2EFM_file.py
-:description : script to convert model to emtools files
+:description : script to convert model to emtools files inorder to compare the result
 :param : 
-:returns: 
+:returns:
 :rtype: 
 """
 
