@@ -439,8 +439,6 @@ if __name__ == '__main__':
 
 
 
-
-
     # # %% <Setp1 ConvexHull base>
     #
     # print('\nConvexHull base ...')
