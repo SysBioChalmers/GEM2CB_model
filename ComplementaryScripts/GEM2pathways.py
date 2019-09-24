@@ -271,7 +271,6 @@ if __name__ == '__main__':
 
     for carbon_rea_id in carbon_rea_ids:        #set carbon lb as -10
         e_coli_core.reactions.get_by_id(carbon_rea_id).bounds = (-10.0,0.0)
-
     model = e_coli_core
 
 
@@ -294,7 +293,6 @@ if __name__ == '__main__':
     figsize = (10, 8)
     fig, axs = plt.subplots(cols, rows,figsize=figsize)
     axs = trim_axs(axs, len(yield_rea_ids))
-
 
     for ax , exmet_reaction in zip(axs,yield_rea_ids):
         temp_columns_max = [column for column in yield_normalized_df.columns if (exmet_reaction in column) and ('max' in column)]
