@@ -3,21 +3,21 @@
 # Created by Hao Luo at 2019-09-17
 
 """ConvexHull_yield.py
-:description : script
-:param : 
-:returns: 
+:description : script to caculate the edge pathways, the fondmental method is ConvexHull
+:param : all matrix(points) and experiment data cutoff persent.
+:returns: selected points(pathways)
 :rtype: 
 """
 
-import matplotlib.pyplot as plt
-from scipy.spatial import ConvexHull
-import numpy as np
-from itertools import combinations
 import os
+from itertools import combinations
+
 import lsqlin
-from mpl_toolkits.mplot3d import axes3d, Axes3D #<-- Note the capitalization!
-import math
+import matplotlib.pyplot as plt
+import numpy as np
 import scipy.io as sio
+from scipy.spatial import ConvexHull
+
 
 #%%
 def get_hull_cutoff(all_points,hull_all_index,cutoff_v,qhull_options = '',options = 1):
@@ -153,6 +153,7 @@ def get_hull_cutoff(all_points,hull_all_index,cutoff_v,qhull_options = '',option
             else:
                 hull_cutoff_index_set.remove(temp_i)
 
+
 def get_distance(V, p):
 
     #V = np.eye(3)
@@ -183,10 +184,12 @@ def get_distance(V, p):
     dist=np.linalg.norm(v0-p+sum)
     return dist
 
+
 def point_in_hull(point, hull, tolerance=1e-12):
     return all(
         (np.dot(eq[:-1], point) + eq[-1] <= tolerance)
         for eq in hull.equations)
+
 
 def get_hull_active(all_points,d,hull_cutoff,hull_cutoff_index = [], normalize = True):
 
@@ -269,6 +272,7 @@ def get_hull_active(all_points,d,hull_cutoff,hull_cutoff_index = [], normalize =
     estimated_data = C0@weights
 
     return hull_active_index,weights,estimated_data,in_hull
+
 
 def hull_plot(all_points,hulls = [],labels = [], markers = [],colors = [],alphas = []):
     #hulls = [hull_1,]
@@ -411,17 +415,16 @@ if __name__ == '__main__':
     os.chdir('../ComplementaryData/')
     print('loading data ...')
 
-
     points_all = sio.loadmat('../../../MATLAB/aumic-master/MYA_test_2/points_all.mat')
     points_2d = points_all['points_2d']
     points_3d = points_all['points_3d']
     points_4d = points_all['points_4d']
-    points_sq = points_all['points_sq']
+    points_sq = points_all['points_sq']         #points_sq  = np.array([[0,0],[2.1,1.5],[2,2],[2,0],[0,2],[1.5,1.5]])
     points_glc_33 = points_all['points_glc_33']
     dataValue =np.array([0.0169,1.8878,0.0556])
     d_t = np.array([0.5,1.9])
     d_f = np.array([1,2.5])
-    #points_sq  = np.array([[0,0],[2.1,1.5],[2,2],[2,0],[0,2],[1.5,1.5]])
+
 
     all_points = points_glc_33
     experiment_data_1 = dataValue
