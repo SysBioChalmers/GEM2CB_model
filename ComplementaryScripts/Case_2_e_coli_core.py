@@ -32,7 +32,6 @@ model = e_coli_core
 yield_normalized_df = GEM2pathways.get_fba_yield_df(model, biomass_rea_id,carbon_rea_ids,yield_rea_ids,step_of_biomass)
 
 
-
 #%% <plot initial yield>: TODO not divided by carbon, so not yield
 
 def trim_axs(axs, N):

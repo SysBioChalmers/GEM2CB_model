@@ -219,6 +219,42 @@ def flux_variability_analysis2(model, reaction_list=None, loopless=False,
 
     return fva_result[["minimum", "maximum"]],fva_fluxes_result
 
+def fva_self_def(model1, reaction_list=None, pfba=False,):
+    model = model1.copy()
+
+    if reaction_list is None:
+        reaction_ids = [r.id for r in model.reactions]
+    else:
+        reaction_ids = reaction_list
+
+    fva_value_result = DataFrame([])
+    fva_fluxes_result = DataFrame([])
+
+    for rea_id in reaction_ids:         #TODO pfba
+        model.objective = rea_id
+        model.objective.direction = 'max'
+
+        f_max = model.optimize()
+        value_max = f_max.objective_value
+        fluxes_max = f_max.fluxes
+
+        model.objective.direction = 'min'
+        f_min = model.optimize()
+        value_min = f_min.objective_value
+        fluxes_min = f_min.fluxes
+
+
+        fva_value_result.at[rea_id, 'max'] = value_max
+        fva_fluxes_result[rea_id + 'max'] = fluxes_max
+        fva_value_result.at[rea_id, 'min'] = value_min
+        fva_fluxes_result[rea_id + 'min'] = fluxes_min
+
+    return fva_value_result,fva_fluxes_result
+
+
+#fva_value_result,fva_fluxes_result = fva_self_def(model, reaction_list=yield_rea_ids, pfba=False,)
+
+
 
 def get_fba_yield_df(model, biomass_rea_id,carbon_rea_ids,yield_rea_ids,step_of_biomass):
 
@@ -235,9 +271,15 @@ def get_fba_yield_df(model, biomass_rea_id,carbon_rea_ids,yield_rea_ids,step_of_
     for persent_i in np.arange(0,1+1/step_of_biomass,1/step_of_biomass):
 
         #set biomass bounds
-        model.reactions.get_by_id(biomass_rea_id).bounds = (solution.objective_value*persent_i,solution.objective_value*persent_i)
 
-        pfba_values,pfba_fluxes = flux_variability_analysis2(model,yield_rea_ids)     #FVA
+        model.reactions.get_by_id(biomass_rea_id).bounds = (solution.objective_value*persent_i,solution.objective_value*persent_i)
+        #pfba_values,pfba_fluxes = flux_variability_analysis2(model,yield_rea_ids)     #FVA
+        pfba_values,pfba_fluxes = fva_self_def(model, reaction_list=yield_rea_ids, pfba=False,)
+
+        # if np.isnan(np.sum(pfba_fluxes)) and persent_i == 0:        # somtimen biomass = 0  no solutions
+        #     persent_i = 1e-6
+        #     model.reactions.get_by_id(biomass_rea_id).bounds = (solution.objective_value*persent_i,solution.objective_value*persent_i)
+        #     pfba_values,pfba_fluxes = flux_variability_analysis2(model,yield_rea_ids)     #FVA
 
         #pfba_values['biomass'] = solution.objective_value*persent_i
         #pfba_values_all = pfba_values_all.append(pfba_values)

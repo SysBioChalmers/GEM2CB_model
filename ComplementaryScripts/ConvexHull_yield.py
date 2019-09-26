@@ -327,7 +327,7 @@ def hull_plot(all_points,hulls = [],labels = [], markers = [],colors = [],alphas
     return fig,ax1
 
 
-def pipeline_mya(all_points, experiment_datas = [], qhull_options = 'Qt QJ Pp Qw Qx', cutoff_persent = 0.99):
+def pipeline_mya(all_points, experiment_datas = [], qhull_options = 'Qt QJ Pp Qw Qx', cutoff_persent = 0.99,methods = 4):
         #indexes, hulls , weightss , estimated_datas, in_hulls = pipeline_mya(all_points, experiment_datas = [], qhull_options = 'Qt QJ Pp Qw Qx', cutoff_persent = 0.99)
 
         #  < Setp1 ConvexHull base >
@@ -348,7 +348,7 @@ def pipeline_mya(all_points, experiment_datas = [], qhull_options = 'Qt QJ Pp Qw
 
         else:
             cutoff_v = cutoff_persent*hull_all.volume
-            hull_cutoff_index = get_hull_cutoff(all_points,hull_all_index,cutoff_v,qhull_options = '',options = 1)
+            hull_cutoff_index = get_hull_cutoff(all_points,hull_all_index,cutoff_v,qhull_options = '',options = methods)
             hull_cutoff = ConvexHull(all_points[hull_cutoff_index,:],qhull_options = qhull_options)
 
         print('hull_cutoff_index = \t', hull_cutoff_index)
