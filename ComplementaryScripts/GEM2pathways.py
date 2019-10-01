@@ -26,6 +26,7 @@ from warnings import warn
 from cobra.flux_analysis.parsimonious import add_pfba
 from cobra.util import solver as sutil
 from cobra.flux_analysis.loopless import loopless_fva_iter
+import pandas as pd
 
 
 
@@ -254,9 +255,7 @@ def fva_self_def(model1, reaction_list=None, pfba=False,):
 
 #fva_value_result,fva_fluxes_result = fva_self_def(model, reaction_list=yield_rea_ids, pfba=False,)
 
-
-
-def get_fba_yield_df(model, biomass_rea_id,carbon_rea_ids,yield_rea_ids,step_of_biomass):
+def get_fba_flux_df(model, biomass_rea_id,carbon_rea_ids,yield_rea_ids,step_of_biomass,):
 
     #%% <Step1 check data>
     # initial fba check
@@ -298,12 +297,88 @@ def get_fba_yield_df(model, biomass_rea_id,carbon_rea_ids,yield_rea_ids,step_of_
     return yield_normalized_df
 
 
+
+# %%
+def get_yield_m(model2,production_reaid,carbon_rea_id,max_or_min = 'max'):
+
+    model = model2.copy()
+    model.objective.direction = max_or_min
+    k = 0
+    model.objective = {model.reactions.get_by_id(production_reaid):1,model.reactions.get_by_id(carbon_rea_id):k}
+    selution = model.optimize()
+
+    while selution.objective_value > 1e-6:
+        k = selution.fluxes[production_reaid]/(-selution.fluxes[carbon_rea_id])
+        model.objective = {model.reactions.get_by_id(production_reaid):1,model.reactions.get_by_id(carbon_rea_id):k}
+        selution = model.optimize()
+
+    fluxes = selution.fluxes
+    yield_value = fluxes[production_reaid]/(-fluxes[carbon_rea_id])
+
+    return yield_value,fluxes
+
+# yield_value,fluxes = get_yield_m(model2,production_reaid,carbon_rea_id,max_or_min = 'max')
+
+def get_fba_yield_df(model2, biomass_rea_id,carbon_rea_id,yield_rea_id,step_of_biomass,):
+
+
+    # <Step1 check data and find the biomass yield max and min>
+    # initial fba check
+    model = model2.copy()
+    model.objective = biomass_rea_id
+    solution = model.optimize()
+    print('model.optimize():\t', solution.objective_value)
+
+    biomass_yield_value_max,_ = get_yield_m(model,biomass_rea_id,carbon_rea_id,max_or_min = 'max')
+    biomass_yield_value_min,_ = get_yield_m(model,biomass_rea_id,carbon_rea_id,max_or_min = 'min')
+
+
+    # < Step2 get yield dataFrame(matrix/ points for MYA/Next function)>
+
+    fluxes_all = pd.DataFrame()
+
+    for persent_i in np.arange(0,1+1/step_of_biomass,1/step_of_biomass):
+
+        yield_k = (biomass_yield_value_max + biomass_yield_value_min) * persent_i
+
+        #set biomass yield
+        model = model2.copy()
+        yield_point_flux = model.problem.Constraint(
+            model.reactions.get_by_id(biomass_rea_id).flux_expression + yield_k * model.reactions.get_by_id(carbon_rea_id).flux_expression,
+            lb=0,
+            ub=0)
+        model.add_cons_vars(yield_point_flux)
+
+        for rea_id in yield_rea_ids:
+            _,fluxes_max = get_yield_m(model,rea_id,carbon_rea_id,max_or_min = 'max')
+            _,fluxes_min = get_yield_m(model,rea_id,carbon_rea_id,max_or_min = 'min')
+            # fluxes_all = pd.concat([fluxes_all, fluxes_max], axis=1)
+            # fluxes_all = pd.concat([fluxes_all, fluxes_min], axis=1)
+            fluxes_all[rea_id + 'max'+str(persent_i)] = fluxes_max
+            fluxes_all[rea_id + 'min'+str(persent_i)] = fluxes_min
+
+    yield_df = fluxes_all.loc[ [carbon_rea_id]+[biomass_rea_id]+ yield_rea_ids, : ]     #select reactions
+    yield_normalized_df = yield_df.copy()
+    # yield_normalized_df = yield_normalized_df.T.drop_duplicates().T
+
+    yield_df_values  = yield_normalized_df.values      #normalize and sort
+    yield_df_values = yield_df_values/abs(yield_df_values[0,:])
+
+    yield_normalized_df.loc[:,:] = yield_df_values
+    yield_normalized_df = yield_normalized_df.sort_values(by = [biomass_rea_id]+yield_rea_ids,axis = 1,)
+    return yield_normalized_df
+
+
+
+
+
+# %%
 if __name__ == '__main__':
 
     #%% <Step1 set data> model, biomass_rea_id,carbon_rea_ids,yield_rea_ids,step_of_biomass
 
     e_coli_core = cobra.io.read_sbml_model('../ComplementaryData/e_coli_core.xml')
-    e_coli_core.reactions.get_by_id('EX_o2_e').bounds = (0.0,1000.0)
+    #e_coli_core.reactions.get_by_id('EX_o2_e').bounds = (0.0,1000.0)
 
     biomass_rea_id = 'BIOMASS_Ecoli_core_w_GAM'
     carbon_rea_ids = ['EX_glc__D_e']
@@ -312,12 +387,13 @@ if __name__ == '__main__':
     step_of_biomass = 10
 
     for carbon_rea_id in carbon_rea_ids:        #set carbon lb as -10
-        e_coli_core.reactions.get_by_id(carbon_rea_id).bounds = (-10.0,0.0)
+        e_coli_core.reactions.get_by_id(carbon_rea_id).bounds = (-10.0,0.01)
     model = e_coli_core
 
 
     #%% < Step2 get yield dataFrame(matrix/ points for MYA/Next function)>   FVA
-    yield_normalized_df = get_fba_yield_df(model, biomass_rea_id,carbon_rea_ids,yield_rea_ids,step_of_biomass)
+    # yield_normalized_df = get_fba_flux_df(model, biomass_rea_id,carbon_rea_ids,yield_rea_ids,step_of_biomass)
+    yield_normalized_df = get_fba_yield_df(model, biomass_rea_id,carbon_rea_ids[0],yield_rea_ids,step_of_biomass)
 
 
 
@@ -339,6 +415,7 @@ if __name__ == '__main__':
     for ax , exmet_reaction in zip(axs,yield_rea_ids):
         temp_columns_max = [column for column in yield_normalized_df.columns if (exmet_reaction in column) and ('max' in column)]
         temp_columns_min = [column for column in yield_normalized_df.columns if (exmet_reaction in column) and ('min' in column)]
+
         x = yield_normalized_df.loc[biomass_rea_id,temp_columns_max].values
         y_max = yield_normalized_df.loc[exmet_reaction,temp_columns_max]
         y_min = yield_normalized_df.loc[exmet_reaction,temp_columns_min]
@@ -346,6 +423,6 @@ if __name__ == '__main__':
         ax.plot(x, y_max,'x-',color = 'black',alpha=0.5)
         ax.plot(x, y_min,'x-',color = 'black',alpha=0.5)
         # temp_df.plot.area(x='biomass', y=['maximum','minimum'],label=['max', 'max'],color=['r', 'w'],color=['tab:blue', 'b'],stacked=False);
-        ax.set_ylabel(exmet_reaction)
-    ax.set_xlabel('biomass')
+        ax.set_ylabel(exmet_reaction+'/glc')
+    ax.set_xlabel('biomass/glc')
     fig.show()
