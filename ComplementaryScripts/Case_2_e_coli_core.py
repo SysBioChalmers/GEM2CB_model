@@ -10,29 +10,72 @@
 """
 import cobra
 import matplotlib.pyplot as plt
-import GEM2pathways
+
 import ConvexHull_yield
+import GEM2pathways
+import scipy.io as sio
+import os
+import numpy as np
+os.chdir('../ComplementaryData/')
+
+#%% <method EFMs + MYA> can not caculate
+core_EFMs_z = np.genfromtxt('Case2_1_ecoli_core/e_coli_core_EFMs_standardized.csv', delimiter = ',')
+
+EFM_all_points = core_EFMs_z.T
+EFM_all_points = EFM_all_points[:,1:]   # modes x reas
+experiment_datas = []
 
 
-e_coli_core = cobra.io.read_sbml_model('../ComplementaryData/e_coli_core.xml')
-e_coli_core.reactions.get_by_id('EX_o2_e').bounds = (0.0,1000.0)
+#%% <method EFVs + MYA> can not caculate
+core_EFVs_z = np.genfromtxt('Case2_1_ecoli_core/e_coli_core_EFVs_standardized.csv', delimiter = ',')
+
+EFV_all_points = core_EFVs_z.T
+EFV_all_points = EFV_all_points[:,1:]   # modes x reas
+experiment_datas = []
+
+
+
+#%% <FBA mode>
+
+core_FBAMs_z = np.genfromtxt('Case2_1_ecoli_core/ecoli_core_FBAMs_standardized.csv', delimiter = ',')
+
+FBAem_all_points = core_FBAMs_z.T     # modes x rea
+FBAem_all_points = FBAem_all_points[:,1:]
+experiment_datas = []
+
+
+
+#%% <Our method>
+e_coli_core = cobra.io.read_sbml_model('../ComplementaryData/Case2_1_ecoli_core/e_coli_core.xml')
+#e_coli_core.reactions.get_by_id('EX_o2_e').bounds = (0.0,1000.0)
+model = e_coli_core.copy()
 
 biomass_rea_id = 'BIOMASS_Ecoli_core_w_GAM'
-carbon_rea_ids = ['EX_glc__D_e']
+carbon_rea_id = 'EX_glc__D_e'
 yield_rea_ids = ['EX_ac_e','EX_for_e','EX_etoh_e','EX_lac__D_e','EX_succ_e',]
 
-step_of_biomass = 10
+step_of_biomass = 20
+carbon_uptake_direction = -1
+model.reactions.get_by_id(carbon_rea_id).bounds = (-10,0.001)
 
-for carbon_rea_id in carbon_rea_ids:        #set carbon lb as -10
-    e_coli_core.reactions.get_by_id(carbon_rea_id).bounds = (-10.0,0.0)
-model = e_coli_core
+# all modes
+yield_normalized_df = GEM2pathways.get_yield_space(model, biomass_rea_id,carbon_rea_id,yield_rea_ids,step_of_biomass,carbon_uptake_direction = carbon_uptake_direction,draw = False)
 
+#MYA hull#MYA experiment data
+yield_normalized_df = yield_normalized_df.loc[[carbon_rea_id] + [biomass_rea_id] + yield_rea_ids ,:]
 
-#%% < Step2 get yield dataFrame(matrix/ points for MYA/Next function)>   FVA
-yield_normalized_df = GEM2pathways.get_fba_yield_df(model, biomass_rea_id,carbon_rea_ids,yield_rea_ids,step_of_biomass)
+our_all_points = yield_normalized_df.values.T
+our_all_points = our_all_points[ abs(our_all_points[:,0]) > 1e-10,:]
+our_all_points = our_all_points[:,1:]       #exclude the carbon colume
+
+experiment_datas = [ ]      # TODO experiment data!!!
+qhull_options = 'Qt QJ Pp Qw Qx'      #'QG0'mean expect point 0(index)
+cutoff_persent = 0.99
 
 
 #%% <plot initial yield>: TODO not divided by carbon, so not yield
+
+yield_rea_ids_name = yield_rea_ids
 
 def trim_axs(axs, N):
     """little helper to massage the axs list to have correct length..."""
@@ -42,38 +85,44 @@ def trim_axs(axs, N):
     return axs[:N]
 
 cols = 3
-rows = len(yield_rea_ids) // cols + 1
+rows = len(yield_rea_ids_name) // cols + 1
 figsize = (10, 8)
 fig, axs = plt.subplots(cols, rows,figsize=figsize)
-axs = trim_axs(axs, len(yield_rea_ids))
+axs = trim_axs(axs, len(yield_rea_ids_name))
 
-for ax , exmet_reaction in zip(axs,yield_rea_ids):
-    temp_columns_max = [column for column in yield_normalized_df.columns if (exmet_reaction in column) and ('max' in column)]
-    temp_columns_min = [column for column in yield_normalized_df.columns if (exmet_reaction in column) and ('min' in column)]
-    x = yield_normalized_df.loc[biomass_rea_id,temp_columns_max].values
-    y_max = yield_normalized_df.loc[exmet_reaction,temp_columns_max]
-    y_min = yield_normalized_df.loc[exmet_reaction,temp_columns_min]
+for ax , exmet_reaction in zip(axs,yield_rea_ids_name):
+    index = yield_rea_ids_name.index(exmet_reaction)+1
 
-    ax.plot(x, y_max,'x-',color = 'black',alpha=0.5)
-    ax.plot(x, y_min,'x-',color = 'black',alpha=0.5)
-    # temp_df.plot.area(x='biomass', y=['maximum','minimum'],label=['max', 'max'],color=['r', 'w'],color=['tab:blue', 'b'],stacked=False);
-    ax.set_ylabel(exmet_reaction)
-ax.set_xlabel('biomass')
+    points1 = ax.plot(EFM_all_points[:, 0], EFM_all_points[:, index], 'x', markerfacecolor='none', color='black',
+                      alpha=0.5, label='EFM', markersize=3)
+    points4 = ax.plot(EFV_all_points[:,0], EFV_all_points[:,index],'^',markerfacecolor='none',color = 'tab:blue',
+                      alpha = 0.5,label = 'This_methd',markersize=3)
+    points3 = ax.plot(our_all_points[:, 0], our_all_points[:, index], '^', markerfacecolor='none', color='tab:red',
+                      alpha=0.8, label='EFM', markersize=5)
+    points2 = ax.plot(FBAem_all_points[:, 0], FBAem_all_points[:, index], '.', color='tab:green',
+                      alpha=1, label='FBA_mode', markersize=10)
+
+
+
+    ax.set_ylabel(yield_rea_ids_name[index-1]+'/Glucose',fontsize = 12)
+
+ax.set_xlabel('Yield Biomass/Glucose',fontsize = 12)
+fig.legend((points1[0],points4[0],points2[0],points3[0]),('EFMs','EFVs','FBA modes','This study'),bbox_to_anchor=(0.55, 0.25), loc='upper left', borderaxespad=0.)
 fig.show()
 
-# %% <SETP3 yield analysis >:
 
-all_points = yield_normalized_df.values.T
-all_points = all_points[:,1:]       #exclude the carbon colume
-
-experiment_datas = [ ]      # TODO experiment data!!!
-qhull_options = 'Qt QJ Pp Qw Qx'      #'QG0'mean expect point 0(index)
-cutoff_persent = 0.99
-
-indexes, hulls , weightss , estimated_datas, in_hulls = ConvexHull_yield.pipeline_mya(all_points, experiment_datas , qhull_options = 'Qt QJ Pp Qw Qx', cutoff_persent = 0.99)
-
-
-
+# fig = plt.figure()
+# ax1 = fig.add_subplot(111)
+# index = 5
+# ax1.plot(EFM_all_points[:,0], EFM_all_points[:,index],'x',markerfacecolor='none',color = 'black',label = 'EFM',markersize=5)
+# ax1.plot(EFV_all_points[:,0], EFV_all_points[:,index],'^',markerfacecolor='none',color = 'tab:green',alpha = 0.8,label = 'FBA_mode',markersize=5)
+# ax1.plot(FBAem_all_points[:,0], FBAem_all_points[:,index],'o',markerfacecolor='none',color = 'tab:red',alpha = 0.8,label = 'FBA_mode',markersize=12)
+#
+# #ax1.plot(our_all_points[:,0], our_all_points[:,index],'v',markerfacecolor='none',color = 'tab:blue',alpha = 0.8,label = 'This_methd',markersize=12)
+# ax1.legend()
+# ax1.set_xlabel('Yield Biomass/Glucose',fontsize = 12)
+# ax1.set_ylabel(yield_rea_ids[index-1]+'/Glucose',fontsize = 12)
+# fig.show()
 
 
 

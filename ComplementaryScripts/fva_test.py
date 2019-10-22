@@ -12,13 +12,16 @@ import cobra
 from pandas import DataFrame
 from optlang.symbolics import Zero
 from numpy import zeros
+import os
+
+os.chdir('../ComplementaryData/')
 
 
 
 ecoli_reduced_model = cobra.io.read_sbml_model('ecoli_reduced_model.xml')
 
 model = ecoli_reduced_model.copy()
-model.reactions.get_by_id('EX_GLU').bounds = (-10,-0.1)
+model.reactions.get_by_id('EX_GLU').bounds = (-10,0.0) #((-10,-0.1)) 0 没有意义啊？？！！
 yield_rea_ids = ['EX_ACT','EX_FOR','EX_ETH','EX_LAC','EX_SUC']
 a = model.optimize().objective_value
 
@@ -66,6 +69,69 @@ def fva_self_def(model1, reaction_list=None, pfba=False,):
 
 
 fva_value_result,fva_fluxes_result = fva_self_def(model, reaction_list=yield_rea_ids, pfba=False,)
+
+# %%
+model2 = cobra.io.read_sbml_model('e_coli_core.xml')
+model2.optimize()
+model2.reactions.get_by_id('EX_glc__D_e').bounds = (-10,-0.01)
+production_reaid = 'BIOMASS_Ecoli_core_w_GAM'
+carbon_rea_id = 'EX_glc__D_e'
+
+
+def get_yield_m(model2,production_reaid,carbon_rea_id,max_or_min = 'max'):
+
+    model = model2.copy()
+    model.objective.direction = max_or_min
+    k = 0
+    model.objective = {model.reactions.get_by_id(production_reaid):1,model.reactions.get_by_id(carbon_rea_id):k}
+    selution = model.optimize()
+
+    while selution.objective_value > 1e-6:
+        k = selution.fluxes[production_reaid]/(-selution.fluxes[carbon_rea_id])
+        model.objective = {model.reactions.get_by_id(production_reaid):1,model.reactions.get_by_id(carbon_rea_id):k}
+        selution = model.optimize()
+
+    fluxes = selution.fluxes
+    yield_value = fluxes[production_reaid]/(-fluxes[carbon_rea_id])
+
+    return yield_value,fluxes
+
+yield_value,fluxes = get_yield_m(model2,production_reaid,carbon_rea_id,max_or_min = 'max')
+
+
+
+
+# %%
+# model = model2.copy()
+# model.objective.direction = 'min'
+#
+# k = 0
+# model.objective = {model.reactions.get_by_id(production_reaid):1,model.reactions.get_by_id(carbon_rea_id):k}
+# selution = model.optimize()
+#
+# while selution.objective_value > 1e-6:
+#     k = selution.fluxes[production_reaid]/(-selution.fluxes[carbon_rea_id])
+#     model.objective = {model.reactions.get_by_id(production_reaid):1,model.reactions.get_by_id(carbon_rea_id):k}
+#     selution = model.optimize()
+#
+# fluxes_min = selution.fluxes
+# yield_value_min = fluxes_min[production_reaid]/(-fluxes_min[carbon_rea_id])
+
+
+
+
+model = model2.copy()
+yield_point_flux = model.problem.Constraint(
+    model.reactions.get_by_id(production_reaid).flux_expression + 0.08*model.reactions.get_by_id(carbon_rea_id).flux_expression,
+    lb=0,
+    ub=0)
+model.add_cons_vars(yield_point_flux)
+selution = model.optimize()
+print(selution)
+
+
+
+
 
 # %%
 
