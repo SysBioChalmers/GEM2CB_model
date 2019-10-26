@@ -16,6 +16,7 @@ import GEM2pathways
 import scipy.io as sio
 import os
 import numpy as np
+from scipy.spatial import ConvexHull
 os.chdir('../ComplementaryData/')
 
 '''
@@ -44,16 +45,12 @@ reaids = ['R1','R2','R3','R4','R5','R6','R7','R8','R9','R10','R11','R12']
 yield_rea_ids = ['R1','R12','R9','R7','R10','R8','R6']
 yield_indexes = [reaids.index(i) for i in yield_rea_ids ]
 
-#%% <method EFM + MYA> caculated by matlab emftool. and standardized by step0
+#%% <EFMs > caculated by matlab emftool. and standardized by step0
 
 em_z = np.genfromtxt('Case1_ecoli_reduced/ecoli_reduced_EFMs_standardized.csv', delimiter = ',')
 
-# MYA hull & #MYA experiment data
-EFM_all_points = em_z.T
-EFM_all_points = EFM_all_points[:,1:]   # modes x reas
-experiment_datas = []
-
-#EFM_indexes, EFM_hulls , EFM_weightss , EFM_estimated_datas, EFM_in_hulls = ConvexHull_yield.pipeline_mya(EFM_all_points, experiment_datas , qhull_options = 'Qt QJ Pp Qw Qx', cutoff_persent = 0.99,methods = 1)
+EFMs_all_points = em_z.T
+EFMs_all_points = EFMs_all_points[:,1:]   # modes x reas
 
 
 #%% <FBA modes> from reference and standardized by step0
@@ -62,9 +59,6 @@ FBAMs_z = np.genfromtxt('Case1_ecoli_reduced/ecoli_reduced_FBAMs_standardized.cs
 
 FBAem_all_points = FBAMs_z.T     # modes x rea
 FBAem_all_points = FBAem_all_points[:,1:]
-experiment_datas = []
-# FBAem_indexes, FBAem_hulls , FBAem_weightss , FBAem_estimated_datas, FBAem_in_hulls = ConvexHull_yield.pipeline_mya(\
-#     FBAem_all_points, experiment_datas , qhull_options = 'Qt QJ Pp Qw Qx', cutoff_persent = 0.99,methods = 4)
 
 
 #%% <Our method>
@@ -93,15 +87,25 @@ our_all_points = yield_normalized_df.values.T
 our_all_points = our_all_points[ abs(our_all_points[:,0]) > 1e-10,:]
 our_all_points = our_all_points[:,1:]       #exclude the carbon colume
 
+
+# %% <MYA >
+
 experiment_datas = [ ]      # TODO experiment data!!!
 qhull_options = 'Qt QJ Pp Qw Qx'      #'QG0'mean expect point 0(index)
-cutoff_persent = 0.99
+cutoff_persent = 1
 
 # our_indexes, our_hulls , our_weightss , our_estimated_datas, our_in_hulls = ConvexHull_yield.pipeline_mya(our_all_points, experiment_datas , qhull_options = 'Qt QJ Pp Qw Qx', cutoff_persent = 0.99)
 
+# EFMs_indexes, EFMs_hulls , EFMs_weightss , EFMs_estimated_datas, EFMs_in_hulls = \
+#     ConvexHull_yield.pipeline_mya(EFM_all_points, experiment_datas , qhull_options = 'Qt QJ Pp Qw Qx', cutoff_persent = cutoff_persent )
+
+# EFMs_hull = ConvexHull(EFMs_all_points,qhull_options = qhull_options )
+# FBAem_hull = ConvexHull(FBAem_all_points,qhull_options = qhull_options )
+# our_hull = ConvexHull(our_all_points,qhull_options = qhull_options )
+
+
 
 #%% <plot initial yield>: TODO not divided by carbon, so not yield
-
 
 yield_rea_ids_name = ['EX_ac_e','EX_for_e','EX_etoh_e','EX_lac__D_e','EX_succ_e',]
 
@@ -120,17 +124,38 @@ axs = trim_axs(axs, len(yield_rea_ids_name))
 
 for ax , exmet_reaction in zip(axs,yield_rea_ids_name):
     index = yield_rea_ids_name.index(exmet_reaction)+1
+    
+    xy_EFMs = EFMs_all_points[:, [0,index]]
+    xy_FBAem = FBAem_all_points[:, [0,index]]
+    xy_our = our_all_points[:, [0,index]]
 
-    points3 = ax.plot(our_all_points[:,0], our_all_points[:,index],'^',markerfacecolor='none',color = 'tab:blue',
+    hull_EFMs = ConvexHull(xy_EFMs,qhull_options = qhull_options )
+    hull_FBAem = ConvexHull(xy_FBAem,qhull_options = qhull_options )
+    hull_our = ConvexHull(xy_our,qhull_options = qhull_options )
+
+    points_our = ax.plot(xy_our[:,0], xy_our[:,1],                 '^',markerfacecolor='none',color = 'tab:blue',
                       alpha = 1,label = 'This_methd',markersize=5)
-    points2 = ax.plot(FBAem_all_points[:, 0], FBAem_all_points[:, index], 'o', markerfacecolor='none', color='black',
+    for simplex in hull_our.simplices: 
+        line_our = ax.plot(xy_our[simplex, 0], xy_our[simplex, 1], '^--',markerfacecolor='none',color = 'tab:blue',
+                      alpha = 0.5,label = 'This_methd',markersize=5)
+    
+    points_FBAem = ax.plot(xy_FBAem[:,0], xy_FBAem[:,1],                'o', markerfacecolor='none', color='black',
                       alpha=1, label='FBA_mode', markersize=10)
-    points1 = ax.plot(EFM_all_points[:, 0], EFM_all_points[:, index], 'x', markerfacecolor='none', color='tab:red',
-                      alpha=1, label='EFM', markersize=10)
+    for simplex in hull_FBAem.simplices: 
+        line_FBAem = ax.plot(xy_FBAem[simplex, 0], xy_FBAem[simplex, 1], 'o--', markerfacecolor='none', color='black',
+                      alpha=0.5, label='FBA_mode', markersize=10)
+    
+    points_EFMs = ax.plot(xy_EFMs[:,0], xy_EFMs[:,1],                'x', markerfacecolor='none', color='tab:red',
+                      alpha=1, label='EFMs', markersize=10)
+    for simplex in hull_EFMs.simplices: 
+        line_EFMs = ax.plot(xy_EFMs[simplex, 0], xy_EFMs[simplex, 1], 'x-', markerfacecolor='none', color='tab:red',
+                      alpha=0.5, label='EFMs', markersize=10)
+    
+    
     ax.set_ylabel(yield_rea_ids_name[index-1]+'/Glucose',fontsize = 12)
 
 ax.set_xlabel('Yield Biomass/Glucose',fontsize = 12)
-fig.legend((points1[0],points2[0],points3[0]),('EFMs','FBA modes','This study'),bbox_to_anchor=(0.55, 0.25), loc='upper left', borderaxespad=0.)
+fig.legend((line_EFMs[0],line_FBAem[0],line_our[0]),('EFMs','FBA modes','This study'),bbox_to_anchor=(0.55, 0.25), loc='upper left', borderaxespad=0.)
 fig.show()
 
 
