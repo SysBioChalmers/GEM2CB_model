@@ -1,0 +1,95 @@
+-ENZREV 
+R_ACALD R_ACKr R_ACONTa R_ACONTb R_ADK1 R_ALCD2x R_ATPS4rpp R_ENO R_F6PA R_FBA R_FUM R_G3PD2 R_G6PDH2r R_GAPD R_h_pEx R_h2oEx R_ICDHyr R_LDH_D R_MDH R_NADH16pp R_O2Up R_PGI R_PGK R_PGM R_PTAr R_RPE R_RPI R_SUCOAS R_TALA R_TKT1 R_TKT2 R_TPI 
+
+-ENZIRREV 
+Growth R_AcEx R_AcUp R_AKGDH R_ATPM R_CO2Ex R_CO2Up R_CS R_CYTBO3_4pp R_EDA R_EDD R_EthEx R_FBP R_FHL R_FormEx R_FRD2 R_G3PD5 R_GLCptspp R_GLCt2pp R_GlcUp R_GLYCDx R_GlycUp R_GLYK R_GLYOX3 R_GND R_h2Ex R_HEX1 R_ICL R_LacEx R_MALS R_ME1 R_ME2 R_MGSA R_NADH17pp R_NADTRHD R_PDH R_PFK R_PFL R_PGL R_POX R_PPC R_PPCK R_PPS R_PYK R_SuccEx R_SUCCt2_2pp R_SUCCt3pp R_SuccUp R_SUCDi R_THD2pp 
+
+-METINT 
+M_13dpg_c  M_2ddg6p_c  M_2pg_c  M_3pg_c  M_6pgc_c  M_6pgl_c  M_ac_c  M_acald_c  M_accoa_c  M_acon_DASH_C_c  M_actp_c  M_akg_c  M_amp_c  M_atp_c  M_cit_c  M_co2_c  M_dha_c  M_dhap_c  M_e4p_c  M_etoh_c  M_f6p_c  M_fdp_c  M_for_c  M_fum_c  M_g3p_c  M_g6p_c  M_glc_DASH_D_c  M_glc_DASH_D_p  M_glx_c  M_glyc_c  M_glyc3p_c  M_h_c  M_h_p  M_h2_c  M_h2o_c  M_icit_c  M_lac_DASH_D_c  M_mal_DASH_L_c  M_mql8_c  M_mthgxl_c  M_nadh_c  M_nadph_c  M_o2_c  M_oaa_c  M_pep_c  M_pyr_c  M_q8h2_c  M_r5p_c  M_ru5p_DASH_D_c  M_s7p_c  M_succ_c  M_succ_p  M_succoa_c  M_xu5p_DASH_D_c  
+
+-METEXT 
+Biomass  M_4CRSOL_ex  M_5DRIB_ex  M_ac_ex  M_adp_c  M_AMOB_ex  M_ca2_ex  M_cl_ex  M_co2_ex  M_coa_c  M_cobalt2_ex  M_cu2_ex  M_etoh_ex  M_fe2_ex  M_fe3_ex  M_for_ex  M_glc_DASH_D_ex  M_glyc_ex  M_h_ex  M_h2_ex  M_h2o_ex  M_k_ex  M_lac_ex  M_meoh_ex  M_mg2_ex  M_mn2_ex  M_mobd_ex  M_mqn8_c  M_MTHTHF_ex  M_nad_c  M_nadp_c  M_nh4_ex  M_ni2_ex  M_o2_ex  M_pi_c  M_pi_ex  M_q8_c  M_so4_ex  M_succ_ex  M_zn2_ex  
+
+-CAT
+Growth : 1.7178 M_3pg_c + 3.8579 M_accoa_c + 1.0752 M_akg_c + 63.2803 M_atp_c + 0.005205 M_ca2_ex + 0.005205 M_cl_ex + 2.5e-05 M_cobalt2_ex + 0.000709 M_cu2_ex + 0.002278 M_dhap_c + 0.38135 M_e4p_c + 0.094488 M_f6p_c + 0.008253 M_fe2_ex + 0.007808 M_fe3_ex + 0.13903 M_glyc3p_c + 1.4007 M_h_p + 40.8722 M_h2o_c + 0.19519 M_k_ex + 0.008675 M_mg2_ex + 0.000691 M_mn2_ex + 0.000129 M_mobd_ex + 1.8822 M_nadh_c + 13.225 M_nadph_c + 10.8007 M_nh4_ex + 0.000323 M_ni2_ex + 2.9276 M_oaa_c + 0.82896 M_pep_c + 0.96451 M_pi_ex + 2.8394 M_pyr_c + 0.93398 M_r5p_c + 0.039804 M_ru5p_DASH_D_c + 0.25221 M_so4_ex + 0.52486 M_succoa_c + 0.000341 M_zn2_ex = 1 Biomass + 0.000223 M_4CRSOL_ex + 0.000671 M_5DRIB_ex + 0.58258 M_ac_c + 60.6288 M_adp_c + 2e-06 M_AMOB_ex + 2.6515 M_amp_c + 1.7972 M_co2_c + 4.3828 M_coa_c + 0.70838 M_fum_c + 0.054008 M_g3p_c + 51.2225 M_h_c + 2e-06 M_meoh_ex + 0.000448 M_MTHTHF_ex + 1.8822 M_nad_c + 13.225 M_nadp_c + 70.0155 M_pi_c + 0.85927 M_succ_c
+R_ACALD : 1 M_accoa_c + 1 M_h_c + 1 M_nadh_c = 1 M_acald_c + 1 M_coa_c + 1 M_nad_c
+R_AcEx : 1 M_ac_c + 1 M_h_c = 1 M_ac_ex + 1 M_h_p
+R_ACKr : 1 M_actp_c + 1 M_adp_c = 1 M_ac_c + 1 M_atp_c
+R_ACONTa : 1 M_cit_c = 1 M_acon_DASH_C_c + 1 M_h2o_c
+R_ACONTb : 1 M_acon_DASH_C_c + 1 M_h2o_c = 1 M_icit_c
+R_AcUp : 1 M_ac_ex + 1 M_h_p = 1 M_ac_c + 1 M_h_c
+R_ADK1 : 1 M_amp_c + 1 M_atp_c = 2 M_adp_c
+R_AKGDH : 1 M_akg_c + 1 M_coa_c + 1 M_nad_c = 1 M_co2_c + 1 M_nadh_c + 1 M_succoa_c
+R_ALCD2x : 1 M_acald_c + 1 M_h_c + 1 M_nadh_c = 1 M_etoh_c + 1 M_nad_c
+R_ATPM : 1 M_atp_c + 1 M_h2o_c = 1 M_adp_c + 1 M_h_c + 1 M_pi_c
+R_ATPS4rpp : 1 M_adp_c + 4 M_h_p + 1 M_pi_c = 1 M_atp_c + 3 M_h_c + 1 M_h2o_c
+R_CO2Ex : 1 M_co2_c = 1 M_co2_ex
+R_CO2Up : 1 M_co2_ex = 1 M_co2_c
+R_CS : 1 M_accoa_c + 1 M_h2o_c + 1 M_oaa_c = 1 M_cit_c + 1 M_coa_c + 1 M_h_c
+R_CYTBO3_4pp : 4 M_h_c + 0.5 M_o2_c + 1 M_q8h2_c = 4 M_h_p + 1 M_h2o_c + 1 M_q8_c
+R_EDA : 1 M_2ddg6p_c = 1 M_g3p_c + 1 M_pyr_c
+R_EDD : 1 M_6pgc_c = 1 M_2ddg6p_c + 1 M_h2o_c
+R_ENO : 1 M_2pg_c = 1 M_h2o_c + 1 M_pep_c
+R_EthEx : 1 M_etoh_c = 1 M_etoh_ex
+R_F6PA : 1 M_dha_c + 1 M_g3p_c = 1 M_f6p_c
+R_FBA : 1 M_fdp_c = 1 M_dhap_c + 1 M_g3p_c
+R_FBP : 1 M_fdp_c + 1 M_h2o_c = 1 M_f6p_c + 1 M_pi_c
+R_FHL : 1 M_for_c + 1 M_h_c = 1 M_co2_c + 1 M_h2_c
+R_FormEx : 1 M_for_c = 1 M_for_ex
+R_FRD2 : 1 M_fum_c + 1 M_mql8_c = 1 M_mqn8_c + 1 M_succ_c
+R_FUM : 1 M_fum_c + 1 M_h2o_c = 1 M_mal_DASH_L_c
+R_G3PD2 : 1 M_glyc3p_c + 1 M_nadp_c = 1 M_dhap_c + 1 M_h_c + 1 M_nadph_c
+R_G3PD5 : 1 M_glyc3p_c + 1 M_q8_c = 1 M_dhap_c + 1 M_q8h2_c
+R_G6PDH2r : 1 M_g6p_c + 1 M_nadp_c = 1 M_6pgl_c + 1 M_h_c + 1 M_nadph_c
+R_GAPD : 1 M_g3p_c + 1 M_nad_c + 1 M_pi_c = 1 M_13dpg_c + 1 M_h_c + 1 M_nadh_c
+R_GLCptspp : 1 M_glc_DASH_D_p + 1 M_pep_c = 1 M_g6p_c + 1 M_pyr_c
+R_GLCt2pp : 1 M_glc_DASH_D_p + 1 M_h_p = 1 M_glc_DASH_D_c + 1 M_h_c
+R_GlcUp : 1 M_glc_DASH_D_ex = 1 M_glc_DASH_D_p
+R_GLYCDx : 1 M_glyc_c + 1 M_nad_c = 1 M_dha_c + 1 M_h_c + 1 M_nadh_c
+R_GlycUp : 1 M_glyc_ex = 1 M_glyc_c
+R_GLYK : 1 M_atp_c + 1 M_glyc_c = 1 M_adp_c + 1 M_glyc3p_c + 1 M_h_c
+R_GLYOX3 : 1 M_h2o_c + 1 M_mthgxl_c = 1 M_h_c + 1 M_lac_DASH_D_c
+R_GND : 1 M_6pgc_c + 1 M_nadp_c = 1 M_co2_c + 1 M_nadph_c + 1 M_ru5p_DASH_D_c
+R_h_pEx : 1 M_h_p = 1 M_h_ex
+R_h2Ex : 1 M_h2_c = 1 M_h2_ex
+R_h2oEx : 1 M_h2o_c = 1 M_h2o_ex
+R_HEX1 : 1 M_atp_c + 1 M_glc_DASH_D_c = 1 M_adp_c + 1 M_g6p_c + 1 M_h_c
+R_ICDHyr : 1 M_icit_c + 1 M_nadp_c = 1 M_akg_c + 1 M_co2_c + 1 M_nadph_c
+R_ICL : 1 M_icit_c = 1 M_glx_c + 1 M_succ_c
+R_LacEx : 1 M_h_c + 1 M_lac_DASH_D_c = 1 M_h_p + 1 M_lac_ex
+R_LDH_D : 1 M_h_c + 1 M_nadh_c + 1 M_pyr_c = 1 M_lac_DASH_D_c + 1 M_nad_c
+R_MALS : 1 M_accoa_c + 1 M_glx_c + 1 M_h2o_c = 1 M_coa_c + 1 M_h_c + 1 M_mal_DASH_L_c
+R_MDH : 1 M_mal_DASH_L_c + 1 M_nad_c = 1 M_h_c + 1 M_nadh_c + 1 M_oaa_c
+R_ME1 : 1 M_mal_DASH_L_c + 1 M_nad_c = 1 M_co2_c + 1 M_nadh_c + 1 M_pyr_c
+R_ME2 : 1 M_mal_DASH_L_c + 1 M_nadp_c = 1 M_co2_c + 1 M_nadph_c + 1 M_pyr_c
+R_MGSA : 1 M_dhap_c = 1 M_mthgxl_c + 1 M_pi_c
+R_NADH16pp : 4 M_h_c + 1 M_nadh_c + 1 M_q8_c = 3 M_h_p + 1 M_nad_c + 1 M_q8h2_c
+R_NADH17pp : 4 M_h_c + 1 M_mqn8_c + 1 M_nadh_c = 3 M_h_p + 1 M_mql8_c + 1 M_nad_c
+R_NADTRHD : 1 M_nad_c + 1 M_nadph_c = 1 M_nadh_c + 1 M_nadp_c
+R_O2Up : 1 M_o2_ex = 1 M_o2_c
+R_PDH : 1 M_coa_c + 1 M_nad_c + 1 M_pyr_c = 1 M_accoa_c + 1 M_co2_c + 1 M_nadh_c
+R_PFK : 1 M_atp_c + 1 M_f6p_c = 1 M_adp_c + 1 M_fdp_c + 1 M_h_c
+R_PFL : 1 M_coa_c + 1 M_pyr_c = 1 M_accoa_c + 1 M_for_c
+R_PGI : 1 M_g6p_c = 1 M_f6p_c
+R_PGK : 1 M_13dpg_c + 1 M_adp_c = 1 M_3pg_c + 1 M_atp_c
+R_PGL : 1 M_6pgl_c + 1 M_h2o_c = 1 M_6pgc_c + 1 M_h_c
+R_PGM : 1 M_3pg_c = 1 M_2pg_c
+R_POX : 1 M_h2o_c + 1 M_pyr_c + 1 M_q8_c = 1 M_ac_c + 1 M_co2_c + 1 M_q8h2_c
+R_PPC : 1 M_co2_c + 1 M_h2o_c + 1 M_pep_c = 1 M_h_c + 1 M_oaa_c + 1 M_pi_c
+R_PPCK : 1 M_atp_c + 1 M_oaa_c = 1 M_adp_c + 1 M_co2_c + 1 M_pep_c
+R_PPS : 1 M_atp_c + 1 M_h2o_c + 1 M_pyr_c = 1 M_amp_c + 2 M_h_c + 1 M_pep_c + 1 M_pi_c
+R_PTAr : 1 M_accoa_c + 1 M_pi_c = 1 M_actp_c + 1 M_coa_c
+R_PYK : 1 M_adp_c + 1 M_h_c + 1 M_pep_c = 1 M_atp_c + 1 M_pyr_c
+R_RPE : 1 M_ru5p_DASH_D_c = 1 M_xu5p_DASH_D_c
+R_RPI : 1 M_r5p_c = 1 M_ru5p_DASH_D_c
+R_SuccEx : 1 M_succ_p = 1 M_succ_ex
+R_SUCCt2_2pp : 2 M_h_p + 1 M_succ_p = 2 M_h_c + 1 M_succ_c
+R_SUCCt3pp : 1 M_h_p + 1 M_succ_c = 1 M_h_c + 1 M_succ_p
+R_SuccUp : 1 M_succ_ex = 1 M_succ_p
+R_SUCDi : 1 M_q8_c + 1 M_succ_c = 1 M_fum_c + 1 M_q8h2_c
+R_SUCOAS : 1 M_adp_c + 1 M_pi_c + 1 M_succoa_c = 1 M_atp_c + 1 M_coa_c + 1 M_succ_c
+R_TALA : 1 M_g3p_c + 1 M_s7p_c = 1 M_e4p_c + 1 M_f6p_c
+R_THD2pp : 2 M_h_p + 1 M_nadh_c + 1 M_nadp_c = 2 M_h_c + 1 M_nad_c + 1 M_nadph_c
+R_TKT1 : 1 M_r5p_c + 1 M_xu5p_DASH_D_c = 1 M_g3p_c + 1 M_s7p_c
+R_TKT2 : 1 M_e4p_c + 1 M_xu5p_DASH_D_c = 1 M_f6p_c + 1 M_g3p_c
+R_TPI : 1 M_dhap_c = 1 M_g3p_c
