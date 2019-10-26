@@ -1,0 +1,56 @@
+#
+#simple example to test
+#
+#
+-ENZREV
+
+
+-ENZIRREV
+
+
+-METINT
+
+-METEXT
+GLC XYLx ETHx GOLx ACTx XOLx BIOM MAINT CO2
+
+-CAT
+R1 : GLC + ATP => G6P + ADP .
+R2 : G6P = F6P .
+R3 : F6P + ATP = DHAP + GAP + ADP .
+R4 : DHAP = GAP .
+R5 : DHAP + NADH => GOL + NAD .
+R6 : GOL => GOLx .
+R7 : GAP + NAD + ADP = PG3 + NADH + ATP .
+R8 : PG3 = PEP .
+R9 : PEP + ADP = PYR + ATP .
+R10 : PYR => ACD + CO2 .
+R11 : ACD + NADH => ETH + NAD .
+R12 : ACD + NADHm => ETH + NADm .
+R12b : ETH => ETHx .
+R13 : ACD + NADP => ACT + NADPH .
+R14 : ACT => ACTx .
+R15 : ACT + CoA + 2 ATP => AcCoA + 2 ADP .
+R16 : PYR + ATP + CO2 => OAA + ADP .
+R17 : G6P + 2 NADP => Ru5P + CO2 + 2 NADPH .
+R18 : Ru5P = X5P .
+R19 : Ru5P = R5P .
+R20 : R5P + X5P = S7P + GAP .
+R21 : X5P + E4P = F6P + GAP .
+R22 : S7P + GAP = F6P + E4P .
+R23 : PYR + NADm + CoAm => AcCoAm + CO2 + NADHm .
+R24 : OAA + NADm + NADH = OAAm + NADHm + NAD .
+R25 : OAAm + AcCoAm => ICT + CoAm .
+R26 : ICT + NADm => AKG + CO2 + NADHm .
+R27 : ICT + NADPm => AKG + CO2 + NADPHm .
+R28 : AKG + NADm + ADP => SUC + ATP + CO2 + NADHm .
+R29 : SUC + 0.5 NADm = MAL + 0.5 NADHm .
+R30 : MAL + NADm = OAAm + NADHm .
+R31 : XYLx  => XYL .
+R31b : XYL + NADH => XOL + NAD .
+R32 : XYL + NADPH => XOL + NADP .
+R33 : XOL => XOLx .
+R34 : XOL + NAD => XUL + NADH .
+R35 : XUL + ATP => X5P + ADP .
+R36 : 1.04 AKG + 0.57 E4P + 0.11 GOL + 2.39 G6P + 1.07 OAA + 0.99 PEP + 0.57 PG3 + 1.15 PYR + 0.74 R5P + 2.36 AcCoA + 0.31 AcCoAm + 2.68 NAD + 0.53 NADm + 11.55 NADPH + 1.51 NADPHm + 30.48 ATP + 0.43 CO2 => BIOM + 2.36 CoA + 0.31 CoAm + 2.68 NADH + 0.53 NADHm + 11.55 NADP + 1.51 NADPm + 30.48 ADP .
+R37 : ATP => ADP + MAINT .
+R38 : NADH => NAD .

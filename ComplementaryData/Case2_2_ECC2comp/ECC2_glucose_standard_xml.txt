@@ -1,0 +1,122 @@
+EX_Biomass	Biomass <=> 	0	-1000.0	1000.0		{}
+EX_4CRSOL_ex	4CRSOL_ex <=> 	0	-1000.0	1000.0		{}
+EX_5DRIB_ex	5DRIB_ex <=> 	0	-1000.0	1000.0		{}
+EX_ac_ex	ac_ex <=> 	0	-1000.0	1000.0		{}
+EX_adp_c	adp_c <=> 	0	-1000.0	1000.0		{}
+EX_AMOB_ex	AMOB_ex <=> 	0	-1000.0	1000.0		{}
+EX_ca2_ex	ca2_ex <=> 	0	-1000.0	1000.0		{}
+EX_cl_ex	cl_ex <=> 	0	-1000.0	1000.0		{}
+EX_co2_ex	co2_ex <=> 	0	-1000.0	1000.0		{}
+EX_coa_c	coa_c <=> 	0	-1000.0	1000.0		{}
+EX_cobalt2_ex	cobalt2_ex <=> 	0	-1000.0	1000.0		{}
+EX_cu2_ex	cu2_ex <=> 	0	-1000.0	1000.0		{}
+EX_etoh_ex	etoh_ex <=> 	0	-1000.0	1000.0		{}
+EX_fe2_ex	fe2_ex <=> 	0	-1000.0	1000.0		{}
+EX_fe3_ex	fe3_ex <=> 	0	-1000.0	1000.0		{}
+EX_for_ex	for_ex <=> 	0	-1000.0	1000.0		{}
+EX_glc_DASH_D_ex	glc_DASH_D_ex <=> 	0	-1000.0	1000.0		{}
+EX_glyc_ex	glyc_ex <=> 	0	-1000.0	1000.0		{}
+EX_h_ex	h_ex <=> 	0	-1000.0	1000.0		{}
+EX_h2_ex	h2_ex <=> 	0	-1000.0	1000.0		{}
+EX_h2o_ex	h2o_ex <=> 	0	-1000.0	1000.0		{}
+EX_k_ex	k_ex <=> 	0	-1000.0	1000.0		{}
+EX_lac_ex	lac_ex <=> 	0	-1000.0	1000.0		{}
+EX_meoh_ex	meoh_ex <=> 	0	-1000.0	1000.0		{}
+EX_mg2_ex	mg2_ex <=> 	0	-1000.0	1000.0		{}
+EX_mn2_ex	mn2_ex <=> 	0	-1000.0	1000.0		{}
+EX_mobd_ex	mobd_ex <=> 	0	-1000.0	1000.0		{}
+EX_mqn8_c	mqn8_c <=> 	0	-1000.0	1000.0		{}
+EX_MTHTHF_ex	MTHTHF_ex <=> 	0	-1000.0	1000.0		{}
+EX_nad_c	nad_c <=> 	0	-1000.0	1000.0		{}
+EX_nadp_c	nadp_c <=> 	0	-1000.0	1000.0		{}
+EX_nh4_ex	nh4_ex <=> 	0	-1000.0	1000.0		{}
+EX_ni2_ex	ni2_ex <=> 	0	-1000.0	1000.0		{}
+EX_o2_ex	o2_ex <=> 	0	-1000.0	1000.0		{}
+EX_pi_c	pi_c <=> 	0	-1000.0	1000.0		{}
+EX_pi_ex	pi_ex <=> 	0	-1000.0	1000.0		{}
+EX_q8_c	q8_c <=> 	0	-1000.0	1000.0		{}
+EX_so4_ex	so4_ex <=> 	0	-1000.0	1000.0		{}
+EX_succ_ex	succ_ex <=> 	0	-1000.0	1000.0		{}
+EX_zn2_ex	zn2_ex <=> 	0	-1000.0	1000.0		{}
+Growth	1.7178 3pg_c + 3.8579 accoa_c + 1.0752 akg_c + 63.2803 atp_c + 0.005205 ca2_ex + 0.005205 cl_ex + 2.5e-05 cobalt2_ex + 0.000709 cu2_ex + 0.002278 dhap_c + 0.38135 e4p_c + 0.094488 f6p_c + 0.008253 fe2_ex + 0.007808 fe3_ex + 0.13903 glyc3p_c + 40.8722 h2o_c + 1.4007 h_p + 0.19519 k_ex + 0.008675 mg2_ex + 0.000691 mn2_ex + 0.000129 mobd_ex + 1.8822 nadh_c + 13.225 nadph_c + 10.8007 nh4_ex + 0.000323 ni2_ex + 2.9276 oaa_c + 0.82896 pep_c + 0.96451 pi_ex + 2.8394 pyr_c + 0.93398 r5p_c + 0.039804 ru5p_DASH_D_c + 0.25221 so4_ex + 0.52486 succoa_c + 0.000341 zn2_ex --> 0.000223 4CRSOL_ex + 0.000671 5DRIB_ex + 2e-06 AMOB_ex + Biomass + 0.000448 MTHTHF_ex + 0.58258 ac_c + 60.6288 adp_c + 2.6515 amp_c + 1.7972 co2_c + 4.3828 coa_c + 0.70838 fum_c + 0.054008 g3p_c + 51.2225 h_c + 2e-06 meoh_ex + 1.8822 nad_c + 13.225 nadp_c + 70.0155 pi_c + 0.85927 succ_c	1.0	0.0	1000.0		{}
+ACALD	accoa_c + h_c + nadh_c <=> acald_c + coa_c + nad_c	0	-1000.0	1000.0		{}
+AcEx	ac_c + h_c --> ac_ex + h_p	0	0.0	1000.0		{}
+ACKr	actp_c + adp_c <=> ac_c + atp_c	0	-1000.0	1000.0		{}
+ACONTa	cit_c <=> acon_DASH_C_c + h2o_c	0	-1000.0	1000.0		{}
+ACONTb	acon_DASH_C_c + h2o_c <=> icit_c	0	-1000.0	1000.0		{}
+AcUp	ac_ex + h_p --> ac_c + h_c	0	0.0	10.0		{}
+ADK1	amp_c + atp_c <=> 2.0 adp_c	0	-1000.0	1000.0		{}
+AKGDH	akg_c + coa_c + nad_c --> co2_c + nadh_c + succoa_c	0	0.0	1000.0		{}
+ALCD2x	acald_c + h_c + nadh_c <=> etoh_c + nad_c	0	-1000.0	1000.0		{}
+ATPM	atp_c + h2o_c --> adp_c + h_c + pi_c	0	0.0	1000.0		{}
+ATPS4rpp	adp_c + 4.0 h_p + pi_c <=> atp_c + h2o_c + 3.0 h_c	0	-1000.0	1000.0		{}
+CO2Ex	co2_c --> co2_ex	0	0.0	1000.0		{}
+CO2Up	co2_ex --> co2_c	0	0.0	10.0		{}
+CS	accoa_c + h2o_c + oaa_c --> cit_c + coa_c + h_c	0	0.0	1000.0		{}
+CYTBO3_4pp	4.0 h_c + 0.5 o2_c + q8h2_c --> h2o_c + 4.0 h_p + q8_c	0	0.0	1000.0		{}
+EDA	2ddg6p_c --> g3p_c + pyr_c	0	0.0	1000.0		{}
+EDD	6pgc_c --> 2ddg6p_c + h2o_c	0	0.0	1000.0		{}
+ENO	2pg_c <=> h2o_c + pep_c	0	-1000.0	1000.0		{}
+EthEx	etoh_c --> etoh_ex	0	0.0	1000.0		{}
+F6PA	dha_c + g3p_c <=> f6p_c	0	-1000.0	1000.0		{}
+FBA	fdp_c <=> dhap_c + g3p_c	0	-1000.0	1000.0		{}
+FBP	fdp_c + h2o_c --> f6p_c + pi_c	0	0.0	1000.0		{}
+FHL	for_c + h_c --> co2_c + h2_c	0	0.0	1000.0		{}
+FormEx	for_c --> for_ex	0	0.0	1000.0		{}
+FRD2	fum_c + mql8_c --> mqn8_c + succ_c	0	0.0	1000.0		{}
+FUM	fum_c + h2o_c <=> mal_DASH_L_c	0	-1000.0	1000.0		{}
+G3PD2	glyc3p_c + nadp_c <=> dhap_c + h_c + nadph_c	0	-1000.0	1000.0		{}
+G3PD5	glyc3p_c + q8_c --> dhap_c + q8h2_c	0	0.0	1000.0		{}
+G6PDH2r	g6p_c + nadp_c <=> 6pgl_c + h_c + nadph_c	0	-1000.0	1000.0		{}
+GAPD	g3p_c + nad_c + pi_c <=> 13dpg_c + h_c + nadh_c	0	-1000.0	1000.0		{}
+GLCptspp	glc_DASH_D_p + pep_c --> g6p_c + pyr_c	0	0.0	1000.0		{}
+GLCt2pp	glc_DASH_D_p + h_p --> glc_DASH_D_c + h_c	0	0.0	1000.0		{}
+GlcUp	glc_DASH_D_ex --> glc_DASH_D_p	0	0.0	10.0		{}
+GLYCDx	glyc_c + nad_c --> dha_c + h_c + nadh_c	0	0.0	1000.0		{}
+GlycUp	glyc_ex --> glyc_c	0	0.0	10.0		{}
+GLYK	atp_c + glyc_c --> adp_c + glyc3p_c + h_c	0	0.0	1000.0		{}
+GLYOX3	h2o_c + mthgxl_c --> h_c + lac_DASH_D_c	0	0.0	1000.0		{}
+GND	6pgc_c + nadp_c --> co2_c + nadph_c + ru5p_DASH_D_c	0	0.0	1000.0		{}
+h_pEx	h_p <=> h_ex	0	-1000.0	1000.0		{}
+h2Ex	h2_c --> h2_ex	0	0.0	1000.0		{}
+h2oEx	h2o_c <=> h2o_ex	0	-1000.0	1000.0		{}
+HEX1	atp_c + glc_DASH_D_c --> adp_c + g6p_c + h_c	0	0.0	1000.0		{}
+ICDHyr	icit_c + nadp_c <=> akg_c + co2_c + nadph_c	0	-1000.0	1000.0		{}
+ICL	icit_c --> glx_c + succ_c	0	0.0	1000.0		{}
+LacEx	h_c + lac_DASH_D_c --> h_p + lac_ex	0	0.0	1000.0		{}
+LDH_D	h_c + nadh_c + pyr_c <=> lac_DASH_D_c + nad_c	0	-1000.0	1000.0		{}
+MALS	accoa_c + glx_c + h2o_c --> coa_c + h_c + mal_DASH_L_c	0	0.0	1000.0		{}
+MDH	mal_DASH_L_c + nad_c <=> h_c + nadh_c + oaa_c	0	-1000.0	1000.0		{}
+ME1	mal_DASH_L_c + nad_c --> co2_c + nadh_c + pyr_c	0	0.0	1000.0		{}
+ME2	mal_DASH_L_c + nadp_c --> co2_c + nadph_c + pyr_c	0	0.0	1000.0		{}
+MGSA	dhap_c --> mthgxl_c + pi_c	0	0.0	1000.0		{}
+NADH16pp	4.0 h_c + nadh_c + q8_c <=> 3.0 h_p + nad_c + q8h2_c	0	-1000.0	1000.0		{}
+NADH17pp	4.0 h_c + mqn8_c + nadh_c --> 3.0 h_p + mql8_c + nad_c	0	0.0	1000.0		{}
+NADTRHD	nad_c + nadph_c --> nadh_c + nadp_c	0	0.0	1000.0		{}
+O2Up	o2_ex <=> o2_c	0	-1000.0	1000.0		{}
+PDH	coa_c + nad_c + pyr_c --> accoa_c + co2_c + nadh_c	0	0.0	1000.0		{}
+PFK	atp_c + f6p_c --> adp_c + fdp_c + h_c	0	0.0	1000.0		{}
+PFL	coa_c + pyr_c --> accoa_c + for_c	0	0.0	1000.0		{}
+PGI	g6p_c <=> f6p_c	0	-1000.0	1000.0		{}
+PGK	13dpg_c + adp_c <=> 3pg_c + atp_c	0	-1000.0	1000.0		{}
+PGL	6pgl_c + h2o_c --> 6pgc_c + h_c	0	0.0	1000.0		{}
+PGM	3pg_c <=> 2pg_c	0	-1000.0	1000.0		{}
+POX	h2o_c + pyr_c + q8_c --> ac_c + co2_c + q8h2_c	0	0.0	1000.0		{}
+PPC	co2_c + h2o_c + pep_c --> h_c + oaa_c + pi_c	0	0.0	1000.0		{}
+PPCK	atp_c + oaa_c --> adp_c + co2_c + pep_c	0	0.0	1000.0		{}
+PPS	atp_c + h2o_c + pyr_c --> amp_c + 2.0 h_c + pep_c + pi_c	0	0.0	1000.0		{}
+PTAr	accoa_c + pi_c <=> actp_c + coa_c	0	-1000.0	1000.0		{}
+PYK	adp_c + h_c + pep_c --> atp_c + pyr_c	0	0.0	1000.0		{}
+RPE	ru5p_DASH_D_c <=> xu5p_DASH_D_c	0	-1000.0	1000.0		{}
+RPI	r5p_c <=> ru5p_DASH_D_c	0	-1000.0	1000.0		{}
+SuccEx	succ_p --> succ_ex	0	0.0	1000.0		{}
+SUCCt2_2pp	2.0 h_p + succ_p --> 2.0 h_c + succ_c	0	0.0	1000.0		{}
+SUCCt3pp	h_p + succ_c --> h_c + succ_p	0	0.0	1000.0		{}
+SuccUp	succ_ex --> succ_p	0	0.0	10.0		{}
+SUCDi	q8_c + succ_c --> fum_c + q8h2_c	0	0.0	1000.0		{}
+SUCOAS	adp_c + pi_c + succoa_c <=> atp_c + coa_c + succ_c	0	-1000.0	1000.0		{}
+TALA	g3p_c + s7p_c <=> e4p_c + f6p_c	0	-1000.0	1000.0		{}
+THD2pp	2.0 h_p + nadh_c + nadp_c --> 2.0 h_c + nad_c + nadph_c	0	0.0	1000.0		{}
+TKT1	r5p_c + xu5p_DASH_D_c <=> g3p_c + s7p_c	0	-1000.0	1000.0		{}
+TKT2	e4p_c + xu5p_DASH_D_c <=> f6p_c + g3p_c	0	-1000.0	1000.0		{}
+TPI	dhap_c <=> g3p_c	0	-1000.0	1000.0		{}

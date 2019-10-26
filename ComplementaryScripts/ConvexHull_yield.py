@@ -141,17 +141,23 @@ def get_hull_cutoff(all_points,hull_all_index,cutoff_v,qhull_options = '',option
             for i in hull_cutoff_index_set:
 
                 temp_points_index = list(hull_cutoff_index_set - set([i]))
-                hull_temp = ConvexHull(all_points[temp_points_index,:],qhull_options = qhull_options)
+                try:
+                    hull_temp = ConvexHull(all_points[temp_points_index,:],qhull_options = qhull_options)
 
-                if hull_temp.volume > current_v :
-                    current_v = hull_temp.volume
-                    temp_i = i
+                    if hull_temp.volume > current_v :
+                        current_v = hull_temp.volume
+                        temp_i = i
+                except:
+                    continue
 
             if current_v < cutoff_v :
                 return list(hull_cutoff_index_set)
 
             else:
-                hull_cutoff_index_set.remove(temp_i)
+                try:
+                    hull_cutoff_index_set.remove(temp_i)
+                except:
+                    return list(hull_cutoff_index_set)
 
 
 def get_distance(V, p):
@@ -386,7 +392,7 @@ def pipeline_mya(all_points, experiment_datas = [], qhull_options = 'Qt QJ Pp Qw
                 print('weights =\t' , weights)
                 print('estimated_data vs experiment_data: \t' )
                 print(estimated_data)
-                print(estimated_data,'\n')
+                print(experiment_data,'\n')
 
                 if in_hull:
                     hull_cutoff_active = ConvexHull(all_points[hull_active_index,:],qhull_options)
@@ -426,11 +432,11 @@ if __name__ == '__main__':
     d_f = np.array([1,2.5])
 
 
-    all_points = points_glc_33
+    all_points = points_sq
     experiment_data_1 = dataValue
     experiment_data_2 = np.array([0.01,0.50,0.0556])
 
-    experiment_datas = [experiment_data_1,experiment_data_2]
+    experiment_datas = [np.array([0.01,2])]
     qhull_options = 'Qt QJ Pp Qw Qx'      #'QG0'mean expect point 0(index)
     cutoff_persent = 0.99
 

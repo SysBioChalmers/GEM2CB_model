@@ -1,0 +1,33 @@
+#
+# reaction scheme comprising the tricarboxylic acid cycle, glyoxylate shunt
+# and adjacent reactions of amino acid synthesis in E. coli 
+# Schuster, S., Dandekar, T and Fell, D. (1999) 
+# Detection of elementary flux modes in biochemical networks: a promising tool
+# for pathway analysis and metabolic engineering, TIBTECH, 17, 53-60.
+#
+#
+-ENZREV
+
+
+-ENZIRREV
+
+
+-METINT
+G6P T3P PEP PYR AcCoA ATP ADP NADH NAD CoA
+
+-METEXT
+GLU SUC FOR ACT LAC ETH B CO2 H2
+
+-CAT
+R1 : GLU + PEP => G6P + PYR .
+R2 : G6P + ATP => 2 T3P + ADP .
+R3 : G6P + 6 NAD => T3P + 6 NADH .
+R4 : T3P + NAD + ADP => PEP + NADH + ATP .
+R5 : PEP + ADP => PYR + ATP .
+R6 : PEP + CO2 + 2 NADH => SUC + 2 NAD .
+R7 : PYR + CoA => AcCoA + FOR .
+R8 : PYR + NADH => LAC + NAD .
+R9 : AcCoA + ADP => ACT + CoA + ATP .
+R10 : AcCoA + 2 NADH => ETH + CoA + 2 NAD .
+R11 : FOR => CO2 + H2 .
+R12 : 6.775 G6P + 82.2 ATP + 4.065 NADH => B + 82.2 ADP + 4.065 NAD .
