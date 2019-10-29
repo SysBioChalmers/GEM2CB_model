@@ -11,3 +11,5 @@ out
 gen
 ComplementaryData/Case2_2_ECC2comp/ECC2comp_EFMs.mat
 ComplementaryData/Case2_2_ECC2comp/ECC2comp_EFVs.mat
+ComplementaryScripts/nothing.py
+.idea/vcs.xml
