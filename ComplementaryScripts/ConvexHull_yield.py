@@ -10,8 +10,8 @@
 """
 
 import os
+import warnings
 from itertools import combinations
-
 import lsqlin
 import matplotlib.pyplot as plt
 import numpy as np
@@ -24,12 +24,12 @@ from scipy.spatial import ConvexHull
 def get_distance(V, p):
     '''
     function to get the distance of some points and the point
+    for get_hull_cutoff function
     :param V: some points set
     :param p: the point
     :return: the distance
     '''
-    #V = np.eye(3)
-    #p = np.array([[1,2,3]])
+
     p = np.mat(p)
     V = np.mat(V)
     v0=V[:,-1]
@@ -47,7 +47,6 @@ def get_distance(V, p):
         for j in range(0,mv):
             b[k,0]=b[k,0]+(v[j,k]-v0[j])*(p[0,j]-v0[j])
 
-
     x=np.linalg.inv(A)@b
     sum=np.zeros((mv,1))
     for i in range(0,nv):
@@ -57,8 +56,17 @@ def get_distance(V, p):
     return dist
 
 def get_hull_cutoff(all_points, hull_all_index, cutoff_v, qhull_options='Qt QJ Pp Qw Qx', method=1):
+    '''
+    function to get the get_hull_cutoff
+    get the minimum number of point and the hull.volume >= cutoff_v
 
-    # return hull_cutoff_index
+    :param all_points: points set
+    :param hull_all_index: the index of all points (most case it will could complete hull set)
+    :param cutoff_v: cutoff hull volume , keep new hull.volume >= cutoff_v
+    :param qhull_options: ConvexHull function parameters see http://www.qhull.org/
+    :param method: our method is 1 efficient and defult the reference method is 2 but all method should get the result
+    :return: the indexes of points, get the minimum number of point and the hull.volume >= cutoff_v
+    '''
 
     if len(hull_all_index) == 0:
         hull_all = ConvexHull(all_points, qhull_options=qhull_options)
@@ -77,13 +85,13 @@ def get_hull_cutoff(all_points, hull_all_index, cutoff_v, qhull_options='Qt QJ P
                 try:
                     hull_temp = ConvexHull(all_points[temp_points_index, :], qhull_options=qhull_options)
 
-                    if hull_temp.volume > current_v:  # find the max v (affect min point i)
+                    if hull_temp.volume > current_v:  # find the max v (get the point index i that affects the volume minimum)
                         current_v = hull_temp.volume
                         temp_i = i
                 except:
                     continue
 
-            if current_v < cutoff_v:
+            if current_v < cutoff_v:  # untill the current_v < cutoff_v
                 return list(hull_cutoff_index_set)
 
             else:
@@ -92,7 +100,7 @@ def get_hull_cutoff(all_points, hull_all_index, cutoff_v, qhull_options='Qt QJ P
                 except:
                     return list(hull_cutoff_index_set)
 
-    elif method == 2:  # find ndim ymax and one max distant as base comb; add points one by one (the same as reference)
+    elif method == 2:  # find ndim ymax points and one max distant point, as base comb;and then add points one by one (the same as reference)
 
         hull_cutoff_index_set = set()
 
@@ -199,32 +207,60 @@ def get_hull_cutoff(all_points, hull_all_index, cutoff_v, qhull_options='Qt QJ P
                 if hull_temp.volume > cutoff_v:
                     return list(set(comb))
 
-
 def point_in_hull(point, hull, tolerance=1e-12):
+    # Judge whether the point is inside or outside of the hull
+    # TODO: more test
     return all(
         (np.dot(eq[:-1], point) + eq[-1] <= tolerance)
         for eq in hull.equations)
 
 def get_hull_active(all_points_,d_,hull_cutoff_index ,qhull_options='Qt QJ Pp Qw Qx', normalize = True):
+    '''
+    math:
+    if experiment data in the hull :
+        min the sum of weight^2
+        min 1/2 ||h||^2_2
+        Zyh - ym  = 0,
+        h>0,
 
-    if len(hull_cutoff_index)==0:
+    elif the data not in the hull :
+        min the distant the error
+        min 1/2 ||Zyh - ym||^2_2
+    reference : https://doi.org/10.1002/bit.22062
+    :param all_points_: points set use how many dimations depend on the experiment data ['']
+    :param d_: experimen data, the data could be imcomplete use '' replace [1,2,3,'',5]
+    :param hull_cutoff_index: the indexes of points to decide which points will be use
+    :param qhull_options: ConvexHull function parameters see http://www.qhull.org/
+    :param normalize:
+    :return:
+    '''
+
+    if len(hull_cutoff_index) == 0:  # data check
         hull_cutoff_index = np.arange(0,all_points_.shape[0])
+    if len(d_) != all_points_.shape[1]:
+        warnings.warn('the experiment data dimation is different with points dimation:\t')
+        print(len(d_), all_points_.shape[1])
+        return hull_cutoff_index, [], [], []
+
     index_experiment = []
+    index_empty = []
     d = []
     for i in range(0,len(d_)):
         if d_[i] !='':
             d.append(d_[i])
             index_experiment.append(i)
+        else:
+            index_empty.append(i)
 
     all_points = all_points_[:,index_experiment]
 
     hull_cutoff = ConvexHull(all_points[hull_cutoff_index, :], qhull_options=qhull_options)
 
-    in_hull = point_in_hull(d, hull_cutoff, tolerance=1e-12)
+    in_hull = point_in_hull(d, hull_cutoff, tolerance=1e-12)  # in or out of the hull
     print('point in the hull:\t', in_hull)
 
     C = all_points[hull_cutoff_index,:].T
-
+    # set the pramater of lsqlin
     # ret = lsqlin.lsqlin(C_in, d_in, 0, None, None, Aeq, beq, \
     #         lb=None, ub=None, x0=None, opts=None
     (mC,nC) = C.shape
@@ -248,7 +284,6 @@ def get_hull_active(all_points_,d_,hull_cutoff_index ,qhull_options='Qt QJ Pp Qw
         d_in = np.zeros((1,nC))[0]
 
         if normalize:
-            print('experiment data in hull')
             # nored
             Aeq = np.ones((1, nC))
             #beq = np.ones((1, 1))
@@ -273,7 +308,6 @@ def get_hull_active(all_points_,d_,hull_cutoff_index ,qhull_options='Qt QJ Pp Qw
             weights = ret0['x'].T
 
     if  not in_hull:
-        print('experiment data not in hull')
         Aeq = np.ones((1,nC))
         beq = np.ones((1,1))
 
@@ -295,6 +329,15 @@ def get_hull_active(all_points_,d_,hull_cutoff_index ,qhull_options='Qt QJ Pp Qw
 
     hull_active_index = np.array(hull_cutoff_index)[[i for i in range(0,len(weights)) if weights[i] > 1e-4 ]]
     estimated_data = C0@weights
+
+    estimated_data_ = estimated_data[:]
+    for index in index_empty:
+        estimated_data_.insert(index, '')
+
+    print('weights =\t', weights)
+    print('estimated_data vs experiment_data: \t')
+    print(estimated_data)
+    print(d_)
 
     return hull_active_index,weights,estimated_data,in_hull
 
@@ -352,7 +395,8 @@ def hull_plot(all_points,hulls = [],labels = [], markers = [],colors = [],alphas
     return fig,ax1
 
 
-def pipeline_mya(all_points, experiment_datas=[], qhull_options='Qt QJ Pp Qw Qx', cutoff_persent=0.99, methods=1,normalize=True):
+def pipeline_mya(all_points, experiment_datas=[], qhull_options='Qt QJ Pp Qw Qx', cutoff_persent=0.99, method=1,
+                 normalize=True):
     # indexes, hulls , weightss , estimated_datas, in_hulls = pipeline_mya(all_points, experiment_datas = [], qhull_options = 'Qt QJ Pp Qw Qx', cutoff_persent = 0.99)
 
     #  < Setp1 ConvexHull base >
@@ -368,13 +412,14 @@ def pipeline_mya(all_points, experiment_datas=[], qhull_options='Qt QJ Pp Qw Qx'
 
     if cutoff_persent >= 1:
         hull_cutoff_index = hull_all_index
-        hull_cutoff = hull_all
+        # hull_cutoff = hull_all
         print('cutoff_persent >= 1')
 
     else:
         cutoff_v = cutoff_persent * hull_all.volume
-        hull_cutoff_index = get_hull_cutoff(all_points, hull_all_index, cutoff_v, qhull_options=qhull_options, methods=methods)
-        hull_cutoff = ConvexHull(all_points[hull_cutoff_index, :], qhull_options=qhull_options)
+        hull_cutoff_index = get_hull_cutoff(all_points, hull_all_index, cutoff_v, qhull_options=qhull_options,
+                                            method=method)
+        # hull_cutoff = ConvexHull(all_points[hull_cutoff_index, :], qhull_options=qhull_options)
 
     print('hull_cutoff_index = \t', hull_cutoff_index, '\n len:\t', len(list(hull_cutoff_index)))
 
@@ -391,49 +436,36 @@ def pipeline_mya(all_points, experiment_datas=[], qhull_options='Qt QJ Pp Qw Qx'
         print('No eperiment data')
         hull_active_indexes = [hull_cutoff_index]
 
-    # elif len(experiment_datas) == 1:
-    #     experiment_data = experiment_datas[0]
-    #     hull_active_index,weights,estimated_data,in_hull = get_hull_active(all_points,experiment_data,hull_cutoff, \
-    #                                                                        hull_cutoff_index, normalize = True)
-    #     print(hull_active_index)
-    #
-    #     # if in_hull:
-    #     #     hull_cutoff_active = ConvexHull(all_points[hull_active_index,:],qhull_options)
-    #     # else:
-    #     #     hull_cutoff_active = all_points[hull_active_index,:]
     else:  #
-
         for experiment_data in experiment_datas:
-            # experiment_data = experiment_datas[0]
+            hull_cutoff_index_ = hull_cutoff_index[:]
 
             hull_active_index, weights, estimated_data, in_hull = get_hull_active(all_points, experiment_data, \
-                                                                                  hull_cutoff_index, qhull_options=qhull_options,
+                                                                                  hull_cutoff_index_,
+                                                                                  qhull_options=qhull_options,
                                                                                   normalize=normalize)
-            print('hull_active_index = \t', hull_active_index)
-            print('weights =\t', weights)
-            print('estimated_data vs experiment_data: \t')
-            print(estimated_data)
-            print(experiment_data, '\n')
+            print('hull_active_index = \t', list(hull_active_index), '\n len:\t', len(list(hull_active_index)), '\n')
 
-            if in_hull:
-                hull_cutoff_active = ConvexHull(all_points[hull_active_index, :], qhull_options)
-            else:
-                hull_cutoff_active = all_points[hull_active_index, :]
+            # if in_hull:
+            #     hull_cutoff_active = ConvexHull(all_points[hull_active_index, :], qhull_options)
+            # else:
+            #     hull_cutoff_active = all_points[hull_active_index, :]
 
             hull_active_indexes.append(hull_active_index)
             weightss.append(weights)
             estimated_datas.append(estimated_data)
             in_hulls.append(in_hull)
-            hull_cutoff_actives.append(hull_cutoff_active)
+            # hull_cutoff_actives.append(hull_cutoff_active)
 
+    hulls = ['return removed, please caculate it ']
     if len(experiment_datas) <= 1:
-        indexes = [hull_all_index, hull_cutoff_index, hull_active_indexes[0]]
-        hulls = [hull_all, hull_cutoff, hull_cutoff_actives]
+        indexes = [hull_all_index, np.array(hull_cutoff_index), hull_active_indexes[0]]
+        # hulls = [hull_all, hull_cutoff, hull_cutoff_actives]
     else:
-        indexes = [hull_all_index, hull_cutoff_index, hull_active_indexes]
-        hulls = [hull_all, hull_cutoff, hull_cutoff_actives]
+        indexes = [hull_all_index, np.array(hull_cutoff_index), hull_active_indexes]
+        # hulls = [hull_all, hull_cutoff, hull_cutoff_actives]
 
-    return indexes, hulls, weightss, estimated_datas, in_hulls
+    return indexes, weightss, estimated_datas, in_hulls
 
 
 #%%
@@ -441,22 +473,30 @@ if __name__ == '__main__':
     # %% <set data and pramaters>   all_points, experiment_data ,qhull_options = 'Qt QJ Pp Qw Qx', cutoff_persent = 0.99
     os.chdir('../ComplementaryData/')
     print('loading data ...')
-
     points_all = sio.loadmat('../../../MATLAB/aumic-master/MYA_test_2/points_all.mat')
     points_2d = points_all['points_2d']
     points_3d = points_all['points_3d']
     points_4d = points_all['points_4d']
     points_sq = points_all['points_sq']         #points_sq  = np.array([[0,0],[2.1,1.5],[2,2],[2,0],[0,2],[1.5,1.5]])
     points_glc_33 = points_all['points_glc_33']
-    dataValue =np.array([0.0169,1.8878,0.0556])
-    d_t = np.array([0.5,1.9])
-    d_f = np.array([1,2.5])
 
-    all_points = points_sq
-    experiment_data_1 = dataValue
-    experiment_data_2 = np.array([0.01,0.50,0.0556])
+    # all_points = points_sq
+    # d_t = np.array([0.5,1.9])
+    # d_f = np.array([1,2.5])
+    # experiment_datas = [d_t, d_f, d_t]
+    # experiment_data = experiment_datas[0]
+
+    # all_points = points_glc_33
+    # dataValue =np.array([0.0169,1.8878,0.0556])
+    # experiment_datas = [dataValue]
+    # experiment_data = experiment_datas[0]
+
+    all_points = points_2d  # try different data points
+    experiment_datas = []
+    experiment_data = []
+
+    cutoff_persent = 0.90
     qhull_options = 'Qt QJ Pp Qw Qx'
-    experiment_data = [[1, 2.1]]
 
     #  <Setp1 ConvexHull base>
 
@@ -470,7 +510,7 @@ if __name__ == '__main__':
 
     #  <Setp2 ConvexHull cutoff>
     print('ConvexHull cutoff ...')
-    cutoff_v = 0.95 * hull_all.volume
+    cutoff_v = cutoff_persent * hull_all.volume
     hull_cutoff_index = get_hull_cutoff(all_points, hull_all_index, cutoff_v, qhull_options='', method=1)
     print('hull_cutoff_index = ', hull_cutoff_index, '\n len:\t', len(list(hull_cutoff_index)))
 
@@ -479,8 +519,9 @@ if __name__ == '__main__':
     # %% <Setp3 ConvexHull active>
     print('ConvexHull active ...')
 
-    hull_active_index, weights, estimated_data, in_hull = get_hull_active(all_points, [1, 2.1], \
-                                                                          hull_cutoff_index, normalize=True)
+    hull_active_index, weights, estimated_data, in_hull = get_hull_active(all_points, experiment_data,
+                                                                          hull_cutoff_index,
+                                                                          qhull_options=qhull_options, normalize=True)
     print(hull_active_index)
 
     if in_hull:
@@ -488,13 +529,19 @@ if __name__ == '__main__':
     else:
         hull_cutoff_active = all_points[hull_active_index, :]
 
-    # %%
+    # %% < pipeline_mya >
+    indexes, weightss, estimated_datas, in_hulls = pipeline_mya(all_points, experiment_datas=experiment_datas,
+                                                                cutoff_persent=cutoff_persent,
+                                                                qhull_options=qhull_options,
+                                                                method=1, normalize=True)
 
-    hulls = [hull_all, hull_cutoff, hull_cutoff_active]
+    # %% plot  only for 2d
+    if ndim == 2:
+        hulls = [hull_all, hull_cutoff, hull_cutoff_active]
 
-    fig, ax1 = hull_plot(all_points, hulls, labels=['all_points', 'hull_all', 'hull_cutoff', 'hull_active'])
-    ax1.plot(experiment_data[0], experiment_data[1], 'r*', label='experiment data')
-    ax1.legend(loc='lower left', ncol=3, bbox_to_anchor=(0, -0.3, 1, 0), mode="expand", borderaxespad=0.)
-    ax1.set_xlabel('Biomass/ Sourse')
-    ax1.set_ylabel('Production_1/ Sourse')
-    fig.show()
+        fig, ax1 = hull_plot(all_points, hulls, labels=['all_points', 'hull_all', 'hull_cutoff', 'hull_active'])
+        # ax1.plot(experiment_data[0], experiment_data[1], 'r*', label='experiment data')
+        ax1.legend(loc='lower left', ncol=3, bbox_to_anchor=(0, -0.3, 1, 0), mode="expand", borderaxespad=0.)
+        ax1.set_xlabel('Biomass/ Sourse')
+        ax1.set_ylabel('Production_1/ Sourse')
+        fig.show()
