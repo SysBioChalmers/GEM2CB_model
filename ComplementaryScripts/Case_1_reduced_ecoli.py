@@ -8,15 +8,15 @@
 :returns: 
 :rtype: 
 """
-import cobra
-import matplotlib.pyplot as plt
+import os
 
 import ConvexHull_yield
 import GEM2pathways
-import scipy.io as sio
-import os
+import cobra
+import matplotlib.pyplot as plt
 import numpy as np
 from scipy.spatial import ConvexHull
+
 os.chdir('../ComplementaryData/')
 
 '''
@@ -37,18 +37,12 @@ R9 : AcCoA + ADP => ACT + CoA + ATP .
 R10 : AcCoA + 2 NADH => ETH + CoA + 2 NAD .
 R11 : FOR => CO2 + H2 .
 R12 : 6.775 G6P + 82.2 ATP + 4.065 NADH => B + 82.2 ADP + 4.065 NAD .
-
-yield_rea_ids = ['EX_ac_e','EX_for_e','EX_etoh_e','EX_lac__D_e','EX_succ_e',]
-
 '''
-reaids = ['R1','R2','R3','R4','R5','R6','R7','R8','R9','R10','R11','R12']
-yield_rea_ids = ['R1','R12','R9','R7','R10','R8','R6']
-yield_indexes = [reaids.index(i) for i in yield_rea_ids ]
+
 
 #%% <EFMs > caculated by matlab emftool. and standardized by step0
 
 em_z = np.genfromtxt('Case1_ecoli_reduced/ecoli_reduced_EFMs_standardized.csv', delimiter = ',')
-
 EFMs_all_points = em_z.T
 EFMs_all_points = EFMs_all_points[:,1:]   # modes x reas
 
@@ -56,52 +50,49 @@ EFMs_all_points = EFMs_all_points[:,1:]   # modes x reas
 #%% <FBA modes> from reference and standardized by step0
 
 FBAMs_z = np.genfromtxt('Case1_ecoli_reduced/ecoli_reduced_FBAMs_standardized.csv', delimiter = ',')
-
 FBAem_all_points = FBAMs_z.T     # modes x rea
 FBAem_all_points = FBAem_all_points[:,1:]
 
 
 #%% <Our method>
 
-# load a GEM
+# load a GE
 ecoli_reduced_model = cobra.io.read_sbml_model('Case1_ecoli_reduced/ecoli_reduced_model.xml')
 model = ecoli_reduced_model.copy()
 
-# cobra.io.write_sbml_model(ecoli_reduced_model,'Case1_ecoli_reduced/ecoli_reduced_model.xml')
-biomass_rea_id = 'R12'
-carbon_rea_id = 'R1'
-yield_rea_ids = ['R9','EX_FOR','R10','R8','R6']
-
-step_of_biomass = 20
+production_rea_ids_x = ['R12']
+production_rea_ids_y = ['R9', 'EX_FOR', 'R10', 'R8', 'R6']
+carbon_source_rea_id = 'R1'
+model.reactions.get_by_id(carbon_source_rea_id).bounds = (0.001, 10)  # set carbon lb as -10
+steps = 20
 carbon_uptake_direction = 1
-# ecoli_reduced_model.solver = 'glpk'
-model.reactions.get_by_id(carbon_rea_id).bounds = (0.001,10)     #set carbon lb as -10
 
 # all modes
-yield_normalized_df = GEM2pathways.get_yield_space(model, biomass_rea_id,carbon_rea_id,yield_rea_ids,step_of_biomass,carbon_uptake_direction = carbon_uptake_direction,draw = False)
-
-#MYA hull#MYA experiment data
-yield_normalized_df = yield_normalized_df.loc[[carbon_rea_id] + [biomass_rea_id] + yield_rea_ids ,:]
+yield_normalized_df, fluxes_all = GEM2pathways.get_yield_space_multi(model, production_rea_ids_x, production_rea_ids_y,
+                                                                     carbon_source_rea_id,
+                                                                     steps=steps,
+                                                                     carbon_uptake_direction=carbon_uptake_direction,
+                                                                     draw=True)
 
 our_all_points = yield_normalized_df.values.T
 our_all_points = our_all_points[ abs(our_all_points[:,0]) > 1e-10,:]
-our_all_points = our_all_points[:,1:]       #exclude the carbon colume
-
+our_all_points = our_all_points[:, 1:]  # exclude the carbon colume!!!
 
 # %% <MYA >
 
 experiment_datas = [ ]      # TODO experiment data!!!
 qhull_options = 'Qt QJ Pp Qw Qx'      #'QG0'mean expect point 0(index)
-cutoff_persent = 1
+cutoff_persent = 0.99
 
-# our_indexes, our_hulls , our_weightss , our_estimated_datas, our_in_hulls = ConvexHull_yield.pipeline_mya(our_all_points, experiment_datas , qhull_options = 'Qt QJ Pp Qw Qx', cutoff_persent = 0.99)
+our_indexes, our_hulls , our_weightss , our_estimated_datas, our_in_hulls = ConvexHull_yield.pipeline_mya(our_all_points, experiment_datas , qhull_options = qhull_options,methods = 4, cutoff_persent = cutoff_persent)
 
+len(our_indexes[1])
 # EFMs_indexes, EFMs_hulls , EFMs_weightss , EFMs_estimated_datas, EFMs_in_hulls = \
 #     ConvexHull_yield.pipeline_mya(EFM_all_points, experiment_datas , qhull_options = 'Qt QJ Pp Qw Qx', cutoff_persent = cutoff_persent )
 
 # EFMs_hull = ConvexHull(EFMs_all_points,qhull_options = qhull_options )
 # FBAem_hull = ConvexHull(FBAem_all_points,qhull_options = qhull_options )
-# our_hull = ConvexHull(our_all_points,qhull_options = qhull_options )
+our_hull = ConvexHull(our_all_points,qhull_options = qhull_options )
 
 
 

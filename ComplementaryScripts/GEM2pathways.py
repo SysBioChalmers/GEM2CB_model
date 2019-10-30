@@ -231,13 +231,11 @@ def get_yield_space_multi(model2, production_rea_ids_x, production_rea_ids_y, ca
 
     # < Step2 get yield dataFrame(matrix/ points for MYA/Next function)>
     fluxes_all = pd.DataFrame()
-    fluxes_all_list = []
     for production_rea_ids_2d in production_rea_ids_2ds:
         model = model2.copy()
         fluxes_2d = get_yield_space_2d(model, production_rea_ids_2d, carbon_source_rea_id, steps=steps,
                                        carbon_uptake_direction=carbon_uptake_direction, draw=False)
         fluxes_all = pd.concat([fluxes_all, fluxes_2d], axis=1)
-        fluxes_all_list = fluxes_all_list + [fluxes_2d]
 
     index_list = [carbon_source_rea_id] + production_rea_ids_x
     for i in production_rea_ids_y:
@@ -247,10 +245,8 @@ def get_yield_space_multi(model2, production_rea_ids_x, production_rea_ids_y, ca
     yield_df = fluxes_all.loc[index_list, :]  # select reactions
     yield_normalized_df = yield_df.copy()
     # yield_normalized_df = yield_normalized_df.T.drop_duplicates().T
-
     yield_df_values  = yield_normalized_df.values      #normalize and sort
     yield_df_values = yield_df_values/abs(yield_df_values[0,:])
-
     yield_normalized_df.loc[:,:] = yield_df_values
     # yield_normalized_df = yield_normalized_df.sort_values(by = index_list[1:],axis = 1,)
 
@@ -302,7 +298,7 @@ def get_yield_space_multi(model2, production_rea_ids_x, production_rea_ids_y, ca
 
             fig.show()
 
-    return yield_normalized_df
+    return yield_normalized_df, fluxes_all
 
 
 # %%
