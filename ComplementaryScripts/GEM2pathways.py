@@ -98,6 +98,7 @@ def get_yield_space_2d(model2, production_rea_ids_2d, carbon_source_rea_ids_2d, 
                                                 ,carbon_source_rea_ids_2d = ['EX_glc__D_e','EX_glc__D_e'],steps = 20 ,
                                                 carbon_uptake_direction = -1,draw = True)
     '''
+    # TODO : find the max flux of production when max yield
     # <Step1 check input data and find the max and min value of p1 yield >
 
     model = model2.copy()
