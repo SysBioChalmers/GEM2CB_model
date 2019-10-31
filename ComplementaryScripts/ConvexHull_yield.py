@@ -258,6 +258,7 @@ def get_hull_active(all_points_,d_,hull_cutoff_index ,qhull_options='Qt QJ Pp Qw
 
     in_hull = point_in_hull(d, hull_cutoff, tolerance=1e-12)  # in or out of the hull
     print('point in the hull:\t', in_hull)
+    in_hull = True
 
     C = all_points[hull_cutoff_index,:].T
     # set the pramater of lsqlin
@@ -308,6 +309,7 @@ def get_hull_active(all_points_,d_,hull_cutoff_index ,qhull_options='Qt QJ Pp Qw
             weights = ret0['x'].T
 
     if  not in_hull:
+        # Bug: why there are too many pathways !!!!
         Aeq = np.ones((1,nC))
         beq = np.ones((1,1))
 
@@ -330,13 +332,14 @@ def get_hull_active(all_points_,d_,hull_cutoff_index ,qhull_options='Qt QJ Pp Qw
     hull_active_index = np.array(hull_cutoff_index)[[i for i in range(0,len(weights)) if weights[i] > 1e-4 ]]
     estimated_data = C0@weights
 
-    estimated_data_ = estimated_data[:]
+    estimated_data_ = list(estimated_data[:])
     for index in index_empty:
+
         estimated_data_.insert(index, '')
 
     print('weights =\t', weights)
     print('estimated_data vs experiment_data: \t')
-    print(estimated_data)
+    print(estimated_data_)
     print(d_)
 
     return hull_active_index,weights,estimated_data,in_hull
@@ -480,22 +483,24 @@ if __name__ == '__main__':
     points_sq = points_all['points_sq']         #points_sq  = np.array([[0,0],[2.1,1.5],[2,2],[2,0],[0,2],[1.5,1.5]])
     points_glc_33 = points_all['points_glc_33']
 
-    # all_points = points_sq
-    # d_t = np.array([0.5,1.9])
-    # d_f = np.array([1,2.5])
-    # experiment_datas = [d_t, d_f, d_t]
-    # experiment_data = experiment_datas[0]
+    all_points = points_sq
+    d_t = np.array([0.5, 1.9])
+    d_f = np.array([1, 2.5])
+    experiment_datas = [d_t, d_f, d_t]
+    experiment_data = experiment_datas[0]
 
     # all_points = points_glc_33
     # dataValue =np.array([0.0169,1.8878,0.0556])
     # experiment_datas = [dataValue]
     # experiment_data = experiment_datas[0]
 
-    all_points = points_2d  # try different data points
-    experiment_datas = []
-    experiment_data = []
+    # %%
+    # all_points =  np.random.rand(200,6)#points_2d  # try different data points
+    # experiment_datas = []
+    # experiment_data = [0.26112345, 0.68739509, 0.85738014, 0.16804945, 0.40893545,
+    #     0.3448415 ]
 
-    cutoff_persent = 0.90
+    cutoff_persent = 0.95  # 0.99
     qhull_options = 'Qt QJ Pp Qw Qx'
 
     #  <Setp1 ConvexHull base>
@@ -518,22 +523,24 @@ if __name__ == '__main__':
 
     # %% <Setp3 ConvexHull active>
     print('ConvexHull active ...')
+    # experiment_data = [0.3, 0.68739509, 0.85738014, 0.16804945, 0.40893545,0.3448415 ]
 
-    hull_active_index, weights, estimated_data, in_hull = get_hull_active(all_points, experiment_data,
+    hull_active_index, weights, estimated_data, in_hull = get_hull_active(all_points, [2, 2.5],
                                                                           hull_cutoff_index,
                                                                           qhull_options=qhull_options, normalize=True)
     print(hull_active_index)
 
-    if in_hull:
+    try:
         hull_cutoff_active = ConvexHull(all_points[hull_active_index, :], qhull_options)
-    else:
+    except:
         hull_cutoff_active = all_points[hull_active_index, :]
 
+
     # %% < pipeline_mya >
-    indexes, weightss, estimated_datas, in_hulls = pipeline_mya(all_points, experiment_datas=experiment_datas,
-                                                                cutoff_persent=cutoff_persent,
-                                                                qhull_options=qhull_options,
-                                                                method=1, normalize=True)
+    # indexes, weightss, estimated_datas, in_hulls = pipeline_mya(all_points, experiment_datas=experiment_datas,
+    #                                                             cutoff_persent=cutoff_persent,
+    #                                                             qhull_options=qhull_options,
+    #                                                             method=1, normalize=True)
 
     # %% plot  only for 2d
     if ndim == 2:
