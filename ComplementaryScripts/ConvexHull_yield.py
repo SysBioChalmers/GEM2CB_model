@@ -12,6 +12,7 @@
 import os
 import warnings
 from itertools import combinations
+
 import lsqlin
 import matplotlib.pyplot as plt
 import numpy as np
@@ -216,6 +217,7 @@ def point_in_hull(point, hull, tolerance=1e-12):
 
 def get_hull_active(all_points_,d_,hull_cutoff_index ,qhull_options='Qt QJ Pp Qw Qx', normalize = True):
     '''
+    TODO find points without combnation, from the Constrained linear least squares
     math:
     if experiment data in the hull :
         min the sum of weight^2
@@ -242,7 +244,7 @@ def get_hull_active(all_points_,d_,hull_cutoff_index ,qhull_options='Qt QJ Pp Qw
         print(len(d_), all_points_.shape[1])
         return hull_cutoff_index, [], [], []
 
-    index_experiment = []
+    index_experiment = []  # experiment could be not complated
     index_empty = []
     d = []
     for i in range(0,len(d_)):
@@ -258,13 +260,14 @@ def get_hull_active(all_points_,d_,hull_cutoff_index ,qhull_options='Qt QJ Pp Qw
 
     in_hull = point_in_hull(d, hull_cutoff, tolerance=1e-12)  # in or out of the hull
     print('point in the hull:\t', in_hull)
-    in_hull = True
+    # in_hull = True
 
     C = all_points[hull_cutoff_index,:].T
     # set the pramater of lsqlin
     # ret = lsqlin.lsqlin(C_in, d_in, 0, None, None, Aeq, beq, \
     #         lb=None, ub=None, x0=None, opts=None
     (mC,nC) = C.shape
+
     lb = np.zeros(nC)
     ub = np.ones(nC)
     A = None
@@ -273,7 +276,7 @@ def get_hull_active(all_points_,d_,hull_cutoff_index ,qhull_options='Qt QJ Pp Qw
 
     # normalize C and d
     C0 = C      # initial C and d
-    d0 = d
+    d0 = np.array(d)
 
     temp_dt = np.tile(d0,(nC,1))
     C = C0*(1/temp_dt.T)
@@ -295,6 +298,7 @@ def get_hull_active(all_points_,d_,hull_cutoff_index ,qhull_options='Qt QJ Pp Qw
                       lb, ub, None, {'show_progress': False})
             #print (ret['x'].T)
             weights = ret['x'].T
+            weights = combinations_points(weights, mC, nC, C_in, d_in, Aeq, beq, in_hull)
 
         else:
             # not nored the same as nored
@@ -307,29 +311,31 @@ def get_hull_active(all_points_,d_,hull_cutoff_index ,qhull_options='Qt QJ Pp Qw
                  lb, ub, None, {'show_progress': False})
             #print (ret0['x'].T)
             weights = ret0['x'].T
+            weights = combinations_points(weights, mC, nC, C_in, d_in, Aeq0, beq0, in_hull)
 
     if  not in_hull:
         # Bug: why there are too many pathways !!!!
         Aeq = np.ones((1,nC))
-        beq = np.ones((1,1))
+        beq = np.ones((Aeq.shape[0], 1))
 
         if normalize:
             ret = lsqlin.lsqlin(C, d, 0, None, None, Aeq, beq, \
                  lb, ub, None, {'show_progress': False})
             #print (ret['x'].T)
             weights = ret['x'].T
+            weights = combinations_points(weights, mC, nC, C, d, Aeq, beq, in_hull)
 
         else:
             ret0 = lsqlin.lsqlin(C0, d0, 0, None, None, Aeq, beq, \
                  lb, ub, None, {'show_progress': False})
             #print (ret0['x'].T)
             weights = ret0['x'].T
+            weights = combinations_points(weights, mC, nC, C0, d0, Aeq, beq, in_hull)
 
     weights = list(weights)
-    weights = np.around(weights, decimals=4)
+    weights = np.around(weights, decimals=6)
 
-
-    hull_active_index = np.array(hull_cutoff_index)[[i for i in range(0,len(weights)) if weights[i] > 1e-4 ]]
+    hull_active_index = np.array(hull_cutoff_index)[[i for i in range(0, len(weights)) if weights[i] > 1e-6]]
     estimated_data = C0@weights
 
     estimated_data_ = list(estimated_data[:])
@@ -343,6 +349,59 @@ def get_hull_active(all_points_,d_,hull_cutoff_index ,qhull_options='Qt QJ Pp Qw
     print(d_)
 
     return hull_active_index,weights,estimated_data,in_hull
+
+
+def combinations_points(weights, mC, nC, C, d, Aeq, beq, in_hull):
+    '''
+    scrips to reduce the points
+    :param weights:
+    :param mC:
+    :param nC:
+    :param C:
+    :param d:
+    :param Aeq:
+    :param beq:
+    :param in_hull:
+    :return:
+    '''
+    # (mC,nC) = C.shape
+    nweights = 0  # check how many points
+    for i in weights:
+        if i > 1e-6:
+            nweights = nweights + 1
+    if in_hull:
+        dim = mC + 1
+    else:
+        dim = mC
+    # print(nweights,'..............',mC)
+
+    if nweights > dim:  # if the number of points > dim+1 ,reduce
+        print('Looking for points by combinations...')
+        lb_ = np.zeros(dim)
+        ub_ = np.ones(dim)
+        min_dis_ave_2 = np.inf
+
+        for i in combinations(np.arange(nC), dim):
+            Aeq_ = Aeq[:, i]
+            beq_ = np.ones((Aeq_.shape[0], 1))
+            C_part = C[:, i]
+            ret = lsqlin.lsqlin(C_part, d, 0, None, None, Aeq_, beq_, \
+                                lb_, ub_, None, {'show_progress': False})
+
+            if ret['gap'] < 1e-6 and sum((C_part @ ret['x'] - d.reshape(3, 1)) ** 2) < 0.1:
+                # TODO check the cutoff 0.1 ???
+                print(sum((C_part @ ret['x'] - d.reshape(3, 1)) ** 2))
+                dis_ave = np.array(ret['x']) - np.array([1 / (dim)])
+                dis_ave_2 = dis_ave ** 2
+                if sum(dis_ave_2) < min_dis_ave_2:
+                    min_dis_ave_2 = sum(dis_ave_2)
+                    min_i = i
+                    weights_i = ret['x']
+        weights_ = np.zeros(nC)
+        weights_[list(min_i)] = list(weights_i)
+    else:
+        weights_ = weights
+    return weights_
 
 
 def hull_plot(all_points,hulls = [],labels = [], markers = [],colors = [],alphas = []):
@@ -470,8 +529,6 @@ def pipeline_mya(all_points, experiment_datas=[], qhull_options='Qt QJ Pp Qw Qx'
 
     return indexes, weightss, estimated_datas, in_hulls
 
-
-#%%
 if __name__ == '__main__':
     # %% <set data and pramaters>   all_points, experiment_data ,qhull_options = 'Qt QJ Pp Qw Qx', cutoff_persent = 0.99
     os.chdir('../ComplementaryData/')
@@ -483,16 +540,18 @@ if __name__ == '__main__':
     points_sq = points_all['points_sq']         #points_sq  = np.array([[0,0],[2.1,1.5],[2,2],[2,0],[0,2],[1.5,1.5]])
     points_glc_33 = points_all['points_glc_33']
 
-    all_points = points_sq
-    d_t = np.array([0.5, 1.9])
-    d_f = np.array([1, 2.5])
-    experiment_datas = [d_t, d_f, d_t]
-    experiment_data = experiment_datas[0]
-
-    # all_points = points_glc_33
-    # dataValue =np.array([0.0169,1.8878,0.0556])
-    # experiment_datas = [dataValue]
+    # all_points = points_sq
+    # d_t = np.array([0.5, 1.9])
+    # d_f = np.array([1, 2.5])
+    # experiment_datas = [d_t, d_f, d_t]
     # experiment_data = experiment_datas[0]
+
+    all_points = points_3d
+
+    all_points = points_glc_33
+    dataValue = np.array([0.0169, 1.8878, 0.0556])
+    experiment_datas = [dataValue]
+    experiment_data = experiment_datas[0]
 
     # %%
     # all_points =  np.random.rand(200,6)#points_2d  # try different data points
@@ -525,7 +584,7 @@ if __name__ == '__main__':
     print('ConvexHull active ...')
     # experiment_data = [0.3, 0.68739509, 0.85738014, 0.16804945, 0.40893545,0.3448415 ]
 
-    hull_active_index, weights, estimated_data, in_hull = get_hull_active(all_points, [2, 2.5],
+    hull_active_index, weights, estimated_data, in_hull = get_hull_active(all_points, experiment_data,
                                                                           hull_cutoff_index,
                                                                           qhull_options=qhull_options, normalize=True)
     print(hull_active_index)
@@ -537,10 +596,10 @@ if __name__ == '__main__':
 
 
     # %% < pipeline_mya >
-    # indexes, weightss, estimated_datas, in_hulls = pipeline_mya(all_points, experiment_datas=experiment_datas,
-    #                                                             cutoff_persent=cutoff_persent,
-    #                                                             qhull_options=qhull_options,
-    #                                                             method=1, normalize=True)
+    indexes, weightss, estimated_datas, in_hulls = pipeline_mya(all_points, experiment_datas=experiment_datas,
+                                                                cutoff_persent=cutoff_persent,
+                                                                qhull_options=qhull_options,
+                                                                method=1, normalize=True)
 
     # %% plot  only for 2d
     if ndim == 2:
@@ -552,3 +611,19 @@ if __name__ == '__main__':
         ax1.set_xlabel('Biomass/ Sourse')
         ax1.set_ylabel('Production_1/ Sourse')
         fig.show()
+    # %% < test resuts:>
+    '''
+    points  experiment  estimated_data  in_hull act_index number
+    points_sq:  [0.5, 1.9]  [0.5, 1.9]  True [0 2 4] 3  passed
+    points_sq:  [1,3]  [1.0, 2.0]  False [2 4] 2        passed
+    
+    points_2d:  [0.8,0.6]  [0.8000002661226724, 0.5999998133271094]  True [ 3  8 12] 3  passed
+    points_2d:  [1,3]  [0.9344051189612134, 0.9994916200977046]  False [3] 1    passed
+    
+    points_3d:  [0.8, 0.6, 0.6]  [0.7999998126345972, 0.599999961784013, 0.5999999865075214]  True [ 5 12 23 24] 4  passed
+    points_3d:  [1,0.6,0.6]  [0.9190085753931684, 0.591700064282075, 0.6046583530568356]  False [12 23 24] 1    passed
+    
+    points_glc_33:  [0.0169 1.8878 0.0556]  [0.01662157720811822, 1.464659815092023, 0.055366326919507505]  False [ 1 22 23] 3  passed
+    
+    
+    '''
