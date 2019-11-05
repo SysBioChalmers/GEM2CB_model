@@ -13,11 +13,13 @@ import cobra
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from scipy.spatial import ConvexHull
 
 
 # %%
 def get_yield_opt(model2, production_rea_id, carbon_source_rea_id, max_or_min='max', carbon_uptake_direction=-1):
     '''
+    TODO add constrain to max flux ???
     Get the max or min Yield , Y = production / carbon
 
     Math :
@@ -130,7 +132,7 @@ def get_yield_space_2d(model2, production_rea_ids_2d, carbon_source_rea_ids_2d, 
 
     fluxes_2d = pd.DataFrame()
 
-    for step in np.arange(0, steps + 1):
+    for step in np.arange(0, steps + 1):  # max and min at each splits
         persent_i = step / steps
 
         yield_k = p1_yield_value_min + (p1_yield_value_max - p1_yield_value_min) * persent_i  # split yield_p1
@@ -172,32 +174,46 @@ def get_yield_space_2d(model2, production_rea_ids_2d, carbon_source_rea_ids_2d, 
         fluxes_2d[p2_rea_id + '_max_' + str(persent_i) + '_x_' + p1_rea_id] = fluxes_max
         fluxes_2d[p2_rea_id + '_min_' + str(persent_i) + '_x_' + p1_rea_id] = fluxes_min
 
+    # 2d convex hull
+    points_2d = fluxes_2d.loc[[p1_rea_id, p2_rea_id, s1_rea_id, s2_rea_id]].values
+    points_2d[0, :] = points_2d[0, :] / abs(points_2d[2, :])
+    points_2d[1, :] = points_2d[1, :] / abs(points_2d[3, :])
+    points_2d = points_2d.T
+    points_2d = np.around(points_2d, 6, )
+    hull = ConvexHull(points_2d[:, [0, 1]], qhull_options='QJ Qx A0.99999999')  # 'QJ C-1e-6'
+    hull_index = hull.vertices
+    # fluxes_2d_hull = fluxes_2d[fluxes_2d.columns[hull_index]]
+
     # < Step3 draw >
     if draw:
         fig = plt.figure()
         ax = fig.add_subplot(111)
 
-        temp_columns_max = [column for column in fluxes_2d.columns if ('max' in column)]
-        temp_columns_min = [column for column in fluxes_2d.columns if ('min' in column)]
+        # temp_columns_max = [column for column in fluxes_2d.columns if ('max' in column)]
+        # temp_columns_min = [column for column in fluxes_2d.columns if ('min' in column)]
+        #
+        # x = fluxes_2d.loc[p1_rea_id, temp_columns_max].values / abs(fluxes_2d.loc[s1_rea_id, temp_columns_max].values)
+        # y_max = fluxes_2d.loc[p2_rea_id, temp_columns_max].values / abs(
+        #     fluxes_2d.loc[s2_rea_id, temp_columns_max].values)
+        # y_min = fluxes_2d.loc[p2_rea_id, temp_columns_min].values / abs(
+        #     fluxes_2d.loc[s2_rea_id, temp_columns_min].values)
+        # ax.plot([x[0], x[0]], [y_max[0], y_min[0]], 'x-', color='tab:blue', alpha=0.8)
+        # ax.plot(x, y_max, 'x-', color='tab:blue', alpha=0.8)
+        # ax.plot(x, y_min, 'x-', color='tab:blue', alpha=0.8)
 
-        x = fluxes_2d.loc[p1_rea_id, temp_columns_max].values / abs(fluxes_2d.loc[s1_rea_id, temp_columns_max].values)
-        y_max = fluxes_2d.loc[p2_rea_id, temp_columns_max].values / abs(
-            fluxes_2d.loc[s2_rea_id, temp_columns_max].values)
-        y_min = fluxes_2d.loc[p2_rea_id, temp_columns_min].values / abs(
-            fluxes_2d.loc[s2_rea_id, temp_columns_min].values)
-
-        ax.plot([x[0], x[0]], [y_max[0], y_min[0]], 'x-', color='tab:blue', alpha=0.8)
-        ax.plot(x, y_max, 'x-', color='tab:blue', alpha=0.8)
-        ax.plot(x, y_min, 'x-', color='tab:blue', alpha=0.8)
-
+        ax.plot(points_2d[:, 0], points_2d[:, 1], 'x', color='black', alpha=0.8)
+        ax.plot(points_2d[hull_index, 0], points_2d[hull_index, 1], 'o--', color='tab:blue', markerfacecolor='none',
+                alpha=0.8, lw=1)
+        ax.plot(points_2d[hull_index[[-1, 0]], 0], points_2d[hull_index[[-1, 0]], 1], 'o--', markerfacecolor='none',
+                color='tab:blue', alpha=0.8, lw=1)
         ax.set_ylabel(p1_rea_id + '/' + s1_rea_id)
         ax.set_xlabel(p1_rea_id + '/' + s2_rea_id)
         fig.show()
 
-    return fluxes_2d
+    return fluxes_2d, hull_index
 
 
-# fluxes_2d = get_yield_space_2d(e_coli_core, production_rea_ids_2d = ['BIOMASS_Ecoli_core_w_GAM','EX_ac_e'],
+# fluxes_2d ,hull_index = get_yield_space_2d(e_coli_core, production_rea_ids_2d = ['BIOMASS_Ecoli_core_w_GAM','EX_ac_e'],
 #                                          carbon_source_rea_ids_2d = ['EX_glc__D_e','EX_glc__D_e'],steps = 20 ,
 #                                          carbon_uptake_direction = -1,draw = True)
 
@@ -232,11 +248,17 @@ def get_yield_space_multi(model2, production_rea_ids_x, production_rea_ids_y, ca
 
     # < Step2 get yield dataFrame(matrix/ points for MYA/Next function)>
     fluxes_all = pd.DataFrame()
+    hull_index_all = np.array([])
+    hull_index_all = hull_index_all.astype(int)
     for production_rea_ids_2d in production_rea_ids_2ds:
         model = model2.copy()
-        fluxes_2d = get_yield_space_2d(model, production_rea_ids_2d, carbon_source_rea_id, steps=steps,
-                                       carbon_uptake_direction=carbon_uptake_direction, draw=False)
+        fluxes_2d, hull_index = get_yield_space_2d(model, production_rea_ids_2d, carbon_source_rea_id, steps=steps,
+                                                   carbon_uptake_direction=carbon_uptake_direction, draw=draw)
+        hull_index_temp = hull_index + fluxes_all.shape[1]
+        hull_index_all = np.concatenate((hull_index_all, hull_index_temp))
         fluxes_all = pd.concat([fluxes_all, fluxes_2d], axis=1)
+        # fluxes_2d_hull = fluxes_2d[fluxes_2d.columns[hull_index]]
+        # fluxes_hull = pd.concat([fluxes_hull, fluxes_2d_hull], axis=1)
 
     index_list = [carbon_source_rea_id] + production_rea_ids_x
     for i in production_rea_ids_y:
@@ -250,12 +272,14 @@ def get_yield_space_multi(model2, production_rea_ids_x, production_rea_ids_y, ca
     yield_df_values = yield_df_values/abs(yield_df_values[0,:])
     yield_normalized_df.loc[:,:] = yield_df_values
     # yield_normalized_df = yield_normalized_df.sort_values(by = index_list[1:],axis = 1,)
+    hull_index_all.sort()
+    yield_normalized_df_hull = yield_normalized_df[yield_normalized_df.columns[hull_index_all]]
 
     # < Step3 draw >
     for x_i in production_rea_ids_x:
 
-        yield_normalized_df_temp = yield_normalized_df.loc[:,
-                                   [column for column in yield_normalized_df.columns if ('_x_' + x_i in column)]]
+        yield_normalized_df_temp = yield_normalized_df_hull.loc[:,
+                                   [column for column in yield_normalized_df_hull.columns if ('_x_' + x_i in column)]]
 
         if draw:
             def trim_axs(axs, N):
@@ -276,18 +300,21 @@ def get_yield_space_multi(model2, production_rea_ids_x, production_rea_ids_y, ca
 
             for ax, exmet_reaction in zip(axs, production_rea_ids_y):
                 temp_columns_max = [column for column in yield_normalized_df_temp.columns if
-                                    (exmet_reaction in column) and ('max' in column)]
+                                    (exmet_reaction + '_max' in column)]
                 temp_columns_min = [column for column in yield_normalized_df_temp.columns if
-                                    (exmet_reaction in column) and ('min' in column)]
-                x = yield_normalized_df_temp.loc[x_i, temp_columns_max].values
+                                    (exmet_reaction + '_min' in column)]
+                x_max = yield_normalized_df_temp.loc[x_i, temp_columns_max].values
                 y_max = yield_normalized_df_temp.loc[exmet_reaction, temp_columns_max]
+                x_min = yield_normalized_df_temp.loc[x_i, temp_columns_min].values
                 y_min = yield_normalized_df_temp.loc[exmet_reaction, temp_columns_min]
 
                 # lines:
-                ax.plot([x[0], x[0]], [y_max[0], y_min[0]], 'x-', color='tab:blue', alpha=0.5)
-                ax.plot([x[-1], x[-1]], [y_max[-1], y_min[-1]], 'x-', color='tab:blue', alpha=0.5)
-                ax.plot(x, y_max, 'x-', color='tab:blue', alpha=0.5)
-                ax.plot(x, y_min, 'x-', color='tab:blue', alpha=0.5)
+                ax.plot([x_max[0], x_min[0]], [y_max[0], y_min[0]], 'o--', color='tab:blue', markerfacecolor='none',
+                        alpha=0.5)
+                ax.plot([x_max[-1], x_min[-1]], [y_max[-1], y_min[-1]], 'o--', color='tab:blue', markerfacecolor='none',
+                        alpha=0.5)
+                ax.plot(x_max, y_max, 'o--', color='tab:blue', markerfacecolor='none', alpha=1)
+                ax.plot(x_min, y_min, 'o--', color='tab:blue', markerfacecolor='none', alpha=1)
 
                 # points
                 x_points = yield_normalized_df.loc[x_i, :].values
@@ -299,7 +326,7 @@ def get_yield_space_multi(model2, production_rea_ids_x, production_rea_ids_y, ca
 
             fig.show()
 
-    return yield_normalized_df, fluxes_all
+    return yield_normalized_df, fluxes_all, hull_index_all
 
 
 # %%
@@ -320,15 +347,27 @@ if __name__ == '__main__':
 
     # %% < get_yield_space_2d>
     print('----------get_yield_space_2d----------\n')
-    fluxes_2d = get_yield_space_2d(model, production_rea_ids_2d=['BIOMASS_Ecoli_core_w_GAM', 'EX_ac_e'],
-                                   carbon_source_rea_ids_2d=['EX_glc__D_e', 'EX_glc__D_e'], steps=steps,
-                                   carbon_uptake_direction=-1, draw=draw)
+    fluxes_2d, hull_index = get_yield_space_2d(model, production_rea_ids_2d=['BIOMASS_Ecoli_core_w_GAM', 'EX_ac_e'],
+                                               carbon_source_rea_ids_2d=['EX_glc__D_e', 'EX_glc__D_e'], steps=steps,
+                                               carbon_uptake_direction=-1, draw=draw)
 
     # %% < get_yield_space_multi >
     print('----------get_yield_space_multi----------\n')
-    production_rea_ids_x = ['BIOMASS_Ecoli_core_w_GAM', 'EX_ac_e', ]
-    production_rea_ids_y = ['BIOMASS_Ecoli_core_w_GAM', 'EX_ac_e', 'EX_for_e', 'EX_etoh_e', 'EX_lac__D_e', 'EX_succ_e']
+    production_rea_ids_x = ['BIOMASS_Ecoli_core_w_GAM', 'EX_ac_e']  # , ,
+    production_rea_ids_y = ['BIOMASS_Ecoli_core_w_GAM', 'EX_ac_e', 'EX_for_e', 'EX_etoh_e', 'EX_lac__D_e',
+                            'EX_succ_e']  #
     carbon_source_rea_id = 'EX_glc__D_e'
 
-    yield_normalized_df = get_yield_space_multi(model, production_rea_ids_x, production_rea_ids_y, carbon_source_rea_id,
-                                                steps=steps, carbon_uptake_direction=-1, draw=True)
+    yield_normalized_df, fluxes_all, hull_index_all = get_yield_space_multi(model, production_rea_ids_x,
+                                                                            production_rea_ids_y, carbon_source_rea_id,
+                                                                            steps=steps, carbon_uptake_direction=-1,
+                                                                            draw=True)
+    yield_normalized_df_hull = yield_normalized_df[yield_normalized_df.columns[hull_index_all]]
+
+    # %%<test results >
+    '''
+    e_coli_core,    
+    yield_opt,  passed
+    fluxes_2d,  passed
+    get_yield_space_multi,  passed
+    '''
