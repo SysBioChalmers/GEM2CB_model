@@ -5,6 +5,8 @@ Updated: 2019-10-27
 Requirements,
 
 - [cobrapy](https://opencobra.github.io/cobrapy/)
+- [cvxpy](https://github.com/cvxgrp/cvxpy)
+- [cvxopt](http://cvxopt.org/)
 
 # Notice <br />
 Please add `./ComplementaryScripts/My_def` to sys.path to ues functions in My_def   <br />
