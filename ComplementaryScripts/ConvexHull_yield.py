@@ -13,11 +13,13 @@ import os
 import warnings
 from itertools import combinations
 
+import cvxpy as cp
 import lsqlin
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.io as sio
 from scipy.spatial import ConvexHull
+from scipy.spatial import Delaunay
 
 
 #%%
@@ -208,12 +210,23 @@ def get_hull_cutoff(all_points, hull_all_index, cutoff_v, qhull_options='Qt QJ P
                 if hull_temp.volume > cutoff_v:
                     return list(set(comb))
 
-def point_in_hull(point, hull, tolerance=1e-12):
+
+def point_in_hull(point, hull, tolerance=1e-6):
     # Judge whether the point is inside or outside of the hull
     # TODO: more test
     return all(
         (np.dot(eq[:-1], point) + eq[-1] <= tolerance)
         for eq in hull.equations)
+
+
+def point_in_hull_passed(point, hull, tolerance=1e-12):
+    # Judge whether the point is inside or outside of the hull
+    p = point
+    hull_points = hull.points
+    if not isinstance(hull_points, Delaunay):
+        hull_ = Delaunay(hull_points)
+    return hull_.find_simplex(p) >= 0
+
 
 def get_hull_active(all_points_,d_,hull_cutoff_index ,qhull_options='Qt QJ Pp Qw Qx', normalize = True):
     '''
@@ -258,11 +271,14 @@ def get_hull_active(all_points_,d_,hull_cutoff_index ,qhull_options='Qt QJ Pp Qw
 
     hull_cutoff = ConvexHull(all_points[hull_cutoff_index, :], qhull_options=qhull_options)
 
-    in_hull = point_in_hull(d, hull_cutoff, tolerance=1e-12)  # in or out of the hull
-    print('point in the hull:\t', in_hull)
-    # in_hull = True
+    # in_hull = point_in_hull(d, hull_cutoff, tolerance=1e-12)  # in or out of the hull
+    # print('point in the hull:\t', in_hull)
+    in_hull = False
 
     C = all_points[hull_cutoff_index,:].T
+    d = np.array(d)
+    C0 = C
+    d0 = d
     # set the pramater of lsqlin
     # ret = lsqlin.lsqlin(C_in, d_in, 0, None, None, Aeq, beq, \
     #         lb=None, ub=None, x0=None, opts=None
@@ -270,67 +286,136 @@ def get_hull_active(all_points_,d_,hull_cutoff_index ,qhull_options='Qt QJ Pp Qw
 
     lb = np.zeros(nC)
     ub = np.ones(nC)
-    A = None
-    b = None
-    x0 = None
+    # A = None
+    # b = None
+    # x0 = None
+    Aeq = np.ones((1, nC))
+    beq = np.ones((1,))
+    x = cp.Variable(nC)
+    objective = cp.Minimize(cp.sum_squares(C0 * x - d0))
+    constraints = [x <= ub,
+                   x >= lb,
+                   Aeq @ x == beq,
+                   ]
+    prob = cp.Problem(objective, constraints)
+    result = prob.solve(solver=cp.CPLEX)
+    weights = x.value
+    # print(weights)
+
+    if len(np.where(weights > 1e-6)[0]) > mC + 1 and sum((C0 @ x.value - d0) ** 2) < 0.001:
+        in_hull = True
+        Aeq = np.vstack([Aeq, C0])
+        beq = np.vstack([beq, d0.reshape(mC, 1)])
+        beq = beq.reshape(mC + 1)
+        # C = np.eye(nC) #np.array([mC]*nC)
+        # d = np.ones(nC)
+        x = cp.Variable(nC)
+        objective = cp.Minimize(cp.norm1(x))
+        constraints = [x <= ub,
+                       x >= lb,
+                       Aeq @ x == beq * 1.0,
+                       ]  # Aeq @ x >= beq * 1.0
+        prob = cp.Problem(objective, constraints)
+        result = prob.solve(solver=cp.CPLEX)
+        # print(prob.status)
+        if prob.status == 'optimal':
+            weights = x.value
+        else:
+            constraints = [x <= ub,
+                           x >= lb,
+                           Aeq @ x <= beq * 1.05,
+                           Aeq @ x >= beq * 0.95]
+            prob = cp.Problem(objective, constraints)
+            result = prob.solve(solver=cp.CPLEX)
+            if prob.status == 'optimal':
+                print('give 5% error')
+                weights = x.value
+            else:
+                in_hull = False
 
     # normalize C and d
-    C0 = C      # initial C and d
-    d0 = np.array(d)
+    # C0 = C      # initial C and d
+    # d0 = np.array(d)
 
-    temp_dt = np.tile(d0,(nC,1))
-    C = C0*(1/temp_dt.T)
-    d = np.ones((1,mC))[0]
-
-    if in_hull:
-
-        C_in = np.eye(nC)       #one C and zero d
-        d_in = np.zeros((1,nC))[0]
-
-        if normalize:
-            # nored
-            Aeq = np.ones((1, nC))
-            #beq = np.ones((1, 1))
-            Aeq = np.vstack([Aeq, C])
-            beq = np.ones((Aeq.shape[0],1))
-
-            ret = lsqlin.lsqlin(C_in, d_in, 0, None, None, Aeq, beq, \
-                      lb, ub, None, {'show_progress': False})
-            #print (ret['x'].T)
-            weights = ret['x'].T
-            weights = combinations_points(weights, mC, nC, C_in, d_in, Aeq, beq, in_hull)
-
-        else:
-            # not nored the same as nored
-            Aeq0 = np.ones((1, nC))
-            beq0 = np.ones((1, 1))
-            Aeq0 = np.vstack([Aeq0, C0])
-            beq0 = np.vstack([beq0, d0.reshape(Aeq0.shape[0]-1,1)])
-
-            ret0 = lsqlin.lsqlin(C_in, d_in, 0, None, None, Aeq0, beq0, \
-                 lb, ub, None, {'show_progress': False})
-            #print (ret0['x'].T)
-            weights = ret0['x'].T
-            weights = combinations_points(weights, mC, nC, C_in, d_in, Aeq0, beq0, in_hull)
-
-    if  not in_hull:
-        # Bug: why there are too many pathways !!!!
-        Aeq = np.ones((1,nC))
-        beq = np.ones((Aeq.shape[0], 1))
-
-        if normalize:
-            ret = lsqlin.lsqlin(C, d, 0, None, None, Aeq, beq, \
-                 lb, ub, None, {'show_progress': False})
-            #print (ret['x'].T)
-            weights = ret['x'].T
-            weights = combinations_points(weights, mC, nC, C, d, Aeq, beq, in_hull)
-
-        else:
-            ret0 = lsqlin.lsqlin(C0, d0, 0, None, None, Aeq, beq, \
-                 lb, ub, None, {'show_progress': False})
-            #print (ret0['x'].T)
-            weights = ret0['x'].T
-            weights = combinations_points(weights, mC, nC, C0, d0, Aeq, beq, in_hull)
+    # temp_dt = np.tile(d0,(nC,1))
+    # C = C0*(1/temp_dt.T)
+    # d = np.ones((1,mC))[0]
+    #
+    # if in_hull:
+    #
+    #     C_in = np.eye(nC)       #one C and zero d
+    #     d_in = np.zeros((1,nC))[0]
+    #
+    #     if normalize:
+    #         # nored
+    #         Aeq = np.ones((1, nC))
+    #         #beq = np.ones((1, 1))
+    #         Aeq = np.vstack([Aeq, C])
+    #         beq = np.ones((Aeq.shape[0]))
+    #
+    #         # ret = lsqlin.lsqlin(C_in, d_in, 0, None, None, Aeq, beq, \
+    #         #           lb, ub, None, {'show_progress': False})
+    #
+    #         x = cp.Variable(nC)
+    #         objective = cp.Minimize(cp.sum_squares(C_in*x - d_in ))
+    #         constraints = [x <= ub, x >= lb, Aeq @ x == beq]
+    #         prob = cp.Problem(objective, constraints)
+    #         result = prob.solve()
+    #
+    #         #print (ret['x'].T)
+    #         weights = x.value  #ret['x'].T
+    #         weights = combinations_points(weights, mC, nC, C_in, d_in, Aeq, beq, in_hull)
+    #
+    #     else:
+    #         # not nored the same as nored
+    #         Aeq0 = np.ones((1, nC))
+    #         beq0 = np.ones((1))
+    #         Aeq0 = np.vstack([Aeq0, C0])
+    #         beq0 = np.vstack([beq0, d0.reshape(Aeq0.shape[0]-1,1)])
+    #
+    #         # ret0 = lsqlin.lsqlin(C_in, d_in, 0, None, None, Aeq0, beq0, \
+    #         #      lb, ub, None, {'show_progress': False})
+    #
+    #         x = cp.Variable(nC)
+    #         objective = cp.Minimize(cp.sum_squares(C_in*x - d_in ))
+    #         constraints = [x <= ub, x >= lb, Aeq0 @ x == beq0]
+    #         prob = cp.Problem(objective, constraints)
+    #         result = prob.solve()
+    #         #print (ret0['x'].T)
+    #         weights = x.value  #ret['x'].T
+    #         weights = combinations_points(weights, mC, nC, C_in, d_in, Aeq0, beq0, in_hull)
+    #
+    # if  not in_hull:
+    #     # Bug: why there are too many pathways !!!!
+    #     Aeq = np.ones((1,nC))
+    #     beq = np.ones((Aeq.shape[0]))
+    #
+    #     if normalize:
+    #         # ret = lsqlin.lsqlin(C, d, 0, None, None, Aeq, beq, \
+    #         #      lb, ub, None, {'show_progress': False})
+    #         #print (ret['x'].T)
+    #         x = cp.Variable(nC)
+    #         objective = cp.Minimize(cp.sum_squares(C*x - d ))
+    #         constraints = [x <= ub, x >= lb, Aeq @ x == beq]
+    #         prob = cp.Problem(objective, constraints)
+    #         result = prob.solve()
+    #
+    #         weights = x.value  #ret['x'].T
+    #         weights = combinations_points(weights, mC, nC, C, d, Aeq, beq, in_hull)
+    #
+    #     else:
+    #         # ret0 = lsqlin.lsqlin(C0, d0, 0, None, None, Aeq, beq, \
+    #         #      lb, ub, None, {'show_progress': False})
+    #         #print (ret0['x'].T)
+    #
+    #         x = cp.Variable(nC)
+    #         objective = cp.Minimize(cp.sum_squares(C0*x - d0 ))
+    #         constraints = [x <= ub, x >= lb, Aeq @ x == beq]
+    #         prob = cp.Problem(objective, constraints)
+    #         result = prob.solve()
+    #
+    #         weights = x.value  #ret['x'].T
+    #         weights = combinations_points(weights, mC, nC, C0, d0, Aeq, beq, in_hull)
 
     weights = list(weights)
     weights = np.around(weights, decimals=6)
@@ -340,13 +425,13 @@ def get_hull_active(all_points_,d_,hull_cutoff_index ,qhull_options='Qt QJ Pp Qw
 
     estimated_data_ = list(estimated_data[:])
     for index in index_empty:
-
         estimated_data_.insert(index, '')
 
+    print('Point in or not in hull: ', in_hull)
     print('weights =\t', weights)
     print('estimated_data vs experiment_data: \t')
-    print(estimated_data_)
-    print(d_)
+    print(np.around(estimated_data_, decimals=6))
+    print(np.around(d_, decimals=6))
 
     return hull_active_index,weights,estimated_data,in_hull
 
@@ -380,17 +465,21 @@ def combinations_points(weights, mC, nC, C, d, Aeq, beq, in_hull):
         lb_ = np.zeros(dim)
         ub_ = np.ones(dim)
         min_dis_ave_2 = np.inf
+        comb_list = list(combinations(np.arange(nC), dim))
+        if len(comb_list) > 1e9:
+            print('Too many combinations....try reduce the points!!!')
+            return weights
 
-        for i in combinations(np.arange(nC), dim):
+        for i in comb_list:
             Aeq_ = Aeq[:, i]
             beq_ = np.ones((Aeq_.shape[0], 1))
             C_part = C[:, i]
             ret = lsqlin.lsqlin(C_part, d, 0, None, None, Aeq_, beq_, \
                                 lb_, ub_, None, {'show_progress': False})
 
-            if ret['gap'] < 1e-6 and sum((C_part @ ret['x'] - d.reshape(3, 1)) ** 2) < 0.1:
-                # TODO check the cutoff 0.1 ???
-                print(sum((C_part @ ret['x'] - d.reshape(3, 1)) ** 2))
+            if ret['gap'] < 1e-6:
+                # TODO check the cutoff and sum((C_part @ ret['x'] - d.reshape(, 1)) ** 2) < 0.1 0.1 ???
+                # print(sum((C_part @ ret['x'] - d.reshape(3, 1)) ** 2))
                 dis_ave = np.array(ret['x']) - np.array([1 / (dim)])
                 dis_ave_2 = dis_ave ** 2
                 if sum(dis_ave_2) < min_dis_ave_2:
@@ -500,13 +589,15 @@ def pipeline_mya(all_points, experiment_datas=[], qhull_options='Qt QJ Pp Qw Qx'
 
     else:  #
         for experiment_data in experiment_datas:
+            print('\n\t\t\t\t---------- Experimrnt data i ... ---------- ')
             hull_cutoff_index_ = hull_cutoff_index[:]
 
             hull_active_index, weights, estimated_data, in_hull = get_hull_active(all_points, experiment_data, \
                                                                                   hull_cutoff_index_,
                                                                                   qhull_options=qhull_options,
                                                                                   normalize=normalize)
-            print('hull_active_index = \t', list(hull_active_index), '\n len:\t', len(list(hull_active_index)), '\n')
+            print('hull_active_index = \t', list(hull_active_index), '\n \t\t len:\t', len(list(hull_active_index)),
+                  '\n')
 
             # if in_hull:
             #     hull_cutoff_active = ConvexHull(all_points[hull_active_index, :], qhull_options)
@@ -546,12 +637,13 @@ if __name__ == '__main__':
     # experiment_datas = [d_t, d_f, d_t]
     # experiment_data = experiment_datas[0]
 
-    all_points = points_3d
+    all_points = points_4d
+    experiment_data = [0.6, 0.6, 0.6, 0.6]
 
-    all_points = points_glc_33
-    dataValue = np.array([0.0169, 1.8878, 0.0556])
-    experiment_datas = [dataValue]
-    experiment_data = experiment_datas[0]
+    # all_points = points_glc_33
+    # dataValue = np.array([0.0169, 1.8878, 0.0556])
+    # experiment_datas = [dataValue]
+    # experiment_data = experiment_datas[0]
 
     # %%
     # all_points =  np.random.rand(200,6)#points_2d  # try different data points
@@ -560,7 +652,7 @@ if __name__ == '__main__':
     #     0.3448415 ]
 
     cutoff_persent = 0.95  # 0.99
-    qhull_options = 'Qt QJ Pp Qw Qx'
+    qhull_options = 'QJ A0.999'
 
     #  <Setp1 ConvexHull base>
 
@@ -575,7 +667,7 @@ if __name__ == '__main__':
     #  <Setp2 ConvexHull cutoff>
     print('ConvexHull cutoff ...')
     cutoff_v = cutoff_persent * hull_all.volume
-    hull_cutoff_index = get_hull_cutoff(all_points, hull_all_index, cutoff_v, qhull_options='', method=1)
+    hull_cutoff_index = get_hull_cutoff(all_points, hull_all_index, cutoff_v, qhull_options=qhull_options, method=1)
     print('hull_cutoff_index = ', hull_cutoff_index, '\n len:\t', len(list(hull_cutoff_index)))
 
     hull_cutoff = ConvexHull(all_points[hull_cutoff_index, :], qhull_options=qhull_options)
@@ -596,7 +688,7 @@ if __name__ == '__main__':
 
 
     # %% < pipeline_mya >
-    indexes, weightss, estimated_datas, in_hulls = pipeline_mya(all_points, experiment_datas=experiment_datas,
+    indexes, weightss, estimated_datas, in_hulls = pipeline_mya(all_points, experiment_datas=[experiment_data],
                                                                 cutoff_persent=cutoff_persent,
                                                                 qhull_options=qhull_options,
                                                                 method=1, normalize=True)
