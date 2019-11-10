@@ -22,6 +22,8 @@ from scipy.spatial import ConvexHull
 from scipy.spatial import Delaunay
 
 
+#
+
 #%%
 
 def get_distance(V, p):
@@ -231,6 +233,7 @@ def point_in_hull_passed(point, hull, tolerance=1e-12):
 def get_hull_active(all_points_,d_,hull_cutoff_index ,qhull_options='Qt QJ Pp Qw Qx', normalize = True):
     '''
     TODO find points without combnation, from the Constrained linear least squares
+    TODO try normalize
     math:
     if experiment data in the hull :
         min the sum of weight^2
