@@ -114,7 +114,8 @@ def dxdy(x, t, CB_model):
     return dxdt_vector
 
 
-def cb_model_simulate(CB_model, initial_x0, tspan, draw=True):
+def cb_model_simulate(CB_model, tspan, draw=True):
+    initial_x0 = CB_model.x0
     sol = odeint(dxdy, initial_x0, tspan, args=(CB_model,))
 
     if draw:
@@ -149,6 +150,7 @@ if __name__ == '__main__':
     (n_mets, n_path) = Smz.shape
 
     # experiment data
+    print('\n---------- Loading Experiment Data ... ---------- ')
     experiment_data_df = pd.read_csv('Case1_ecoli_reduced/ecoli_reduce_experiment_data.txt', delimiter='\t', header=0)
     metabObj = ['glc', 'succ', 'for', 'lac', 'ac', 'etoh', 'biomass', ]
 
@@ -240,4 +242,4 @@ if __name__ == '__main__':
         return rM, rE, rG
 
 
-    sol = cb_model_simulate(CB_model, initial_x0, tspan, draw=True)
+    sol = cb_model_simulate(CB_model, tspan, draw=True)
