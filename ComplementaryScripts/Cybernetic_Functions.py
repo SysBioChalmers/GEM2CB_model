@@ -14,8 +14,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from scipy.integrate import odeint
+import __main__
 
-os.chdir('../ComplementaryData/')
 
 
 # %% <def functions>
@@ -88,26 +88,32 @@ def dxdy(x, t, CB_model):
     alpha = CB_model.alpha
     beta = CB_model.beta
     Biomass_index = CB_model.Biomass_index
-    sub_index = CB_model['sub_index']
+    sub_index = CB_model.sub_index
+    n_carbon = CB_model.n_carbon
 
     (n_mets, n_path) = Smz.shape
 
-    rM, rE, rG = rate_def(x, CB_model)
+    rM, rE, rG = __main__.rate_def(x, CB_model)
+    # rM, rE, rG = __main__.rate_def2(x, CB_model).rM , rate_def2(x, CB_model).rE , rate_def2(x, CB_model).rG
 
-    cybernetic_var = abs(Smz[sub_index, :] * rM)
+    # cybernetic_var = abs(Smz[sub_index, :] * rM * n_carbon)
+    cybernetic_var = abs(Smz[sub_index, :] * rM * n_carbon)
 
     u = cybernetic_var / sum(cybernetic_var)
     v = cybernetic_var / np.max(abs(cybernetic_var))
-    u[u == 0] = 1
-    v[v == 0] = 1
+    u[u < 0.0001] = 1
+    v[v < 0.0001] = 1
 
     V = np.eye(n_path) * v
 
     Growth_rate = rG * v
     mu = sum(Growth_rate)
 
-    dy_dx_mets = Smz @ V @ rM * x[Biomass_index]
-    dy_dx_enzyme = alpha + rE * u - (beta + mu) * x[n_path:];
+    dy_dx_mets = Smz @ (v * rM * x[Biomass_index])
+    # dy_dx_enzyme = alpha + rE * u - (beta + mu) * x[n_mets:];
+
+    mumax = Smz[Biomass_index, :].T * kmax
+    dy_dx_enzyme = (mumax + beta) / (alpha + ke) * (alpha + rE * u) - (beta + mu) * x[n_mets:];
 
     dxdt_vector = list(dy_dx_mets) + list(dy_dx_enzyme)
 
@@ -130,6 +136,7 @@ def cb_model_simulate(CB_model, tspan, draw=True):
 
 if __name__ == '__main__':
     # %% < def input:>
+    os.chdir('../ComplementaryData/')
 
     # DefineTime
     tStart = 0.0
@@ -235,7 +242,7 @@ if __name__ == '__main__':
             kmax[6] * (x[2] ** 2) / ((K[6] ** 2) + (x[2] ** 2)),
         ]
 
-        rE = ke * rM / kmax / np.array(list(x[n_path:-1]) + [1])
+        rE = ke * rM / kmax / np.array(list(x[n_mets:-1]) + [1])
 
         rG = Smz[Biomass_index, :] * rM[:]  # 11: biomass index
 
