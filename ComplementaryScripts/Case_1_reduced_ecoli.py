@@ -231,7 +231,7 @@ metabObj = ['glc', 'biomass', 'ac', 'for', 'etoh', 'lac', 'succ']
 initial_mets = experiment_data_df[metabObj].values[0, :]
 
 # initial:Enzyme: initial_enzyme.shape = (n_path,)
-initial_enzyme = np.array([0.9] * n_path)
+initial_enzyme = np.array([0.9] * (n_path - 1) + [1])
 
 # initial data x0 :initial_x0.shape  = (n_mets + n_path,)
 initial_x0 = np.concatenate((initial_mets, initial_enzyme))
@@ -244,22 +244,22 @@ ke = np.array([0.620342] * n_path)  # or 0.5
 # Metabolites rate Parameters kmax , Ki : dm/dt =  Smz @ V @ rM(kmax,K) * c
 # kmax : n_path
 kmax = np.array([
-    1.0895e+01,
-    2.6936e+01,
-    4.1210e-09,
-    2.2697e+00,
-    8.4682e-07,
-    7.9862e+00
+    10.9834382998037,
+    22.0252764422883,
+    2.51869911959873e-09,
+    8.63617956141342e-06,
+    1.84082444427781e-07,
+    28.4203763528915
 ])
 
 # K : n_path
 K = np.array([
-    1.5235e-5,
-    1.5181e+01,
-    3.5111e+00,
-    2.4034e-5,
-    6.7265e-5,
-    7.8,
+    0.00242654588166614,
+    9.65979532962462,
+    2.91194363535861e-07,
+    3.39429549655414,
+    4.32918435262398,
+    4.75053521070238,
 ])
 
 # carbon number for each pathways
@@ -294,17 +294,18 @@ def rate_def(x, CB_model):
 
     (n_mets, n_path) = Smz.shape
 
+    r_kin_basic = [
+        kmax[0] * x[sub_index] / (K[0] + x[sub_index]),
+        kmax[1] * x[sub_index] / (K[1] + x[sub_index]),
+        kmax[2] * x[sub_index] / (K[2] + x[sub_index]),
+        kmax[3] * x[sub_index] / (K[3] + x[sub_index]),
+        kmax[4] * x[sub_index] / (K[4] + x[sub_index]),
+        kmax[5] * (x[3] ** 2) / ((K[5] ** 2) + (x[3] ** 2)), ]
 
-    rM = [
-        kmax[0] * x[0 + n_mets] * x[sub_index] / (K[0] + x[sub_index]),
-        kmax[1] * x[1 + n_mets] * x[sub_index] / (K[1] + x[sub_index]),
-        kmax[2] * x[2 + n_mets] * x[sub_index] / (K[2] + x[sub_index]),
-        kmax[3] * x[3 + n_mets] * x[sub_index] / (K[3] + x[sub_index]),
-        kmax[4] * x[4 + n_mets] * x[sub_index] / (K[4] + x[sub_index]),
-        kmax[5] * (x[3] ** 2) / ((K[5] ** 2) + (x[3] ** 2)),
-    ]
+    rM = r_kin_basic * x[n_mets:]
 
-    rE = ke * rM / kmax / np.array(list(x[n_mets:-1]) + [1])
+    rE = ke * r_kin_basic / kmax
+
 
     rG = Smz[Biomass_index, :] * rM[:]  # 11: biomass index
 
