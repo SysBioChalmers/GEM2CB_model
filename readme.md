@@ -6,7 +6,7 @@ Requirements,
 
 - [cobrapy](https://opencobra.github.io/cobrapy/)
 - [cvxpy](https://github.com/cvxgrp/cvxpy)
-- [cvxopt](http://cvxopt.org/)
+- [IBM Cplex](https://www.ibm.com/se-en/analytics/cplex-optimizer)
 
 # Notice <br />
 Please add `./ComplementaryScripts/My_def` to sys.path to ues functions in My_def   <br />
