@@ -51,6 +51,18 @@ FBAem_z[:,:] = FBAem_z[:,:]/abs(FBAem_z[0,:])
 np.savetxt('Case1_ecoli_reduced/ecoli_reduced_FBAMs_standardized.csv', FBAem_z, delimiter=',')
 reduced_FBAMs = np.genfromtxt('Case1_ecoli_reduced/ecoli_reduced_FBAMs_standardized.csv', delimiter = ',')
 
+# %% <experiment data process>
+
+
+
+
+
+
+
+
+
+
+
 
 # %% case 2.1 Ecoli core model 95 reactions
 
