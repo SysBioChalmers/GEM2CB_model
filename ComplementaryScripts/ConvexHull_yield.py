@@ -433,8 +433,12 @@ def get_hull_active(all_points_,d_,hull_cutoff_index ,qhull_options='Qt QJ Pp Qw
     print('Point in or not in hull: ', in_hull)
     print('weights =\t', weights)
     print('estimated_data vs experiment_data: \t')
-    print(np.around(estimated_data_, decimals=6))
-    print(np.around(d_, decimals=6))
+    try:
+        print(np.around(estimated_data_, decimals=6))
+        print(np.around(d_, decimals=6))
+    except:
+        print(estimated_data_)
+        print(d_)
 
     return hull_active_index,weights,estimated_data,in_hull
 

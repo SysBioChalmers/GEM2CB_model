@@ -81,6 +81,7 @@ class Cybernetic_Model(dict):
 
 def dxdy(x, t, CB_model):
     # Smz=Smz, kmax=kmax, K=K, ke=ke, alpha=alpha, beta=beta
+    # TODO the result i different from matlab.... :(
     Smz = CB_model.Smz
     kmax = CB_model.kmax
     K = CB_model.K
@@ -107,8 +108,9 @@ def dxdy(x, t, CB_model):
     else:
         u = v = np.zeros(n_path)
 
-    u[u < 0.0001] = 1.0
-    v[v < 0.0001] = 1.0
+    if CB_model.name == 'CB model for Ecoli reduced matrix ':
+        u[-1] = 1.0
+        v[-1] = 1.0
 
 
     V = np.eye(n_path) * v
@@ -123,12 +125,12 @@ def dxdy(x, t, CB_model):
     dy_dx_enzyme = (mumax + beta) / (alpha + ke) * (alpha + rE * u) - (beta + mu) * x[n_mets:];
 
     dxdt_vector = list(dy_dx_mets) + list(dy_dx_enzyme)
-    if abs(t - 5.0) < 0.1:
-        print('t', t)
-        print('rM', rM)
-        print('u', u)
-        print('v', v)
-        print('x', x)
+    # if abs(t - 0.0) < 0.01:
+    #     print('t', t)
+    #     print('rM', rM)
+    #     print('(mumax + beta) / (alpha + ke) * (alpha + rE * u)', (mumax + beta) / (alpha + ke) * (alpha + rE * u))
+    #     print('(beta + mu) * x[n_mets:]', (beta + mu) * x[n_mets:])
+    #     print('x', x)
 
 
     return dxdt_vector
@@ -305,6 +307,7 @@ if __name__ == '__main__':
 
         # initial metabolites at tome 0, t0: initial_mets.shape = (n_mets,)
         initial_mets = experiment_data_df[metabObj].values[0, :]
+        initial_mets = initial_mets[[0, 6, 4, 2, 5, 3, 1]]
 
         # initial:Enzyme: initial_enzyme.shape = (n_path,)
         initial_enzyme = np.array([0.9, 0.9, 0.9, 0.9, 0.9, 1])
@@ -323,21 +326,22 @@ if __name__ == '__main__':
         # kmax : n_path
 
         kmax = np.array([
-            11.03,
-            19.18,
-            4.1210e-05,
-            2.18,
-            8.4682e-05,
-            19.8
+            10.86,
+            35.17,
+            4.1210e-09,
+            2.31,
+            4.12e-7,
+            21.08
         ])
 
+        # K : n_path
         K = np.array([
-            0.002,
-            6.38,
-            5.27,
-            0.002,
-            0.002,
-            15,
+            2.5235,
+            24.39,
+            33.50,
+            1,
+            1,
+            1.042,
         ])
 
         # carbon number for each pathways
@@ -370,16 +374,17 @@ if __name__ == '__main__':
 
             (n_mets, n_path) = Smz.shape
 
-            rM = [
-                kmax[0] * x[0 + n_mets] * x[sub_index] / (K[0] + x[sub_index]),
-                kmax[1] * x[1 + n_mets] * x[sub_index] / (K[1] + x[sub_index]),
-                kmax[2] * x[2 + n_mets] * x[sub_index] / (K[2] + x[sub_index]),
-                kmax[3] * x[3 + n_mets] * x[sub_index] / (K[3] + x[sub_index]),
-                kmax[4] * x[4 + n_mets] * x[sub_index] / (K[4] + x[sub_index]),
-                kmax[5] * (x[3] ** 2) / ((K[5] ** 2) + (x[3] ** 2)),
-            ]
+            r_kin_basic = [
+                kmax[0] * x[sub_index] / (K[0] + x[sub_index]),
+                kmax[1] * x[sub_index] / (K[1] + x[sub_index]),
+                kmax[2] * x[sub_index] / (K[2] + x[sub_index]),
+                kmax[3] * x[sub_index] / (K[3] + x[sub_index]),
+                kmax[4] * x[sub_index] / (K[4] + x[sub_index]),
+                kmax[5] * (x[3] ** 2) / ((K[5] ** 2) + (x[3] ** 2)), ]
 
-            rE = ke * rM / kmax / np.array(list(x[n_mets:-1]) + [1])
+            rM = r_kin_basic * x[n_mets:]
+
+            rE = ke * r_kin_basic / kmax
 
             rG = Smz[Biomass_index, :] * rM[:]  # 11: biomass index
 
