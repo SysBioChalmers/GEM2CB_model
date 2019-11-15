@@ -108,9 +108,13 @@ def dxdy(x, t, CB_model):
     else:
         u = v = np.zeros(n_path)
 
-    if CB_model.name == 'CB model for Ecoli reduced matrix ':
+    if CB_model.name in ['CB model for Ecoli reduced matrix ', 'CB model for Ecoli iML1515 matrix ']:
         u[-1] = 1.0
         v[-1] = 1.0
+        # print(CB_model.name)
+    # if CB_model.name in [ 'CB model for Ecoli core matrix '] :
+    #     u[u<0.001] = 1.0
+    #     v[v<0.001] = 1.0
 
 
     V = np.eye(n_path) * v
@@ -125,12 +129,12 @@ def dxdy(x, t, CB_model):
     dy_dx_enzyme = (mumax + beta) / (alpha + ke) * (alpha + rE * u) - (beta + mu) * x[n_mets:];
 
     dxdt_vector = list(dy_dx_mets) + list(dy_dx_enzyme)
-    # if abs(t - 0.0) < 0.01:
-    #     print('t', t)
-    #     print('rM', rM)
-    #     print('(mumax + beta) / (alpha + ke) * (alpha + rE * u)', (mumax + beta) / (alpha + ke) * (alpha + rE * u))
-    #     print('(beta + mu) * x[n_mets:]', (beta + mu) * x[n_mets:])
-    #     print('x', x)
+    if abs(t - 0.0) < 0.01:
+        print('t', t)
+        print('rM', rM)
+        print('(mumax + beta) / (alpha + ke) * (alpha + rE * u)', (mumax + beta) / (alpha + ke) * (alpha + rE * u))
+        print('(beta + mu) * x[n_mets:]', (beta + mu) * x[n_mets:])
+        print('x', x)
 
 
     return dxdt_vector
