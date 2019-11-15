@@ -195,8 +195,8 @@ for ax, exmet_reaction in zip(axs, yield_rea_ids_name):
         line_EFMs = ax.plot(xy_EFMs[simplex, 0], xy_EFMs[simplex, 1], 'x-', markerfacecolor='none', color='tab:orange',
                             alpha=0.5, label='EFMs', markersize=10)
 
-    points_exp = ax.plot(xy_exp[:, 0], xy_exp[:, 1], '^', color='tab:red',
-                         alpha=1, label='experiment data', markersize=11)
+    # points_exp = ax.plot(xy_exp[:, 0], xy_exp[:, 1], '^', color='tab:red',
+    #                      alpha=1, label='experiment data', markersize=11)
 
     ax.set_ylabel(yield_rea_ids_name[index - 1] + '/Glucose', fontsize=12)
 
@@ -320,11 +320,18 @@ sol = Cybernetic_Functions.cb_model_simulate(ecoli_reduced_our_cb, tspan, draw=F
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
+colors = ['blue', 'teal', 'tab:red', 'tab:orange']
+color_list = plt.cm.tab10(np.linspace(0, 1, 12))
 
-for metid in metabObj:
-    experiment_p = ax.plot(experiment_data_df['time'], experiment_data_df[metid], 'o--',
-                           alpha=0.5, )
+for index in range(0, CB_model.Smz.shape[0]):
+    ax.plot(tspan, sol[:, index], color=color_list[index], linewidth=2, label=metabObj[index])
+    experiment_p = ax.plot(experiment_data_df['time'], experiment_data_df[metabObj[index]], 'o--',
+                           color=color_list[index],
+                           linewidth=1)
 
-for key in range(0, CB_model.Smz.shape[0]):
-    model_line = ax.plot(tspan, sol[:, key], color="k", linewidth=2)
+ax.set_xlabel('Time (h)', fontsize=12)
+ax.set_ylabel('Concentration (mM)', fontsize=12)
+fig.legend(loc='center left', bbox_to_anchor=(0.1, 0.57), ncol=2)
+
+
 fig.show()

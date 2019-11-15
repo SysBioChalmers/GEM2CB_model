@@ -369,7 +369,7 @@ K = np.array([
     3.8855e-03, ])
 
 # carbon number for each pathways
-n_carbon = np.array([6, 6, 6, 2, 2])
+n_carbon = np.array([6, 6, 6, 0, 0])
 Biomass_index = 1
 sub_index = 0
 
@@ -422,13 +422,20 @@ sol = Cybernetic_Functions.cb_model_simulate(ecoli_core_our_cb, tspan, draw=Fals
 
 # experiment data
 
-fig = plt.figure(figsize=(10, 5))
+fig = plt.figure()
 ax = fig.add_subplot(111)
+colors = ['blue', 'teal', 'tab:red', 'tab:orange']
+color_list = plt.cm.tab10(np.linspace(0, 1, 12))
 
-for metid in metabObj:
-    experiment_p = ax.plot(experiment_data_df['time'], experiment_data_df[metid], 'o--',
-                           alpha=0.5, )
+for index in range(0, CB_model.Smz.shape[0]):
+    ax.plot(tspan, sol[:, index], color=color_list[index + 1], linewidth=2, label=metabObj[index])
+    experiment_p = ax.plot(experiment_data_df['time'], experiment_data_df[metabObj[index]], 'o--',
+                           color=color_list[index + 1],
+                           linewidth=1)
 
-for key in range(0, CB_model.Smz.shape[0]):
-    model_line = ax.plot(tspan, sol[:, key], color="k", linewidth=2)
+ax.set_xlabel('Time (h)', fontsize=12)
+ax.set_ylabel('Concentration (mM)', fontsize=12)
+fig.legend(loc='center left', bbox_to_anchor=(0.1, 0.57), ncol=2)
+
+
 fig.show()
