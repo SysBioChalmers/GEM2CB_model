@@ -7,6 +7,7 @@
 *.iml
 
 Archive/
+archive/
 ComplementaryData/__pycache__/
 out
 gen
