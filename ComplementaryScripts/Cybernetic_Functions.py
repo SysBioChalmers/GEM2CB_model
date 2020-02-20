@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from scipy.integrate import odeint
+import scipy
 import copy
 import matplotlib
 
@@ -103,7 +104,7 @@ def dxdy(x, t, CB_model):
         u, v = __main__.cybernetic_var_def(rM, CB_model)
 
     except:
-        print('stand cybernetic_vars')
+        # print('stand cybernetic_vars')
         # cybernetic_var = abs(Smz[sub_index, :] * rM * n_carbon)
         cybernetic_var = rM * n_carbon
         # cybernetic_var[cybernetic_var==0] = 1
@@ -154,11 +155,122 @@ def cb_model_simulate(CB_model, tspan, draw=True):
         fig, ax = plt.subplots()
         for key in range(0, CB_model.Smz.shape[0]):
             model_line = ax.plot(tspan, sol[:, key], color="k", linewidth=2)
-        ax.legend((model_line[0],), ("HCM FBA",), fontsize=18)
+
+        ax.legend((model_line[0],), ("Simulation",), fontsize=18)
         ax.set_xlabel("Time (hr)", fontsize=20)
-        ax.set_xlabel("Abundance (mM)", fontsize=20)
+        ax.set_ylabel("Abundance (mM)", fontsize=20)
         fig.show()
     return sol
+
+
+def update_paras_func(x_paras, _CB_model, para_to_fit, retern_model_or_paras='model'):
+    num_kmax = len(para_to_fit['kmax'])
+    num_K = len(para_to_fit['K'])
+
+    print('kmax = np.array(', list(x_paras)[0:num_kmax], ')')
+    print('K = np.array(', list(x_paras)[num_kmax:], ')')
+
+    if retern_model_or_paras == 'model':
+        if num_kmax > 0:
+            _CB_model['kmax'][para_to_fit['kmax']] = x_paras[0:num_kmax]
+        if num_K > 0:
+            _CB_model['K'][para_to_fit['K']] = x_paras[num_kmax:num_kmax + num_K]
+        return _CB_model
+    else:
+        x_paras = [0] * (num_kmax + num_K)
+        if num_kmax > 0:
+            x_paras[0:num_kmax] = _CB_model['kmax'][para_to_fit['kmax']]
+        if num_K > 0:
+            x_paras[num_kmax:num_kmax + num_K] = _CB_model['K'][para_to_fit['K']]
+        # paras_initial = x_paras
+        return x_paras
+    # TODO return other para_to_fit keys
+
+
+def residuals_func(x_paras, _CB_model, para_to_fit, exp_y, tspan, time_points_index, metas_index, weights=[],
+                   draw=False):
+    _CB_model = update_paras_func(x_paras, _CB_model, para_to_fit, retern_model_or_paras='model')
+
+    sol_temp = cb_model_simulate(_CB_model, tspan, draw=False)
+
+    model_y = sol_temp[time_points_index, :][:, metas_index]
+
+    if len(weights) == 0:
+        weights = 1
+
+    res = exp_y - model_y
+    res_sq = res ** 2
+    weight_of_method = 1 / np.mean(res_sq, axis=0) ** 2 / len(time_points_index)
+    weight_of_method = weight_of_method / sum(weight_of_method)
+    f = sum(res_sq * weight_of_method * weights)
+
+    # f = sum(abs(exp_y - model_y)) * weights
+    # print('f',f)
+    # print('x_paras',x_paras)
+
+    if draw:
+        global fitting_fig, fitting_ax, model_lines
+        for i in range(0, _CB_model.Smz.shape[0]):
+            model_lines[i][0].remove()
+            model_lines[i] = fitting_ax.plot(tspan, sol_temp[:, i], color="k", linewidth=2)
+            plt.pause(1e-9)
+        fitting_fig.show()
+    # return 0
+    return abs(sum(f))
+
+
+def parameters_fitting(CB_model, experiment_data_df, para_to_fit, tspan, draw=False):
+    _CB_model = copy.deepcopy(CB_model)
+    # _CB_model = CB_model.copy()
+    # para_index = {'kmax': [0, 1, 2, 3, 4, 5], }
+
+    time_points = experiment_data_df.time
+    time_points_index = []
+    for time_point in time_points:
+        index = np.argmin(abs(tspan - time_point))
+        time_points_index.append(index)
+
+    metas_index = []
+    for exp_met_name in experiment_data_df.columns:
+        if exp_met_name in _CB_model.metas_names:
+            index = _CB_model.metas_names.index(exp_met_name)
+            metas_index.append(index)
+
+    exp_y = experiment_data_df[_CB_model.metas_names].values
+
+    sol_initial = cb_model_simulate(_CB_model, tspan, draw=False)
+
+    paras_initial = update_paras_func([], _CB_model, para_to_fit, retern_model_or_paras='paras')
+
+    # model_y = sol[timepoints_index,:][:,metas_index]
+    print('Fiting')
+    if draw:
+        global fitting_fig, fitting_ax, model_lines
+        print('drawing')
+        matplotlib.use("Qt5Agg")
+        plt.ion()
+        fitting_fig, fitting_ax = plt.subplots()
+        fitting_ax.set_xlabel("Time (hr)", fontsize=20)
+        fitting_ax.set_ylabel("Concentration (mM)", fontsize=20)
+        exp_ponts = []
+        model_lines = []
+        for i in range(0, _CB_model.Smz.shape[0]):
+            exp_ponts.append(fitting_ax.plot(experiment_data_df.time, exp_y[:, i], 'o'))
+            model_lines.append(fitting_ax.plot(tspan, sol_initial[:, i], color="k", linewidth=2))
+            plt.pause(0.01)
+            # fitting_fig.show()
+        # fitting_ax.legend((model_line[0],), ("HCM FBA",), fontsize=18)
+        # exp_ponts[1][0].remove()
+        fitting_fig.show()
+        # fitting_fig.clf()
+        # plt.close()
+
+    minimum = scipy.optimize.fmin(residuals_func, paras_initial, args=(
+        _CB_model, para_to_fit, exp_y, tspan, time_points_index, metas_index, [], draw),
+                                  xtol=0.01, ftol=0.01, maxiter=100, full_output=True)
+    print(minimum[0])
+    print(minimum[1])
+    return minimum
 
 
 if __name__ == '__main__':
@@ -440,116 +552,7 @@ if __name__ == '__main__':
 
 
     # %%
-    def update_paras_func(x_paras, _CB_model, para_to_fit, retern_model_or_paras='model'):
-        num_kmax = len(para_to_fit['kmax'])
-        num_K = len(para_to_fit['K'])
-
-        if retern_model_or_paras == 'model':
-            if num_kmax > 0:
-                _CB_model['kmax'][para_to_fit['kmax']] = x_paras[0:num_kmax]
-            if num_K > 0:
-                _CB_model['K'][para_to_fit['K']] = x_paras[num_kmax:num_kmax + num_K]
-            return _CB_model
-        else:
-            x_paras = [0] * (num_kmax + num_K)
-            if num_kmax > 0:
-                x_paras[0:num_kmax] = _CB_model['kmax'][para_to_fit['kmax']]
-            if num_K > 0:
-                x_paras[num_kmax:num_kmax + num_K] = _CB_model['K'][para_to_fit['K']]
-            # paras_initial = x_paras
-            return x_paras
-        # TODO return other para_to_fit keys
-
-
-    def residuals_func(x_paras, _CB_model, para_to_fit, exp_y, tspan, time_points_index, metas_index, weights=[],
-                       draw=False):
-
-        _CB_model = update_paras_func(x_paras, _CB_model, para_to_fit, retern_model_or_paras='model')
-
-        sol_temp = cb_model_simulate(_CB_model, tspan, draw=False)
-
-        model_y = sol_temp[time_points_index, :][:, metas_index]
-
-        if len(weights) == 0:
-            weights = 1
-
-        res = exp_y - model_y
-        res_sq = res ** 2
-        weight_of_method = 1 / np.mean(res_sq, axis=0) ** 2 / len(time_points_index)
-        weight_of_method = weight_of_method / sum(weight_of_method)
-        f = sum(res_sq * weight_of_method * weights)
-
-        # f = sum(abs(exp_y - model_y)) * weights
-        # print('f',f)
-        # print('x_paras',x_paras)
-
-        if draw:
-            global fitting_fig, fitting_ax, model_lines
-            for i in range(0, _CB_model.Smz.shape[0]):
-                model_lines[i][0].remove()
-                model_lines[i] = fitting_ax.plot(tspan, sol_temp[:, i], color="k", linewidth=2)
-                plt.pause(1e-9)
-            fitting_fig.show()
-        # return 0
-        return abs(sum(f))
-
-
-    def parameters_fitting(CB_model, experiment_data_df, para_to_fit, tspan, draw=False):
-
-        _CB_model = copy.deepcopy(CB_model)
-        # _CB_model = CB_model.copy()
-        # para_index = {'kmax': [0, 1, 2, 3, 4, 5], }
-
-        time_points = experiment_data_df.time
-        time_points_index = []
-        for time_point in time_points:
-            index = np.argmin(abs(tspan - time_point))
-            time_points_index.append(index)
-        _CB_model['metas_names'] = ['glc', 'succ', 'for', 'lac', 'ac', 'etoh', 'biomass', ]
-
-        metas_index = []
-        for exp_met_name in experiment_data_df.columns:
-            if exp_met_name in _CB_model.metas_names:
-                index = _CB_model.metas_names.index(exp_met_name)
-                metas_index.append(index)
-
-        exp_y = experiment_data_df[_CB_model.metas_names].values
-
-        sol_initial = cb_model_simulate(_CB_model, tspan, draw=False)
-
-        paras_initial = update_paras_func([], _CB_model, para_to_fit, retern_model_or_paras='paras')
-
-        # model_y = sol[timepoints_index,:][:,metas_index]
-        print('Fiting')
-        if draw:
-            global fitting_fig, fitting_ax, model_lines
-            print('drawing')
-            matplotlib.use("Qt5Agg")
-            plt.ion()
-            fitting_fig, fitting_ax = plt.subplots()
-            fitting_ax.set_xlabel("Time (hr)", fontsize=20)
-            fitting_ax.set_ylabel("Concentration (mM)", fontsize=20)
-            exp_ponts = []
-            model_lines = []
-            for i in range(0, _CB_model.Smz.shape[0]):
-                exp_ponts.append(fitting_ax.plot(experiment_data_df.time, exp_y[:, i], 'o'))
-                model_lines.append(fitting_ax.plot(tspan, sol_initial[:, i], color="k", linewidth=2))
-                plt.pause(0.01)
-                # fitting_fig.show()
-            # fitting_ax.legend((model_line[0],), ("HCM FBA",), fontsize=18)
-            # exp_ponts[1][0].remove()
-            fitting_fig.show()
-            # fitting_fig.clf()
-            # plt.close()
-
-        minimum = scipy.optimize.fmin(residuals_func, paras_initial, args=(
-            _CB_model, para_to_fit, exp_y, tspan, time_points_index, metas_index, [], draw),
-                                      xtol=0.01, ftol=0.01, maxiter=200, full_output=True)
-        print(minimum[0])
-        print(minimum[1])
-        return minimum
-
-
+    CB_model['metas_names'] = ['glc', 'succ', 'for', 'lac', 'ac', 'etoh', 'biomass', ]
     para_to_fit = {'kmax': [0, 1, 2, 3, 4, 5], 'K': [0, 1, 2, 3, 4, 5]}
     minimum = parameters_fitting(CB_model, experiment_data_df, para_to_fit, tspan, draw=True)
 

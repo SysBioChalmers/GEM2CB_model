@@ -483,6 +483,7 @@ plt.show()
 # %%
 import numpy as np
 from scipy.integrate import odeint
+import scipy
 
 Ab = np.array([[-0.25, 0, 0],
                [0.25, -0.2, 0],
@@ -503,6 +504,112 @@ time = np.linspace(0, 25, 101)
 A0 = [10, 20, 30]
 
 MA = odeint(deriv, A0, time, args=(Ab,))
+
+MA2 = scipy.integrate.ode(deriv).set_integrator('vode', method='bdf', order=15)
+MA2.set_f_params(*args)
+
+# %%
+from scipy.integrate import ode
+import numpy as np
+
+y0, t0 = [1.0j, 2.0], 0
+
+
+def f(t, y, arg1):
+    return [1j * arg1 * y[0] + y[1], -arg1 * y[1] ** 2]
+
+
+def jac(t, y, arg1):
+    return [[1j * arg1, 1], [0, -arg1 * 2 * y[1]]]
+
+
+r = ode(f, jac).set_integrator('zvode', method='bdf')
+r.set_initial_value(y0, t0).set_f_params(2.0).set_jac_params(2.0)
+t1 = 10
+dt = 1
+while r.successful() and r.t < t1:
+    print(r.t + dt, r.integrate(r.t + dt))
+
+
+def pend(t, y, b, c):
+    theta, omega = y
+    dydt = [omega, -b * omega - c * np.sin(theta)]
+    return dydt
+
+
+b = 0.25
+c = 5.0
+y0 = [np.pi - 0.1, 0.0]
+t = np.linspace(0, 10, 101)
+from scipy.integrate import odeint
+
+sol = odeint(pend, y0, t, args=(b, c), tfirst=True)
+
+import matplotlib.pyplot as plt
+
+plt.plot(t, sol[:, 0], 'b', label='theta(t)')
+plt.plot(t, sol[:, 1], 'g', label='omega(t)')
+plt.legend(loc='best')
+plt.xlabel('t')
+plt.grid()
+plt.show()
+
+# %%
+from scipy.integrate import odeint
+from scipy.integrate import ode
+import numpy as np
+
+
+def dy_dt(t, y, a, b, c):
+    dydt = [y[1], 1000 * (1 - y[0] ** 2) * y[1] - y[0]]
+    return dydt
+
+
+# y(2); 1000*(1-y(1)^2)*y(2)-y(1)
+a = 1
+b = 0
+c = 1000.0
+y0 = [2, 0]
+t = np.linspace(0, 3000, 30000)
+
+sol = odeint(dy_dt, y0, t, args=(a, b, c), tfirst=True)
+
+import matplotlib.pyplot as plt
+
+plt.plot(t, sol[:, 0], 'b', label='1')
+plt.plot(t, sol[:, 1], 'g', label='2')
+plt.legend(loc='best')
+plt.xlabel('t')
+plt.grid()
+plt.show()
+
+import julia
+from julia.api import Julia
+
+jl = Julia(compiled_modules=False)
+from diffeqpy import de
+
+
+def f(u, p, t):
+    return -u
+
+
+u0 = 0.5
+tspan = (0., 1.)
+prob = de.ODEProblem(f, u0, tspan)
+sol = de.solve(prob)
+
+r = ode(dy_dt, jac=None).set_integrator('vode', method='bdf', order=15)
+r.set_f_params(a, b, c)
+r.set_initial_value(y0, 0)
+
+t1 = 1000
+dt = 1
+while r.successful() and r.t < t1:
+    plt.plot(r.t + dt, r.integrate(r.t + dt)[0], 'b', label='1')
+    plt.plot(r.t + dt, r.integrate(r.t + dt)[1], 'g', label='2')
+    # print(r.t+dt, r.integrate(r.t+dt))
+plt.show()
 
 # %%
 from scipy.interpolate import UnivariateSpline
@@ -576,3 +683,127 @@ class Cybernetic_Model(dict):
 
 
 ecoli_reduced_cb = Cybernetic_Model('CB model for Ecoli reduced matrix ')
+
+# %% <fminsearch test:>
+from scipy import optimize
+import random
+
+
+# print(random.randint(0,9))
+def f(x, y):
+    k = [x[0] * 3, (x[1] ** 2) * y]
+    return random.randint(0, 9)
+
+
+minimum = optimize.fmin(f, [1000, 1], args=(10,), full_output=True)
+minimum[0]
+
+# banana = lambda x: 100*(x[1]-x[0]**2)**2+(1-x[0])**2
+# xopt = scipy.optimize.fmin(func=banana, x0=[-1.2,1])
+
+# %%
+import matplotlib
+import matplotlib.pyplot as plt
+
+matplotlib.use("TkAgg")
+
+plt.ion()  # 开启interactive mode 成功的关键函数
+fig, ax = plt.subplots(1)
+plt.figure(1)
+
+plt.plot([1, 2, 3], [4, 5, 5], '-r')
+
+for i in range(200):
+    fig.clf(ax)  # 清空画布上的所有内容
+    t_now = i * 0.1
+    t.append(t_now)  # 模拟数据增量流入，保存历史数据
+    m.append(sin(t_now))  # 模拟数据增量流入，保存历史数据
+    ax.plot(t, m, '-r')
+    plt.pause(0.01)
+
+# %%
+import matplotlib.pyplot as plt
+import numpy as np
+import time
+from math import *
+
+plt.ion()  # 开启interactive mode 成功的关键函数
+plt.figure(1)
+t = [0]
+t_now = 0
+m = [sin(t_now)]
+
+for i in range(2000):
+    # plt.clf() # 清空画布上的所有内容。此处不能调用此函数，不然之前画出的点，将会被清空。
+    t_now = i * 0.1
+    """
+    由于第次只画一个点，所以此处有两种方式，第一种plot函数中的样式选
+    为点'.'、'o'、'*'都可以，就是不能为线段'-'。因为一条线段需要两
+    个点才能确定。第二种方法是scatter函数，也即画点。
+    """
+    plt.plot(t_now, sin(t_now), '.')  # 第次对画布添加一个点，覆盖式的。
+    # plt.scatter(t_now, sin(t_now))
+
+    plt.draw()  # 注意此函数需要调用
+    time.sleep(0.01)
+
+# %%
+import matplotlib.pyplot as plt
+import matplotlib
+import matplotlib.pyplot as plt
+
+matplotlib.use("TkAgg")
+import numpy as np
+import time
+from math import *
+
+plt.ion()  # 开启interactive mode 成功的关键函数
+plt.figure(1)
+t = np.linspace(0, 20, 100)
+
+for i in range(20):
+    # plt.clf() # 清空画布上的所有内容。此处不能调用此函数，不然之前画出的轨迹，将会被清空。
+    y = np.sin(t * i / 10.0)
+    plt.plot(t, y)  # 一条轨迹
+    plt.draw()  # 注意此函数需要调用
+    time.sleep(1)
+
+# %%
+import matplotlib
+
+gui_env = ['TKAgg', 'GTKAgg', 'Qt4Agg', 'WXAgg']
+import matplotlib.pyplot as plt
+
+for env in gui_env:
+    try:
+        matplotlib.use(i)
+        fig, ax = plt.subplots()
+        y1 = []
+        line = ax.plot(y1, label='test')
+        for i in range(50):
+            y1.append(i)
+            # line[0].remove()
+            line = ax.plot(y1, label='test')
+            ax.legend()
+            # plt.pause(1e-9)
+            plt.show()
+        print(env)
+    except:
+        pass
+
+    #
+# 其中y1是数据的Y值，只要不停地更y1的数组内容，就可以0.3S刷新一次
+# %%
+import matplotlib
+
+gui_env = ['TKAgg', 'GTKAgg', 'Qt4Agg', 'WXAgg']
+for gui in gui_env:
+    try:
+        print("testing", gui)
+        matplotlib.use(gui, warn=False, force=True)
+        from matplotlib import pyplot as plt
+
+        break
+    except:
+        continue
+print("Using:", matplotlib.get_backend())

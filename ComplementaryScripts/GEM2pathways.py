@@ -206,8 +206,8 @@ def get_yield_space_2d(model2, production_rea_ids_2d, carbon_source_rea_ids_2d, 
                 alpha=0.8, lw=1)
         ax.plot(points_2d[hull_index[[-1, 0]], 0], points_2d[hull_index[[-1, 0]], 1], 'o--', markerfacecolor='none',
                 color='tab:blue', alpha=0.8, lw=1)
-        ax.set_ylabel(p1_rea_id + '/' + s1_rea_id)
-        ax.set_xlabel(p1_rea_id + '/' + s2_rea_id)
+        ax.set_ylabel(p2_rea_id + '/' + s2_rea_id)
+        ax.set_xlabel(p1_rea_id + '/' + s1_rea_id)
         fig.show()
 
     return fluxes_2d, hull_index
