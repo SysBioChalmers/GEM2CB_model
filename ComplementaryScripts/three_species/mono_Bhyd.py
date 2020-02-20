@@ -267,29 +267,42 @@ experiment_data_df = pd.read_csv('Bhyd_experiment_data.txt', delimiter='\t', hea
 
 experiment_data_to_fit = experiment_data_df[['time'] + metabObj].iloc[0:-1]
 experiment_data_to_fit['biomass'] = experiment_data_to_fit['biomass'] * 5e-3
-minimum = Cybernetic_Functions.parameters_fitting(CB_model, experiment_data_to_fit, para_to_fit, tspan, draw=True)
+# minimum = Cybernetic_Functions.parameters_fitting(CB_model, experiment_data_to_fit, para_to_fit, tspan, draw=True)
 
 # %% <plot cybernetic model result>
 # experiment data
 
-fig = plt.figure(figsize=(6, 2.5))
-ax = fig.add_subplot(111)
+figsize = (6, 4)
+# fig = plt.figure(figsize=(6, 2.5))
+fig, axs = plt.subplots(2, 1, figsize=figsize)
+# ax_1 = fig.add_subplot(111)
+ax_1 = axs[1]
+ax_2 = axs[0]
 colors = ['blue', 'teal', 'tab:red', 'tab:orange']
 color_list = plt.cm.tab10(np.linspace(0, 1, 12))
 experiment_data_df = pd.read_csv('Bhyd_experiment_data.txt', delimiter='\t', header=0)
 experiment_data_df['biomass'] = experiment_data_df['biomass'] * 5e-3
 experiment_data_df = experiment_data_df[0:-1]
-for index in range(0, CB_model.Smz.shape[0]):
-    ax.plot(tspan, sol[:, index], color=color_list[index + 1], linewidth=2, label=metabObj[index])
-    experiment_p = ax.plot(experiment_data_df['time'], experiment_data_df[metabObj[index]], 'o--',
-                           color=color_list[index + 1],
-                           linewidth=1)
+biomassindexs = [1]
 
-ax.set_xlabel('Time (h)', fontsize=12)
-ax.set_ylabel('Concentration (mM)', fontsize=12)
-# box = ax.get_position()
-# ax.set_position([box.x0, box.y0, box.width , box.height* 0.8])
-ax.legend(loc='center left', bbox_to_anchor=(1, 0.5), ncol=1)
+for index in range(0, CB_model.Smz.shape[0]):
+    if index not in biomassindexs:
+        ax_1.plot(tspan, sol[:, index], color=color_list[index + 1], linewidth=2, label=metabObj[index])
+        experiment_p = ax_1.plot(experiment_data_df['time'], experiment_data_df[metabObj[index]], 'o--',
+                                 color=color_list[index + 1],
+                                 linewidth=1)
+    else:
+        ax_2.plot(tspan, sol[:, index], color=color_list[index + 1], linewidth=2, label='B.h')
+        experiment_p = ax_2.plot(experiment_data_df['time'], experiment_data_df[metabObj[index]], 'o--',
+                                 color=color_list[index + 1],
+                                 linewidth=1)
+
+ax_1.set_xlabel('Time (h)', fontsize=12)
+ax_1.set_ylabel('Concentration (mM)', fontsize=12)
+ax_2.set_ylabel('Counts (1e8/ml)', fontsize=12)
+
+ax_1.legend(loc='center left', bbox_to_anchor=(1, 0.5), ncol=1)
+ax_2.legend(loc='center left', bbox_to_anchor=(1, 0.5), ncol=1)
 
 # fig.savefig('test.png')
 fig.show()

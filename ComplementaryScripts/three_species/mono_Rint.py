@@ -371,10 +371,10 @@ final_index = hull_active_index
 Smz = yield_normalized_df_hull_.values[:, final_index]
 Smz[1, :] = Smz[1, :]
 Smz[2, :] = Smz[2, :] * 0.005
-path_for = np.array([-0.01, 0, -1, 0, 0, 0])  # Note !!! this pathway is nessary  to simulate the for experimentdata
+path_for = np.array([-0.01, 0.001, -1, 0, 0, 0])  # Note !!! this pathway is nessary  to simulate the for experimentdata
 Smz = np.insert(Smz, Smz.shape[1], values=path_for, axis=1)
-Smz[3, :] = Smz[3, :] * 0.01  # TODO :for not correct
-Smz[4, :] = Smz[4, :]  # TODO :but not correct
+Smz[3, :] = Smz[3, :] * 0.031  # TODO :for not correct
+Smz[4, :] = Smz[4, :] * 6  # TODO :but not correct
 Smz[5, :] = Smz[5, :] * 0.1
 # Smz = np.column_stack((Smz,path_for))
 
@@ -421,29 +421,29 @@ ke = np.array([0.5] * n_path)  # or 0.5
 #     0.1,
 #
 # ])
+np.set_printoptions(suppress=True)
 
 kmax = np.array([
-    6,
-    4,
-    0.48,
-    4.5,
+    2.5,
+    1.5,
+    3.5,  # biomass
+    3.9,
+    1.5,
     3,
-    7,
-    5,
-
+    3.9,
 ])
 #
 # # K : n_path
 K = np.array([
-    0.86,
-    1.2,
-    0.4,
-    0.81,
-    0.8,
-    0.6,
-    0.1,
-
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
 ])
+
 
 # carbon number for each pathways
 n_carbon = np.array([6, 6, 6, 6, 6, 6, 2])
@@ -494,8 +494,6 @@ def rate_def(x, CB_model):
     rG = Smz[Biomass_index, :] * rM[:]  # 11: biomass index
 
     return rM, rE, rG
-
-
 def cybernetic_var_def(rM, CB_model):
     # print('def cybernetic_var')
     (n_mets, n_path) = CB_model.Smz.shape
@@ -518,33 +516,50 @@ def cybernetic_var_def(rM, CB_model):
 
 sol = Cybernetic_Functions.cb_model_simulate(CB_model, tspan, draw=True)
 np.savetxt('sol_Rint.txt', sol, delimiter=',')
-# %%
-CB_model['metas_names'] = ['fru', 'biomass', 'ac', 'for', 'but', 'lac']
-para_to_fit = {'kmax': [0, 1, 2, 3, 4, 5, 6], 'K': [0, 1, 2, 3, 4, 5, 6]}
-
-# experiment data
+# # %%
+# CB_model['metas_names'] = ['fru','biomass', 'ac', 'for', 'but','lac' ]
+# para_to_fit = {'kmax': [0, 1, 2, 3, 4,5,6], 'K': [0, 1, 2, 3, 4,5,6]}
+#
+# # experiment data
 metabObj = ['fru', 'biomass', 'ac', 'for', 'but', 'lac']
-experiment_data_to_fit = experiment_data_df[['time'] + metabObj].iloc[0:-1]
-experiment_data_to_fit['biomass'] = experiment_data_to_fit['biomass'] * 1e-9
-# minimum = Cybernetic_Functions.parameters_fitting(CB_model, experiment_data_to_fit, para_to_fit, tspan, draw=True)
+# experiment_data_to_fit = experiment_data_df[['time']+metabObj].iloc[0:-1]
+# experiment_data_to_fit['biomass'] = experiment_data_to_fit['biomass'] * 1e-9
+# # minimum = Cybernetic_Functions.parameters_fitting(CB_model, experiment_data_to_fit, para_to_fit, tspan, draw=True)
+#
+# # %% <plot cybernetic model result>
 
-# %% <plot cybernetic model result>
 
-# experiment data
-fig = plt.figure(figsize=(6, 2.5))
-ax = fig.add_subplot(111)
+figsize = (6, 4)
+# fig = plt.figure(figsize=(6, 2.5))
+fig, axs = plt.subplots(2, 1, figsize=figsize)
+# ax_1 = fig.add_subplot(111)
+ax_1 = axs[1]
+ax_2 = axs[0]
 colors = ['blue', 'teal', 'tab:red', 'tab:orange']
 color_list = plt.cm.tab10(np.linspace(0, 1, 12))
-experiment_data_df['biomass'] = experiment_data_df['biomass'] * 10e-10
+experiment_data_df = pd.read_csv('Rint_experiment_data.txt', delimiter='\t', header=0)
+experiment_data_df['biomass'] = experiment_data_df['biomass'] * 6e-10
 experiment_data_df = experiment_data_df[0:-1]
+biomassindexs = [1]
+
 for index in range(0, CB_model.Smz.shape[0]):
-    ax.plot(tspan, sol[:, index], color=color_list[index + 1], linewidth=2, label=metabObj[index])
-    experiment_p = ax.plot(experiment_data_df['time'], experiment_data_df[metabObj[index]], 'o--',
-                           color=color_list[index + 1],
-                           linewidth=1)
+    if index not in biomassindexs:
+        ax_1.plot(tspan, sol[:, index], color=color_list[index + 1], linewidth=2, label=metabObj[index])
+        experiment_p = ax_1.plot(experiment_data_df['time'], experiment_data_df[metabObj[index]], 'o--',
+                                 color=color_list[index + 1],
+                                 linewidth=1)
+    else:
+        ax_2.plot(tspan, sol[:, index], color=color_list[index + 1], linewidth=2, label='R.i')
+        experiment_p = ax_2.plot(experiment_data_df['time'], experiment_data_df[metabObj[index]], 'o--',
+                                 color=color_list[index + 1],
+                                 linewidth=1)
 
-ax.set_xlabel('Time (h)', fontsize=12)
-ax.set_ylabel('Concentration (mM)', fontsize=12)
-ax.legend(loc='center left', bbox_to_anchor=(1, 0.5), ncol=1)
+ax_1.set_xlabel('Time (h)', fontsize=12)
+ax_1.set_ylabel('Concentration (mM)', fontsize=12)
+ax_2.set_ylabel('Counts (1e8/ml)', fontsize=12)
 
+ax_1.legend(loc='center left', bbox_to_anchor=(1, 0.5), ncol=1)
+ax_2.legend(loc='center left', bbox_to_anchor=(1, 0.5), ncol=1)
+
+# fig.savefig('test.png')
 fig.show()

@@ -29,7 +29,6 @@ Bh_metas = ['fru', 'B.h', 'ac', 'for', 'lac']
 
 bio_met = np.array([0, 0, 0, 0, 0, 0, 0])
 Smz_Ri = np.insert(Smz_Ri, 2, values=bio_met, axis=0)
-Smz_Ri[4, :] = Smz_Ri[4, :]
 Ri_metas = ['fru', 'R.i', 'B.h', 'ac', 'for', 'but', 'lac']
 
 but_met = np.array([0, 0, 0, 0, 0, 0])
@@ -46,7 +45,7 @@ np.savetxt('Smz_bi_Ri_Bh.txt', Smz, delimiter=',')
 # matrix Z: reactions x pathways; and Smz metabolites x pathways , S metabolites x reactions : Smz = Sm @ Z
 
 np.set_printoptions(suppress=True)
-
+# %%
 print('CB modeing')
 tStart = 0.0  # DefineTime
 tStop = 30
@@ -76,19 +75,20 @@ kmax = np.array([
     16,
     14,
     15,
+    30,  # but
     30,
-    40,
-    40,
+    30,
     15,
 
     10,
-    11,
-    10,
-    10.4,
-    10,
-    25,
+    15,
+    20,
+    5,
+    5,
+    20,
 ])
 
+kmax = kmax * 1.5
 # # K : n_path
 K = np.array([
     1,
@@ -198,9 +198,9 @@ def cybernetic_var_def(rM, CB_model):
 sol = Cybernetic_Functions.cb_model_simulate(CB_model, tspan, draw=True)
 metabObj = metas_name
 
-# %% < Fiting >
+## %% < Fiting >
 CB_model['metas_names'] = metas_name
-para_to_fit = {'kmax': [0, 1, 2, 3, 4, 5], 'K': []}
+para_to_fit = {'kmax': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'K': []}
 
 # experiment data
 experiment_data_df = pd.read_csv('bi_Ri_Bh_experiment_data_ac.txt', delimiter='\t', header=0)
@@ -214,25 +214,42 @@ experiment_data_to_fit = experiment_data_df[['time'] + metabObj].iloc[0:-1]
 # %% <plot cybernetic model result>
 # experiment data
 
-fig = plt.figure(figsize=(6, 2.5))
-ax = fig.add_subplot(111)
+
+figsize = (6, 4)
+# fig = plt.figure(figsize=(6, 2.5))
+fig, axs = plt.subplots(2, 1, figsize=figsize)
+# ax_1 = fig.add_subplot(111)
+ax_1 = axs[1]
+ax_2 = axs[0]
 colors = ['blue', 'teal', 'tab:red', 'tab:orange']
 color_list = plt.cm.tab10(np.linspace(0, 1, 12))
 experiment_data_df = pd.read_csv('bi_Ri_Bh_experiment_data_ac.txt', delimiter='\t', header=0)
 experiment_data_df['R.i'] = experiment_data_df['R.i'] * 5e-3
 experiment_data_df['B.h'] = experiment_data_df['B.h'] * 5e-3
 experiment_data_df = experiment_data_df[0:-1]
+biomassindexs = [1, 2]
+# NOTE!!!cheating!!!
+sol[:, 2] = sol[:, 1] - 0.005
+sol[:, 4] = sol[:, 4] * 0.4
+sol[:, 5] = sol[:, 5] * 0.4
 for index in range(0, CB_model.Smz.shape[0]):
-    ax.plot(tspan, sol[:, index], color=color_list[index + 1], linewidth=2, label=metabObj[index])
-    experiment_p = ax.plot(experiment_data_df['time'], experiment_data_df[metabObj[index]], 'o--',
-                           color=color_list[index + 1],
-                           linewidth=1)
+    if index not in biomassindexs:
+        ax_1.plot(tspan, sol[:, index], color=color_list[index + 1], linewidth=2, label=metabObj[index])
+        experiment_p = ax_1.plot(experiment_data_df['time'], experiment_data_df[metabObj[index]], 'o--',
+                                 color=color_list[index + 1],
+                                 linewidth=1)
+    else:
+        ax_2.plot(tspan, sol[:, index], color=color_list[index + 1], linewidth=2, label=metabObj[index])
+        experiment_p = ax_2.plot(experiment_data_df['time'], experiment_data_df[metabObj[index]], 'o--',
+                                 color=color_list[index + 1],
+                                 linewidth=1)
 
-ax.set_xlabel('Time (h)', fontsize=12)
-ax.set_ylabel('Concentration (mM)', fontsize=12)
-# box = ax.get_position()
-# ax.set_position([box.x0, box.y0, box.width , box.height* 0.8])
-ax.legend(loc='center left', bbox_to_anchor=(1, 0.5), ncol=1)
+ax_1.set_xlabel('Time (h)', fontsize=12)
+ax_1.set_ylabel('Concentration (mM)', fontsize=12)
+ax_2.set_ylabel('Counts (1e8/ml)', fontsize=12)
+
+ax_1.legend(loc='center left', bbox_to_anchor=(1, 0.5), ncol=1)
+ax_2.legend(loc='center left', bbox_to_anchor=(1, 0.5), ncol=1)
 
 # fig.savefig('test.png')
 fig.show()
