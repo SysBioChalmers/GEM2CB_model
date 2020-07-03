@@ -151,5 +151,5 @@ model.optimize()
 
 cobra.io.save_json_model(model, 'Bhyd_growth.json')
 
-# gemstool.io.gem2txt(model,'test.txt')
+# gemstool.io.gem2txt(model,'Branch_work.txt')
 # gemstool.io.solution2txt(model.optimize(),model,'test2.txt')

@@ -14,17 +14,18 @@ import warnings
 from itertools import combinations
 
 import cvxpy as cp
-import lsqlin
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.io as sio
 from scipy.spatial import ConvexHull
 from scipy.spatial import Delaunay
 
+import lsqlin
+
 
 #
 
-#%%
+# %%
 
 def get_distance(V, p):
     '''
@@ -215,7 +216,7 @@ def get_hull_cutoff(all_points, hull_all_index, cutoff_v, qhull_options='Qt QJ P
 
 def point_in_hull(point, hull, tolerance=1e-6):
     # Judge whether the point is inside or outside of the hull
-    # TODO: more test
+    # TODO: more Branch_work
     return all(
         (np.dot(eq[:-1], point) + eq[-1] <= tolerance)
         for eq in hull.equations)
@@ -305,7 +306,9 @@ def get_hull_active(all_points_,d_,hull_cutoff_index ,qhull_options='Qt QJ Pp Qw
     weights = x.value
     # print(weights)
 
-    if len(np.where(weights > 1e-6)[0]) > mC + 1 and sum((C0 @ x.value - d0) ** 2) < 0.001:
+    min_tol = 1e-4  # NOte>
+
+    if len(np.where(weights > min_tol)[0]) > mC + 1 and sum((C0 @ x.value - d0) ** 2) < 0.001:
         in_hull = True
         Aeq = np.vstack([Aeq, C0])
         beq = np.vstack([beq, d0.reshape(mC, 1)])
@@ -423,8 +426,8 @@ def get_hull_active(all_points_,d_,hull_cutoff_index ,qhull_options='Qt QJ Pp Qw
     weights = list(weights)
     weights = np.around(weights, decimals=6)
 
-    hull_active_index = np.array(hull_cutoff_index)[[i for i in range(0, len(weights)) if weights[i] > 1e-6]]
-    estimated_data = C0@weights
+    hull_active_index = np.array(hull_cutoff_index)[[i for i in range(0, len(weights)) if weights[i] > min_tol]]
+    estimated_data = C0 @ weights
 
     estimated_data_ = list(estimated_data[:])
     for index in index_empty:
@@ -459,7 +462,7 @@ def combinations_points(weights, mC, nC, C, d, Aeq, beq, in_hull):
     # (mC,nC) = C.shape
     nweights = 0  # check how many points
     for i in weights:
-        if i > 1e-6:
+        if i > min_tol:
             nweights = nweights + 1
     if in_hull:
         dim = mC + 1
@@ -484,7 +487,7 @@ def combinations_points(weights, mC, nC, C, d, Aeq, beq, in_hull):
             ret = lsqlin.lsqlin(C_part, d, 0, None, None, Aeq_, beq_, \
                                 lb_, ub_, None, {'show_progress': False})
 
-            if ret['gap'] < 1e-6:
+            if ret['gap'] < min_tol:
                 # TODO check the cutoff and sum((C_part @ ret['x'] - d.reshape(, 1)) ** 2) < 0.1 0.1 ???
                 # print(sum((C_part @ ret['x'] - d.reshape(3, 1)) ** 2))
                 dis_ave = np.array(ret['x']) - np.array([1 / (dim)])

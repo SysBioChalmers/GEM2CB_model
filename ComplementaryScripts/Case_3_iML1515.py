@@ -56,12 +56,12 @@ model.reactions.get_by_id(carbon_source_rea_id).bounds = (-10, -0.001)
 
 
 # all modes
-# yield_normalized_df, fluxes_all, hull_index_all = GEM2pathways.get_yield_space_multi(model, production_rea_ids_x,
-#                                                                                      production_rea_ids_y,
-#                                                                                      carbon_source_rea_id,
-#                                                                                      steps=steps,
-#                                                                                      carbon_uptake_direction=carbon_uptake_direction,
-#                                                                                      draw=True)
+yield_normalized_df, fluxes_all, hull_index_all = GEM2pathways.get_yield_space_multi(model, production_rea_ids_x,
+                                                                                     production_rea_ids_y,
+                                                                                     carbon_source_rea_id,
+                                                                                     steps=steps,
+                                                                                     carbon_uptake_direction=carbon_uptake_direction,
+                                                                                     draw=True)
 # yield_normalized_df_hull = yield_normalized_df[yield_normalized_df.columns[hull_index_all]]
 #
 #
@@ -212,7 +212,9 @@ for ax , exmet_reaction in zip(axs,yield_rea_ids_name):
 
 ax.set_xlabel('Yield Biomass/Glucose',fontsize = 18)
 # fig.legend((line_EFMs[0],line_EFVs[0],line_our[0],line_FBAem[0]),('EFMs','EFVs','This study','FBA modes'),bbox_to_anchor=(0.6, 0.3), loc='upper left', borderaxespad=0.,prop={'size': 18})
-fig.legend((points_our[0],points_exp[0],line_our_1[0],line_our_99[0] ,line_our_ac[0]),('All pathways','Experiment data','Convex hull','Convex hull %99','Convex hull with data'),bbox_to_anchor=(0.55, 0.35), loc='upper left', borderaxespad=0.,prop={'size': 20})
+fig.legend((points_our[0], points_exp[0], line_our_1[0], line_our_99[0], line_our_ac[0]),
+           ('All pathways', 'Experiment data', 'Convex hull', 'Convex hull %99', 'Convex hull with data'),
+           bbox_to_anchor=(0.55, 0.35), loc='upper left', borderaxespad=0., prop={'size': 20})
 # fig.savefig('../ComplementaryData/Case3_iML1515/4.png',format ='png')
 fig.show()
 
@@ -221,7 +223,8 @@ fig.show()
 tStart = 0.0  # DefineTime
 tStop = 8.5
 tStep = 0.1
-tspan = np.linspace(tStart, tStop, (tStop - tStart) / tStep)
+# tspan = np.linspace(tStart, tStop, (tStop - tStart) / tStep)
+tspan = np.linspace(tStart, tStop, int(((tStop - tStart) / tStep) + 1))
 
 # matrix Z: reactions x pathways; and Smz metabolites x pathways , S metabolites x reactions : Smz = Sm @ Z
 final_index = hull_active_index
@@ -280,7 +283,14 @@ n_carbon = np.array([6, 6, 6, 6, 6, 6, 6, 0])
 Biomass_index = 1
 sub_index = 0
 
-ecoli_iML1515_our_cb = Cybernetic_Functions.Cybernetic_Model('CB model for Ecoli iML1515 matrix ')
+
+class Cybernetic_Model_basic(Cybernetic_Functions.Cybernetic_Model):
+    pass
+
+
+ecoli_iML1515_our_cb = Cybernetic_Model_basic('CB model for Ecoli iML1515 matrix ')
+
+# ecoli_iML1515_our_cb = Cybernetic_Functions.Cybernetic_Model('CB model for Ecoli iML1515 matrix ')
 ecoli_iML1515_our_cb.Smz = Smz
 ecoli_iML1515_our_cb.x0 = initial_x0
 ecoli_iML1515_our_cb.kmax = kmax
@@ -295,15 +305,14 @@ ecoli_iML1515_our_cb['Biomass_index'] = Biomass_index
 CB_model = ecoli_iML1515_our_cb
 
 
-def rate_def(x, CB_model):
-    Smz = CB_model.Smz
-    kmax = CB_model.kmax
-    K = CB_model.K
-    ke = CB_model.ke
-    alpha = CB_model.alpha
-    beta = CB_model.beta
-    Biomass_index = CB_model.Biomass_index
-    sub_index = CB_model['sub_index']
+def rate_def(self, x):
+    name = self.name
+    Smz = self.Smz
+    kmax = self.kmax
+    K = self.K
+    ke = self.ke
+    Biomass_index = self.Biomass_index
+    sub_index = self.sub_index
 
     (n_mets, n_path) = Smz.shape
 
@@ -326,7 +335,30 @@ def rate_def(x, CB_model):
     return rM, rE, rG
 
 
-sol = Cybernetic_Functions.cb_model_simulate(CB_model, tspan, draw=False)
+def cybernetic_var_def(self, rM):
+    # print('def cybernetic_var')
+    (n_mets, n_path) = self.Smz.shape
+    # cybernetic_var = abs(Smz[sub_index, :] * rM * n_carbon)
+    cybernetic_var = rM * self.n_carbon
+    # cybernetic_var[cybernetic_var==0] = 1
+    cybernetic_var[cybernetic_var < 0] = 0
+    if sum(cybernetic_var) > 0:
+        u = cybernetic_var / sum(cybernetic_var)
+        v = cybernetic_var / np.max(abs(cybernetic_var))
+    else:
+        u = v = np.zeros(n_path)
+
+    if CB_model.name in ['CB model for Ecoli iML1515 matrix ']:
+        print(123)
+        u[-1] = 1.0
+        v[-1] = 1.0
+    return u, v
+
+
+setattr(Cybernetic_Model_basic, 'rate_def', rate_def)
+setattr(Cybernetic_Model_basic, 'cybernetic_var_def', cybernetic_var_def)
+
+sol = Cybernetic_Functions.cb_model_simulate(CB_model, tspan, draw=True)
 
 # %% <plot cybernetic model result>
 

@@ -20,8 +20,7 @@ import My_def
 os.chdir('../ComplementaryData/')
 
 #%% <method EFMs + MYA>
-ECC2comp_EFVs_noO2 = sio.loadmat('ECC2comp/ECC2comp_EFVs_noO2.mat')
-
+ECC2comp_EFVs_noO2 = sio.loadmat('Case2_2_ECC2comp/ECC2comp_EFVs_noO2.mat')
 ECC2comp_EFVs_noO2_z = ECC2comp_EFVs_noO2['elmoden']
 
 # rea_ids = ECC2comp_EFVs_noO2['mode_rates_names']
@@ -47,7 +46,7 @@ data_cloumes_indexs = [29, 0, 2, 21, 17, 37, 59]
 
 #%% <method EFVs + MYA>  # EFVs
 
-ECC2comp_EFVs_noO2 = sio.loadmat('ECC2comp/ECC2comp_EFVs_noO2.mat')
+ECC2comp_EFVs_noO2 = sio.loadmat('Case2_2_ECC2comp/ECC2comp_EFVs_noO2.mat')
 
 ECC2comp_EFVs_noO2_z = ECC2comp_EFVs_noO2['elmoden']
 
@@ -100,8 +99,8 @@ cobra.io.write_sbml_model(ECC2comp,'../ComplementaryData/ECC2comp/ECC2_standard.
 #  standard:
 
 
-ECC2comp = cobra.io.read_sbml_model('../ComplementaryData/ECC2comp/ECC2_standard.xml')
-ECC2comp.reactions.O2Up.bounds = (0.0,0.0)
+ECC2comp = cobra.io.read_sbml_model('../ComplementaryData/Case2_2_ECC2comp/ECC2_standard.xml')
+ECC2comp.reactions.O2Up.bounds = (0.0, 0.0)
 
 #My_def.io_file.model2txt(e_coli_core_mat,'../ComplementaryData/ECC2comp/ECC2_glucose_standard_mat.txt')
 
@@ -120,7 +119,8 @@ model = ECC2comp
 
 
 # all modes
-yield_normalized_df = GEM2pathways.get_fba_yield_df(model, biomass_rea_id,carbon_rea_ids,yield_rea_ids,step_of_biomass)
+yield_normalized_df = GEM2pathways.get_yield_space_multi(model, biomass_rea_id, carbon_rea_ids, yield_rea_ids,
+                                                         step_of_biomass)
 
 
 #yield_normalized_df = yield_normalized_df.fillna(0)

@@ -10,14 +10,15 @@
 """
 import os
 
-import ConvexHull_yield
-import GEM2pathways
-import Cybernetic_Functions
 import cobra
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from scipy.spatial import ConvexHull
+
+import ConvexHull_yield
+import Cybernetic_Functions
+import GEM2pathways
 
 os.chdir('../ComplementaryData/')
 
@@ -212,8 +213,8 @@ fig.show()
 tStart = 0.0  # DefineTime
 tStop = 8.5
 tStep = 0.1
-tspan = np.linspace(tStart, tStop, (tStop - tStart) / tStep)
-
+# tspan = np.linspace(tStart, tStop, (tStop - tStart) / tStep)
+tspan = np.linspace(tStart, tStop, int(((tStop - tStart) / tStep) + 1))
 # matrix Z: reactions x pathways; and Smz metabolites x pathways , S metabolites x reactions : Smz = Sm @ Z
 final_index = our_indexes[-1][-1]
 Smz = yield_normalized_df_hull_.values[:, final_index]
@@ -267,30 +268,41 @@ n_carbon = np.array([6, 6, 6, 6, 6, 0])
 Biomass_index = 1
 sub_index = 0
 
-ecoli_reduced_our_cb = Cybernetic_Functions.Cybernetic_Model('CB model for Ecoli reduced matrix ')
+
+# Construct the model:
+class Cybernetic_Model_basic(Cybernetic_Functions.Cybernetic_Model):
+    pass
+
+
+ecoli_reduced_our_cb = Cybernetic_Model_basic('CB model for Ecoli reduced matrix ')
 ecoli_reduced_our_cb.Smz = Smz
-ecoli_reduced_our_cb.x0 = initial_x0
+# ecoli_reduced_our_cb.x0 = initial_x0
+ecoli_reduced_our_cb.initial_mets = initial_mets
+ecoli_reduced_our_cb.initial_enzymes = initial_enzyme
 ecoli_reduced_our_cb.kmax = kmax
 ecoli_reduced_our_cb.K = K
 ecoli_reduced_our_cb.ke = ke
 ecoli_reduced_our_cb.alpha = alpha
 ecoli_reduced_our_cb.beta = beta
 ecoli_reduced_our_cb.n_carbon = n_carbon
-ecoli_reduced_our_cb['sub_index'] = sub_index
-ecoli_reduced_our_cb['Biomass_index'] = Biomass_index
+ecoli_reduced_our_cb.sub_index = sub_index
+ecoli_reduced_our_cb.Biomass_index = Biomass_index
+# ecoli_reduced_our_cb.mets_name = mets_name
+# ecoli_reduced_our_cb.experiment_data_df = experiment_data_df_1
 
 CB_model = ecoli_reduced_our_cb
 
 
-def rate_def(x, CB_model):
-    Smz = CB_model.Smz
-    kmax = CB_model.kmax
-    K = CB_model.K
-    ke = CB_model.ke
-    alpha = CB_model.alpha
-    beta = CB_model.beta
-    Biomass_index = CB_model.Biomass_index
-    sub_index = CB_model['sub_index']
+def rate_def(self, x):
+    name = self.name
+    Smz = self.Smz
+    kmax = self.kmax
+    K = self.K
+    ke = self.ke
+    Biomass_index = self.Biomass_index
+    sub_index = self.sub_index
+
+    (n_mets, n_path) = Smz.shape
 
     (n_mets, n_path) = Smz.shape
 
@@ -306,13 +318,40 @@ def rate_def(x, CB_model):
 
     rE = ke * r_kin_basic / kmax
 
-
     rG = Smz[Biomass_index, :] * rM[:]  # 11: biomass index
+
+    if type(Biomass_index) != int and len(Biomass_index) == n_path:
+        rG = rM[:] * np.array([Smz[Biomass_index[i], i] for i in np.arange(0, n_path)])
+    else:
+        rG = rM[:] * Smz[Biomass_index, :]  # biomass index
 
     return rM, rE, rG
 
 
-sol = Cybernetic_Functions.cb_model_simulate(ecoli_reduced_our_cb, tspan, draw=False)
+def cybernetic_var_def(self, rM):
+    # print('def cybernetic_var')
+    (n_mets, n_path) = self.Smz.shape
+    # cybernetic_var = abs(Smz[sub_index, :] * rM * n_carbon)
+    cybernetic_var = rM * self.n_carbon
+    # cybernetic_var[cybernetic_var==0] = 1
+    cybernetic_var[cybernetic_var < 0] = 0
+    if sum(cybernetic_var) > 0:
+        u = cybernetic_var / sum(cybernetic_var)
+        v = cybernetic_var / np.max(abs(cybernetic_var))
+    else:
+        u = v = np.zeros(n_path)
+
+    if CB_model.name in ['CB model for Ecoli reduced matrix ']:
+        # print(123)
+        u[-1] = 1.0
+        v[-1] = 1.0
+    return u, v
+
+
+setattr(Cybernetic_Model_basic, 'rate_def', rate_def)
+setattr(Cybernetic_Model_basic, 'cybernetic_var_def', cybernetic_var_def)
+
+sol = Cybernetic_Functions.cb_model_simulate(CB_model, tspan, draw=False)
 
 # %% <plot cybernetic model result>
 

@@ -48,7 +48,7 @@ def get_yield_opt(model2, production_rea_id, carbon_source_rea_id, max_or_min='m
     model = model2.copy()  # not change initial model
     model.objective.direction = max_or_min  # max or min
 
-    # first round, yield >0, so test from 0, (when yield_temp = 0 , the method is same as FBA)
+    # first round, yield >0, so Branch_work from 0, (when yield_temp = 0 , the method is same as FBA)
     yield_temp = 0
     model.objective = {model.reactions.get_by_id(production_rea_id): 1,
                        model.reactions.get_by_id(carbon_source_rea_id): carbon_uptake_direction * (-yield_temp)}
@@ -105,7 +105,7 @@ def get_yield_space_2d(model2, production_rea_ids_2d, carbon_source_rea_ids_2d, 
 
     model = model2.copy()
 
-    if type(carbon_source_rea_ids_2d) == str:  # test input type and size
+    if type(carbon_source_rea_ids_2d) == str:  # Branch_work input type and size
         carbon_source_rea_ids_2d_normalized = [carbon_source_rea_ids_2d] * 2
     elif type(carbon_source_rea_ids_2d) == list:
         if len(carbon_source_rea_ids_2d) == 1:
@@ -143,8 +143,8 @@ def get_yield_space_2d(model2, production_rea_ids_2d, carbon_source_rea_ids_2d, 
             model.reactions.get_by_id(
                 p1_rea_id).flux_expression - carbon_uptake_direction * yield_k * model.reactions.get_by_id(
                 s1_rea_id).flux_expression,
-            lb=0,
-            ub=0)
+            lb=-1e-5,
+            ub=1e-5)
         model.add_cons_vars(yield_point_flux)
 
         # Get all cores     multiprocessing but filed...
@@ -166,13 +166,19 @@ def get_yield_space_2d(model2, production_rea_ids_2d, carbon_source_rea_ids_2d, 
         # fluxes_2d[p2_rea_id + '_max_' + str(persent_i) + '_x_' + p1_rea_id] = fluxes_list[0]
         # fluxes_2d[p2_rea_id + '_min_' + str(persent_i) + '_x_' + p1_rea_id] = fluxes_list[1]
 
-        _, fluxes_max = get_yield_opt(model, p2_rea_id, s2_rea_id, max_or_min='max',
-                                      carbon_uptake_direction=carbon_uptake_direction)
-        _, fluxes_min = get_yield_opt(model, p2_rea_id, s2_rea_id, max_or_min='min',
-                                      carbon_uptake_direction=carbon_uptake_direction)
+        try:
+            # print(persent_i)
 
-        fluxes_2d[p2_rea_id + '_max_' + str(persent_i) + '_x_' + p1_rea_id] = fluxes_max
-        fluxes_2d[p2_rea_id + '_min_' + str(persent_i) + '_x_' + p1_rea_id] = fluxes_min
+            _, fluxes_max = get_yield_opt(model, p2_rea_id, s2_rea_id, max_or_min='max',
+                                          carbon_uptake_direction=carbon_uptake_direction)
+            _, fluxes_min = get_yield_opt(model, p2_rea_id, s2_rea_id, max_or_min='min',
+                                          carbon_uptake_direction=carbon_uptake_direction)
+
+            fluxes_2d[p2_rea_id + '_max_' + str(persent_i) + '_x_' + p1_rea_id] = fluxes_max
+            fluxes_2d[p2_rea_id + '_min_' + str(persent_i) + '_x_' + p1_rea_id] = fluxes_min
+        except:
+            print(p1_rea_id, persent_i, 'error')
+            continue
 
     # 2d convex hull
     points_2d = fluxes_2d.loc[[p1_rea_id, p2_rea_id, s1_rea_id, s2_rea_id]].values
@@ -353,7 +359,7 @@ if __name__ == '__main__':
 
     # %% < get_yield_space_multi >
     print('----------get_yield_space_multi----------\n')
-    production_rea_ids_x = ['BIOMASS_Ecoli_core_w_GAM', 'EX_ac_e']  # , ,
+    production_rea_ids_x = ['BIOMASS_Ecoli_core_w_GAM']  # , ,, 'EX_ac_e'
     production_rea_ids_y = ['BIOMASS_Ecoli_core_w_GAM', 'EX_ac_e', 'EX_for_e', 'EX_etoh_e', 'EX_lac__D_e',
                             'EX_succ_e']  #
     carbon_source_rea_id = 'EX_glc__D_e'

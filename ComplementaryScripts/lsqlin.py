@@ -239,7 +239,7 @@ if __name__ == '__main__':
                             print (ret['x'].T)
     print ('Should be [-1.00e-01 -1.00e-01  2.15e-01  3.50e-01]')
 
-    #test lsqnonneg
+    # Branch_work lsqnonneg
     C = np.array([[0.0372, 0.2869], [0.6861, 0.7071], [0.6233, 0.6245], [0.6344, 0.6170]]);
     d = np.array([0.8587, 0.1781, 0.0747, 0.8405]);
     ret = lsqnonneg(C, d, {'show_progress': False})

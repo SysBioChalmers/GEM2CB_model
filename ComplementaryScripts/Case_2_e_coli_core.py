@@ -318,7 +318,8 @@ fig.show()
 tStart = 0.0  # DefineTime
 tStop = 10
 tStep = 0.1
-tspan = np.linspace(tStart, tStop, (tStop - tStart) / tStep)
+# tspan = np.linspace(tStart, tStop, (tStop - tStart) / tStep)
+tspan = np.linspace(tStart, tStop, int(((tStop - tStart) / tStep) + 1))
 
 # matrix Z: reactions x pathways; and Smz metabolites x pathways , S metabolites x reactions : Smz = Sm @ Z
 final_index = our_indexes[-1][-1]
@@ -373,7 +374,14 @@ n_carbon = np.array([6, 6, 6, 0, 0])
 Biomass_index = 1
 sub_index = 0
 
-ecoli_core_our_cb = Cybernetic_Functions.Cybernetic_Model('CB model for Ecoli core matrix ')
+
+class Cybernetic_Model_basic(Cybernetic_Functions.Cybernetic_Model):
+    pass
+
+
+ecoli_core_our_cb = Cybernetic_Model_basic('CB model for Ecoli core matrix')
+
+# ecoli_core_our_cb = Cybernetic_Functions.Cybernetic_Model('CB model for Ecoli core matrix ')
 ecoli_core_our_cb.Smz = Smz
 ecoli_core_our_cb.x0 = initial_x0
 ecoli_core_our_cb.kmax = kmax
@@ -388,15 +396,14 @@ ecoli_core_our_cb['Biomass_index'] = Biomass_index
 CB_model = ecoli_core_our_cb
 
 
-def rate_def(x, CB_model):
-    Smz = CB_model.Smz
-    kmax = CB_model.kmax
-    K = CB_model.K
-    ke = CB_model.ke
-    alpha = CB_model.alpha
-    beta = CB_model.beta
-    Biomass_index = CB_model.Biomass_index
-    sub_index = CB_model['sub_index']
+def rate_def(self, x):
+    name = self.name
+    Smz = self.Smz
+    kmax = self.kmax
+    K = self.K
+    ke = self.ke
+    Biomass_index = self.Biomass_index
+    sub_index = self.sub_index
 
     (n_mets, n_path) = Smz.shape
 
@@ -416,7 +423,9 @@ def rate_def(x, CB_model):
     return rM, rE, rG
 
 
-sol = Cybernetic_Functions.cb_model_simulate(ecoli_core_our_cb, tspan, draw=False)
+setattr(Cybernetic_Model_basic, 'rate_def', rate_def)
+
+sol = Cybernetic_Functions.cb_model_simulate(ecoli_core_our_cb, tspan, draw=True)
 
 # %% <plot cybernetic model result>ac
 
