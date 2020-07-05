@@ -9,28 +9,23 @@
 :rtype: 
 """
 
-import ConvexHull_yield
-import GEM2pathways
-import Cybernetic_Functions
+import os
+
 import cobra
-import My_def
-import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
-import statistics
-from cobra.flux_analysis import production_envelope
-from cobra.flux_analysis import flux_variability_analysis
 import pandas as pd
-
 from scipy.spatial import ConvexHull
-import os
+
+import ConvexHull_yield
+import Cybernetic_Functions
+import GEM2pathways
 
 os.chdir('../ComplementaryData/')
 
 iML1515 = cobra.io.read_sbml_model('../ComplementaryData/Case3_iML1515/iML1515.xml')
 
-
-iML1515.reactions.get_by_id('EX_o2_e').bounds = (0.0,1000.0)
+iML1515.reactions.get_by_id('EX_o2_e').bounds = (0.0, 1000.0)
 # % Constrain the phosphotransferase system
 # model = changeRxnBounds(model, 'GLCabcpp', -1000, 'l');
 # model = changeRxnBounds(model, 'GLCptspp', -1000, 'l');
@@ -116,7 +111,7 @@ hull_cutoff_index_99 = [0, 2, 3, 9, 10, 11, 16, 17, 18, 19, 20, 23, 26, 30, 33, 
 hull_active_index = our_indexes[-1][
     -2]  # list(set(our_indexes[-1][-1]) | set(our_indexes[-1][-2]) | set(our_indexes[-1][-3]))
 
-
+# hull_active_index = [3, 17, 20, 30, 32, 33, 34]
 our_all_points_hull_1 = our_all_points[our_indexes[0],:]
 our_all_points_hull_99 = our_all_points[hull_cutoff_index_99,:]
 our_all_points_hull_act = our_all_points[hull_active_index, :]
@@ -235,7 +230,8 @@ path_for = np.array([0, 0, 0, -1, 0, 0, 0])  # Note !!! this pathway is nessary 
 Smz = np.insert(Smz, Smz.shape[1], values=path_for, axis=1)
 # metabolites and pathways number
 (n_mets, n_path) = Smz.shape
-np.savetxt('temp.txt', Smz, delimiter=',')
+# np.savetxt('Case3_iML1515/iML1515_Smz.txt', Smz, delimiter=',') # note： check the result with saved file
+Smz = np.loadtxt('Case3_iML1515/iML1515_Smz.txt', delimiter=',')
 # experiment data
 metabObj = ['glc', 'biomass', 'ac', 'for', 'etoh', 'lac', 'succ']
 
@@ -256,27 +252,28 @@ ke = np.array([0.620342] * n_path)  # or 0.5
 # Metabolites rate Parameters kmax , Ki : dm/dt =  Smz @ V @ rM(kmax,K) * c
 # kmax : n_path
 kmax = np.array([
-    1.8137e-04,
-    5.0561e-01,
-    3.2933e+00,
-    5.6628e+00,
-    1.7679e+01,
-    1.7825e-01,
-    7.1085e+00,
-    2.4708e+02
+    2.8334e-02,
+    1.3296e-01,
+    3.3288e+00,
+    6.7559e+00,
+    1.7234e+01,
+    3.6402e-01,
+    6.9528e+00,
+    2.9645e+02
 ])
 
 # K : n_path
 K = np.array([
-    4.8584e-05,
-    4.9439e-07,
-    7.7285e-02,
-    3.4581e-04,
-    1.2480e+01,
-    3.5425e-01,
-    1.9143e-03,
-    8.5745e+01,
+    2.2462e-04,
+    1.8866e+00,
+    1.3772e-01,
+    2.3646e+01,
+    1.0928e+01,
+    1.7817e+00,
+    5.6565e-04,
+    9.0691e+01,
 ])
+
 
 # carbon number for each pathways
 n_carbon = np.array([6, 6, 6, 6, 6, 6, 6, 0])
@@ -294,6 +291,7 @@ ecoli_iML1515_our_cb = Cybernetic_Model_basic('CB model for Ecoli iML1515 matrix
 ecoli_iML1515_our_cb.Smz = Smz
 ecoli_iML1515_our_cb.x0 = initial_x0
 ecoli_iML1515_our_cb.kmax = kmax
+ecoli_iML1515_our_cb.mets_name = ['glc', 'biomass', 'ac', 'for', 'etoh', 'lac', 'succ']
 ecoli_iML1515_our_cb.K = K
 ecoli_iML1515_our_cb.ke = ke
 ecoli_iML1515_our_cb.alpha = alpha
@@ -301,6 +299,7 @@ ecoli_iML1515_our_cb.beta = beta
 ecoli_iML1515_our_cb.n_carbon = n_carbon
 ecoli_iML1515_our_cb['sub_index'] = sub_index
 ecoli_iML1515_our_cb['Biomass_index'] = Biomass_index
+ecoli_iML1515_our_cb.experiment_data_df = experiment_data_df
 
 CB_model = ecoli_iML1515_our_cb
 
@@ -349,7 +348,7 @@ def cybernetic_var_def(self, rM):
         u = v = np.zeros(n_path)
 
     if CB_model.name in ['CB model for Ecoli iML1515 matrix ']:
-        print(123)
+        # print(123)
         u[-1] = 1.0
         v[-1] = 1.0
     return u, v
@@ -359,6 +358,33 @@ setattr(Cybernetic_Model_basic, 'rate_def', rate_def)
 setattr(Cybernetic_Model_basic, 'cybernetic_var_def', cybernetic_var_def)
 
 sol = Cybernetic_Functions.cb_model_simulate(CB_model, tspan, draw=True)
+
+# %%
+# minimums = []
+# for i in range(0,7):
+#     CB_model.weight_of_method_t_f = i
+#     # cb_model_1.weights_of_mets = weights_of_mets/1000
+#     cb_models = [CB_model, ]
+#
+#     experiment_data_dfs = [experiment_data_df, ]
+#     para_to_fit = {'kmax': np.array([[0], [1], [2], [3],[4],[5], [6], [7],]),
+#                    'K': np.array([])}
+#
+#     minimum = Cybernetic_Functions.parameters_fitting(cb_models, experiment_data_dfs,
+#                                                         para_to_fit, tspan, draw=True,
+#                                                         full_output=False,
+#                                                         options={'xtol': 5, 'ftol': 0.01, 'maxiter': 100,
+#                                                                  'disp': True})
+#
+#
+#
+#     minimums.append(minimum)
+#
+# for minimum in minimums:
+#     CB_models = Cybernetic_Functions.update_paras_func(minimum.x, [CB_model], para_to_fit,
+#                                                        retern_model_or_paras='model')
+#     sol3 = Cybernetic_Functions.cb_model_simulate(CB_models[0], tspan, draw=True)
+
 
 # %% <plot cybernetic model result>
 
