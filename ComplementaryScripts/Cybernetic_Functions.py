@@ -46,6 +46,7 @@ class Cybernetic_Model(dict):
         self['weights_of_mets'] = 1
         self['weights_of_time'] = 1
         self['xtol'] = 0.8
+        self['resources_group'] = [-1]
 
     def __getattr__(self, key):
         try:
@@ -87,18 +88,24 @@ class Cybernetic_Model(dict):
             res_sq_weight_of_method = res_sq * weight_of_method
 
         elif self.weight_of_method_t_f == 2:  # minimize relative variance
-            res_sq_weight_of_method = ((exp_y - model_y) / (np.median(exp_y, axis=0))) ** 2
+            denominators = np.median(exp_y, axis=0)
+            denominators = np.where(denominators <= 0, 0.1, denominators)
+            res_sq_weight_of_method = res_sq / (denominators ** 2)
 
         elif self.weight_of_method_t_f == 2.1:  # minimize relative variance
-            res_sq_weight_of_method = ((exp_y - model_y) / (np.mean(exp_y, axis=0))) ** 2
+            denominators = np.mean(exp_y, axis=0)
+            denominators = np.where(denominators <= 0, 0.1, denominators)
+            res_sq_weight_of_method = res_sq / (denominators ** 2)
 
+        elif self.weight_of_method_t_f == 2.2:  # minimize relative variance
+            denominators = np.max(exp_y, axis=0)
+            denominators = np.where(denominators <= 0, 0.1, denominators)
+            res_sq_weight_of_method = res_sq / (denominators ** 2)
 
         elif self.weight_of_method_t_f == 2.5:  # minimize relative variance
-            # weight_of_method = 1 / (exp_y ** 2 + 1e-20)
-            exp_y_ = np.where(exp_y <= 0, 0.2, exp_y)  # avoid division by zero
-
-            res_sq_weight_of_method = ((res_sq) / exp_y_) ** 2
-
+            denominators = exp_y
+            denominators = np.where(denominators <= 0, 0.1, denominators)
+            res_sq_weight_of_method = res_sq / (denominators ** 2)
 
         elif self.weight_of_method_t_f == 3:  # model_y and exp_y , Normalization by col note : error 0/0
 
@@ -109,6 +116,23 @@ class Cybernetic_Model(dict):
 
             weight_of_method = (exp_y_norm - model_y_norm) ** 2
             res_sq_weight_of_method = res_sq * weight_of_method
+
+        elif self.weight_of_method_t_f == 3.1:  # model_y and exp_y , Normalization by col note : error 0/0
+
+            model_y_norm = (model_y - model_y.min(axis=0) + 1e-20) / (
+                    model_y.max(axis=0) - model_y.min(axis=0) + 1e-20)
+            exp_y_norm = (exp_y - exp_y.min(axis=0) + 1e-20) / (
+                    exp_y.max(axis=0) - exp_y.min(axis=0) + 1e-20)
+
+            weight_of_method = (exp_y_norm - model_y_norm) ** 2
+            res_sq_weight_of_method = weight_of_method
+
+        elif self.weight_of_method_t_f == 3.5:  # model_y and exp_y , Normalization by col note : error 0/0
+
+            res_sq_norm = (res_sq - res_sq.min(axis=0)) / (
+                    res_sq.max(axis=0) - res_sq.min(axis=0) + 1e-20)
+
+            res_sq_weight_of_method = res_sq_norm
 
         elif self.weight_of_method_t_f == 4:  # model_y and exp_y , Normalization by col note : error 0/0
 
@@ -124,7 +148,7 @@ class Cybernetic_Model(dict):
             res_sq_weight_of_method = res_sq * weight_of_method
 
 
-        elif self.weight_of_method_t_f == 5:  # tol for each pathways
+        elif self.weight_of_method_t_f == -1:  # tol for each pathways
             exp_y_ = np.where(exp_y <= 0, 1, exp_y)  # avoid division by zero
             relative_variance = ((res_sq) / exp_y_) ** 2
             res_sq_weight_of_method = np.where(relative_variance <= (self.xtol) ** 2, 0, 1)
@@ -133,8 +157,7 @@ class Cybernetic_Model(dict):
                                                       np.array([np.mean(res_sq_weight_of_method, axis=0)]))
                                                      , axis=1)
 
-
-        elif self.weight_of_method_t_f == 6:  # tol for each experiment point
+        elif self.weight_of_method_t_f == -1:  # tol for each experiment point
             exp_y_ = np.where(exp_y <= 0, 1, exp_y)  # avoid division by zero
             relative_variance = ((res_sq) / exp_y_) ** 2
             res_sq_weight_of_method = np.where(relative_variance <= (self.xtol) ** 2, 0, 1)
@@ -190,7 +213,7 @@ class Cybernetic_Model(dict):
         model.initial_enzymes = np.concatenate((model1.initial_enzymes, model2.initial_enzymes), )
         model.x0 = np.concatenate((model.initial_mets, model.initial_enzymes))
         model.kmax = np.concatenate((model1.kmax, model2.kmax), )
-        model.K = np.concatenate((model1.K[0:-1], model2.K), )
+        model.K = np.concatenate((model1.K, model2.K), )
         model.ke = np.concatenate((model1.ke, model2.ke), )
         model.alpha = np.concatenate((model1.alpha, model2.alpha), )
         model.beta = np.concatenate((model1.beta, model2.beta), )
@@ -200,6 +223,35 @@ class Cybernetic_Model(dict):
             model.Biomass_index = np.concatenate((model1.Biomass_index, model2.Biomass_index), )
         return model
 
+    def cybernetic_var_def(self, rM):
+        (n_mets, n_path) = self.Smz.shape
+        cybernetic_var = rM * self.n_carbon
+        # cybernetic_var[cybernetic_var==0] = 1
+        cybernetic_var[cybernetic_var < 0] = 0
+        u = v = np.ones(n_path)
+
+        for index_i in range(0, len(self.resources_group)):
+            if index_i == 0:
+                index_strat = 0
+            else:
+                index_strat = self.resources_group[index_i - 1]
+            if index_i == len(self.resources_group) - 1:
+                index_end = n_path + 1
+            else:
+                index_end = self.resources_group[index_i]
+
+            cybernetic_var_i = cybernetic_var[index_strat:index_end]
+            # u_i = u[index_strat:index_end]
+            # v_i = v[index_strat:index_end]
+
+            if sum(cybernetic_var_i) > 0:
+                u_i = cybernetic_var_i / sum(cybernetic_var_i)
+                v_i = cybernetic_var_i / np.max(abs(cybernetic_var_i))
+            else:
+                u_i = v_i = np.zeros(len(cybernetic_var_i))
+            u[index_strat:index_end] = u_i
+            v[index_strat:index_end] = v_i
+        return u, v
 
 def dxdy(x, t, CB_model):
     # Smz=Smz, kmax=kmax, K=K, ke=ke, alpha=alpha, beta=beta
@@ -213,6 +265,7 @@ def dxdy(x, t, CB_model):
     Biomass_index = CB_model.Biomass_index
     sub_index = CB_model.sub_index
     n_carbon = CB_model.n_carbon
+    resources_group = CB_model.resources_group
 
     (n_mets, n_path) = Smz.shape
 
@@ -220,21 +273,7 @@ def dxdy(x, t, CB_model):
 
     # rM, rE, rG = __main__.rate_def2(x, CB_model).rM , rate_def2(x, CB_model).rE , rate_def2(x, CB_model).rG
 
-    try:
-        u, v = CB_model.cybernetic_var_def(rM)
-
-    except:
-        # print('stand cybernetic_vars')
-        # cybernetic_var = abs(Smz[sub_index, :] * rM * n_carbon)
-        cybernetic_var = rM * n_carbon
-        # cybernetic_var[cybernetic_var==0] = 1
-        cybernetic_var = np.array(cybernetic_var)
-        cybernetic_var[cybernetic_var < 0] = 0
-        if sum(cybernetic_var) > 0:
-            u = cybernetic_var / sum(cybernetic_var)
-            v = cybernetic_var / np.max(abs(cybernetic_var))
-        else:
-            u = v = np.zeros(n_path)
+    u, v = CB_model.cybernetic_var_def(rM)
 
     Growth_rate = rG * v
     mu = sum(Growth_rate)

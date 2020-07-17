@@ -1,0 +1,694 @@
+12PPDt	12ppd__R_c <=> 12ppd__R_e	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'transport_reaction']}
+2HXICDH	4mop_c + h_c + nadh_c <=> 2hxic__L_c + nad_c	0	-1000.0	1000.0	LAR_RS10050 or LAR_RS07490 or LAR_RS01005	{'from': ['Lreuteri_530', 'gap']}
+3HPPt	3hpp_c <=> 3hpp_e	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'transport_reaction']}
+4ABZt	4abz_e <=> 4abz_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction'], 'initial_id': ['PABAt']}
+AACPS182	ACP_c + atp_c + ocdcya_c --> amp_c + ocdcyaACP_c + ppi_c	0	0.0	1000.0		{'from': ['Lreuteri_530', 'gap']}
+AACPS183	ACP_c + atp_c + ocdctr_c --> amp_c + ocdctrACP_c + ppi_c	0	0.0	1000.0		{'from': ['Lreuteri_530', 'gap']}
+AACPS4	ACP_c + atp_c + hdcea_c --> amp_c + hdeACP_c + ppi_c	0	0.0	1000.0		{'from': ['iML1515', 'gap']}
+AACPS5	ACP_c + atp_c + ocdcea_c --> amp_c + octeACP_c + ppi_c	0	0.0	1000.0		{'from': ['iML1515', 'gap']}
+AALDH	h_c + nadh_c + pacald_c <=> 2phetoh_c + nad_c	0	-1000.0	1000.0	LAR_RS08220 or LAR_RS08425	{'from': ['Lreuteri_530', 'gap']}
+ABTA	4abut_c + akg_c --> glu__L_c + sucsal_c	0	0.0	1000.0	LAR_RS01030	{'from': ['iML1515', 'gap']}
+ACACT1r	2.0 accoa_c <=> aacoa_c + coa_c	0	-1000.0	1000.0	LAR_0050	{'from': ['iML1515', 'gap']}
+ACALD	acald_c + coa_c + nad_c <=> accoa_c + h_c + nadh_c	0	-1000.0	1000.0	LAR_RS01690	{'from': ['iML1515', 'gap']}
+ACALDt	acald_e <=> acald_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction']}
+ACBIPGT	adocbip_c + gtp_c + h_c --> agdpcbi_c + ppi_c	0	0.0	1000.0	LAR_RS09020	{'from': ['iML1515', 'gap']}
+ACCOAC	accoa_c + atp_c + hco3_c --> adp_c + h_c + malcoa_c + pi_c	0	0.0	1000.0	LAR_RS03970 and LAR_RS05235 and LAR_RS05215 and LAR_RS05220 and LAR_RS05225	{'from': ['iML1515', 'gap']}
+ACGK	acglu_c + atp_c --> acg5p_c + adp_c	0	0.0	1000.0	None	{'from': ['iML1515', 'gap']}
+ACHBS	2obut_c + h_c + pyr_c --> 2ahbut_c + co2_c	0	0.0	1000.0	LAR_RS00665	{'from': ['iML1515', 'gap']}
+ACKr	ac_c + atp_c <=> actp_c + adp_c	0	-1000.0	1000.0	LAR_RS02955 or LAR_RS09190	{'from': ['iML1515', 'gap']}
+ACLDC	alac__S_c + h_c --> actn__R_c + co2_c	0	0.0	1000.0	LAR_RS00670	{'from': ['Lreuteri_530', 'gap']}
+ACLS	h_c + 2.0 pyr_c --> alac__S_c + co2_c	0	0.0	1000.0	LAR_RS00665	{'from': ['iML1515', 'gap']}
+ACOTA	acorn_c + akg_c <=> acg5sa_c + glu__L_c	0	-1000.0	1000.0	LAR_RS00985 or LAR_RS01980	{'from': ['iML1515', 'gap']}
+ACPS2	apoACP_c + coa_c --> ACP_c + h_c + pap_c	0	0.0	1000.0	LAR_RS01310 or LAR_RS05255	{'from': ['Lreuteri_530', 'gap']}
+ACTD	actn__R_c + nad_c <=> diact_c + h_c + nadh_c	0	-1000.0	1000.0	LAR_RS07760	{'from': ['Lreuteri_530', 'gap']}
+ACTNdiff	actn__R_e <=> actn__R_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction']}
+ACTPASE	actp_c + h2o_c --> ac_c + h_c + pi_c	0	0.0	1000.0	LAR_RS06570	{'from': ['Lreuteri_530', 'gap']}
+ACt2r	ac_e + h_e <=> ac_c + h_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction'], 'initial_id': ['ACt6']}
+ADA	adn_c + h2o_c + h_c --> ins_c + nh4_c	0	0.0	1000.0	LAR_RS01710	{'from': ['iML1515', 'gap']}
+ADCOBAPS	adcobhex_c + applp_c + atp_c --> adocbip_c + adp_c + h_c + pi_c	0	0.0	1000.0	LAR_RS09130	{'from': ['Lreuteri_530', 'gap']}
+ADCPS1	adcobhex_c + appl_c + atp_c <=> adocbi_c + adp_c + h_c + pi_c	0	-1000.0	1000.0	LAR_RS09130	{'from': ['Lreuteri_530', 'gap']}
+ADEADOCBLPP	adeadocblp_c + h2o_c --> adeadocbl_c + pi_c	0	0.0	1000.0	LAR_RS09010	{'from': ['Lreuteri_530', 'gap']}
+ADEADOCBLS	agdpcbi_c + prbade_c --> adeadocblp_c + gmp_c + h_c	0	0.0	1000.0	LAR_RS09015	{'from': ['Lreuteri_530', 'gap']}
+ADEt2	ade_e + h_e <=> ade_c + h_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction']}
+ADK1	amp_c + atp_c <=> 2.0 adp_c	0	-1000.0	1000.0	LAR_RS07825	{'from': ['iML1515', 'gap']}
+ADNUC	adn_c + h2o_c --> ade_c + rib__D_c	0	0.0	1000.0	LAR_RS08815	{'from': ['iML1515', 'gap']}
+ADOCBIK	adocbi_c + atp_c --> adocbip_c + adp_c + h_c	0	0.0	1000.0	LAR_RS09020	{'from': ['iML1515', 'gap']}
+ADPDS	h2o_c + h_c + n6all26d_c --> 26dap_LL_c + ac_c	0	0.0	1000.0	LAR_RS03355	{'from': ['Lreuteri_530', 'gap']}
+ADPRDP	adprib_c + h2o_c --> amp_c + 2.0 h_c + r5p_c	0	0.0	1000.0	LAR_RS03285	{'from': ['iML1515', 'gap']}
+ADPT	ade_c + prpp_c --> amp_c + ppi_c	0	0.0	1000.0	LAR_RS01375 or LAR_RS10150	{'from': ['iML1515', 'gap']}
+ADPTA	akg_c + h_c + n6all26d_c <=> acamoxm_c + glu__L_c	0	-1000.0	1000.0	LAR_RS04020	{'from': ['Lreuteri_530', 'gap']}
+ADSL1r	dcamp_c <=> amp_c + fum_c	0	-1000.0	1000.0	LAR_RS00685	{'from': ['iML1515', 'gap']}
+ADSL2r	25aics_c <=> aicar_c + fum_c	0	-1000.0	1000.0	LAR_RS00685	{'from': ['iML1515', 'gap']}
+ADSS	asp__L_c + gtp_c + imp_c --> dcamp_c + gdp_c + 2.0 h_c + pi_c	0	0.0	1000.0	LAR_RS00355	{'from': ['iML1515', 'gap']}
+AGAT_LRE	0.0211 cpocdacp_c + 0.5 glyc3p_c + 0.0258 hdeACP_c + 0.075 ocdacp_c + 0.0418 ocdctrACP_c + 0.3519 ocdcyaACP_c + 0.1591 octeACP_c + 0.2566 palmACP_c + 0.0687 tdeacp_c --> ACP_c + 0.5 pa_LRE_c	0	0	1000.0	LAR_RS03690	{'from': ['Lreuteri_530', 'biomass']}
+AGPR	acg5sa_c + nadp_c + pi_c <=> acg5p_c + h_c + nadph_c	0	-1000.0	1000.0	None	{'from': ['iML1515', 'gap']}
+AHCYSNS	ahcys_c + h2o_c --> ade_c + rhcys_c	0	0.0	1000.0	LAR_RS03295	{'from': ['iML1515', 'gap']}
+AHMMPS	air_c + h2o_c --> 4ahmmp_c + gcald_c + 0.5 o2_c + pi_c	0	0.0	1000.0	LAR_RS00470	{'from': ['Lreuteri_530', 'gap']}
+AHSERL2	achms_c + h2s_c <=> ac_c + h_c + hcys__L_c	0	-1000.0	1000.0	LAR_RS09905	{'from': ['Lreuteri_530', 'gap']}
+AICART	10fthf_c + aicar_c <=> fprica_c + thf_c	0	-1000.0	1000.0	LAR_RS00725	{'from': ['iML1515', 'gap']}
+AIRCr	air_c + co2_c --> 5aizc_c + h_c	0	0.0	1000.0	LAR_RS00675 or LAR_RS07745 or LAR_RS00680 or LAR_RS00675	{'from': ['Lreuteri_530', 'gap']}
+ALALAC	ala__D_c + atp_c + lac__D_c <=> adp_c + alalac_c + pi_c	0	-1000.0	1000.0	LAR_RS02540	{'from': ['Lreuteri_530', 'gap']}
+ALAR	ala__L_c <=> ala__D_c	0	-1000.0	1000.0	LAR_RS01315	{'from': ['iML1515', 'gap']}
+ALATA_Lr	ala__L_c + pydx_c <=> pydam_c + pyr_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'gap']}
+ALATRS	ala__L_c + atp_c + trnaala_c --> alatrna_c + amp_c + ppi_c	0	0.0	1000.0	LAR_RS02820	{'from': ['Lreuteri_530', 'gap']}
+ALAt2r	ala__L_e + h_e <=> ala__L_c + h_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction'], 'initial_id': ['ALA_Lt6']}
+ALCD19	glyald_c + h_c + nadh_c <=> glyc_c + nad_c	0	-1000.0	1000.0	LAR_RS01935 or LAR_RS08475	{'from': ['iML1515', 'gap']}
+ALCD19_L	Lglyald_c + h_c + nadph_c <=> glyc_c + nadp_c	0	-1000.0	1000.0	LAR_RS10190	{'from': ['Lreuteri_530', 'gap']}
+ALCD19y	glyald_c + h_c + nadph_c <=> glyc_c + nadp_c	0	-1000.0	1000.0	LAR_RS10190	{'from': ['Lreuteri_530', 'gap']}
+ALCD23x	2mppal_c + h_c + nadh_c <=> ibutoh_c + nad_c	0	-1000.0	1000.0	LAR_RS09195	{'from': ['Lreuteri_530', 'gap']}
+ALCD2x	etoh_c + nad_c <=> acald_c + h_c + nadh_c	0	-1000.0	1000.0	LAR_RS01935 or LAR_RS08475 or LAR_RS01690	{'from': ['iML1515', 'gap']}
+ALCD3ir	nad_c + ppoh_c <=> h_c + nadh_c + ppal_c	0	-1000.0	1000.0	LAR_RS00160 or LAR_RS09195	{'from': ['Lreuteri_530', 'gap']}
+ALDD2x	acald_c + h2o_c + nad_c --> ac_c + 2.0 h_c + nadh_c	0	0.0	1000.0	LAR_RS01690	{'from': ['Lreuteri_530', 'gap']}
+ALKP	dhap_c + h2o_c --> dha_c + pi_c	0	0.0	1000.0	LAR_RS09725	{'from': ['iML1515', 'gap']}
+ALOX	alac__S_c + h_c + 0.5 o2_c --> co2_c + diact_c + h2o_c	0	0.0	1000.0	None	{'from': ['Lreuteri_530', 'gap']}
+ALR2	h_c + mthgxl_c + nadph_c --> acetol_c + nadp_c	0	0.0	1000.0	LAR_RS09730	{'from': ['iML1515', 'gap']}
+ALR4x	acetol_c + h_c + nadh_c --> 12ppd__R_c + nad_c	0	0.0	1000.0	LAR_RS09730	{'from': ['iML1515', 'gap']}
+AMAA	acmama_c + h2o_c --> acmam_c + ala__L_c	0	0.0	1000.0	LAR_RS07340 or LAR_RS07535	{'from': ['Lreuteri_530', 'gap']}
+AMMQT7	2dmmq7_c + amet_c + nadph_c --> ahcys_c + mql7_c + nadp_c	0	0.0	1000.0	LAR_RS05840	{'from': ['Lreuteri_530', 'gap']}
+AMMQT8_2	2dmmq8_c + amet_c --> ahcys_c + h_c + mqn8_c	0	0.0	1000.0	LAR_RS05840	{'from': ['Lreuteri_530', 'gap']}
+AOBUTDs	2aobut_c + h_c --> aact_c + co2_c	0	0.0	1000.0		{'from': ['iML1515', 'gap']}
+AP4AH	ap4a_c + h2o_c --> 2.0 adp_c + 2.0 h_c	0	0.0	1000.0	LAR_RS05830	{'from': ['iML1515', 'gap']}
+APAT	accoa_c + h2o_c + thdp_c <=> acamoxm_c + coa_c	0	-1000.0	1000.0	LAR_RS03350	{'from': ['Lreuteri_530', 'gap']}
+APPLDHr	aact_c + h_c + nadh_c <=> appl_c + nad_c	0	-1000.0	1000.0	LAR_RS09730	{'from': ['iML1515', 'gap']}
+APRAUR	5apru_c + h_c + nadph_c --> 5aprbu_c + nadp_c	0	0.0	1000.0	LAR_RS04660	{'from': ['iML1515', 'gap']}
+ARABRr	arab__L_c + h_c + nadph_c <=> abt__L_c + nadp_c	0	-1000.0	1000.0	LAR_RS10190	{'from': ['Lreuteri_530', 'gap']}
+ARAI	arab__L_c <=> rbl__L_c	0	-1000.0	1000.0	LAR_RS02565	{'from': ['iML1515', 'gap']}
+ARBt2r	arab__L_e + h_e <=> arab__L_c + h_c	0	-1000.0	1000.0	LAR_RS02550	{'from': ['Lreuteri_530', 'transport_reaction']}
+ARGDI	arg__L_c + h2o_c --> citr__L_c + nh4_c	0	0.0	1000.0	LAR_RS02380	{'from': ['Lreuteri_530', 'gap']}
+ARGORNt3	arg__L_e + orn_c <=> arg__L_c + orn__L_e	0	-1000.0	1000.0	LAR_RS02395 or LAR_RS08270 or LAR_RS02390 or LAR_RS09710 or LAR_RS07430	{'from': ['Lreuteri_530', 'transport_reaction']}
+ARGSL	argsuc_c <=> arg__L_c + fum_c	0	-1000.0	1000.0	LAR_RS03960	{'from': ['iML1515', 'gap']}
+ARGSS	asp__L_c + atp_c + citr__L_c --> amp_c + argsuc_c + h_c + ppi_c	0	0.0	1000.0	LAR_RS03955	{'from': ['iML1515', 'gap']}
+ARGTRS	arg__L_c + atp_c + trnaarg_c --> amp_c + argtrna_c + ppi_c	0	0.0	1000.0	LAR_RS06810	{'from': ['Lreuteri_530', 'gap']}
+ARGabc	arg__L_e + atp_c + h2o_c --> adp_c + arg__L_c + h_c + pi_c	0	0.0	1000.0	LAR_RS03935 or LAR_RS03930	{'from': ['Lreuteri_530', 'gap']}
+ARGt2r	arg__L_e + h_e --> arg__L_c + h_c	0	0.0	1000.0	LAR_RS02395	{'from': ['Lreuteri_530', 'transport_reaction'], 'initial_id': ['ARGt2']}
+ASAD	aspsa_c + nadp_c + pi_c <=> 4pasp_c + h_c + nadph_c	0	-1000.0	1000.0	LAR_RS03375	{'from': ['iML1515', 'gap']}
+ASNN	asn__L_c + h2o_c --> asp__L_c + nh4_c	0	0.0	1000.0	LAR_RS10035	{'from': ['iML1515', 'gap']}
+ASNS1	asp__L_c + atp_c + gln__L_c + h2o_c --> amp_c + asn__L_c + glu__L_c + h_c + ppi_c	0	0.0	1000.0	LAR_RS10215	{'from': ['iML1515', 'gap']}
+ASNS2	asp__L_c + atp_c + nh4_c --> amp_c + asn__L_c + h_c + ppi_c	0	0.0	1000.0	LAR_RS09960	{'from': ['iML1515', 'gap']}
+ASNTRS	asn__L_c + atp_c + trnaasn_c --> amp_c + asntrna_c + ppi_c	0	0.0	1000.0	LAR_RS09965	{'from': ['Lreuteri_530', 'gap']}
+ASNt6	asn__L_e + h_e <=> asn__L_c + h_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction']}
+ASPCT	asp__L_c + cbp_c --> cbasp_c + h_c + pi_c	0	0.0	1000.0	LAR_RS00620	{'from': ['iML1515', 'gap']}
+ASPK	asp__L_c + atp_c <=> 4pasp_c + adp_c	0	-1000.0	1000.0	LAR_RS03340	{'from': ['iML1515', 'gap']}
+ASPR	asp__D_c <=> asp__L_c	0	-1000.0	1000.0	LAR_RS01490	{'from': ['Lreuteri_530', 'gap']}
+ASPTA	akg_c + asp__L_c <=> glu__L_c + oaa_c	0	-1000.0	1000.0	LAR_RS01830	{'from': ['iML1515', 'gap']}
+ASPTA2	4hglu_c + akg_c <=> 4h2oxg_c + glu__L_c	0	-1000.0	1000.0	LAR_RS01830	{'from': ['Lreuteri_530', 'gap']}
+ASPTA4	akg_c + cys__L_c <=> glu__L_c + mercppyr_c	0	-1000.0	1000.0	LAR_RS01830	{'from': ['Lreuteri_530', 'gap']}
+ASPTRS	asp__L_c + atp_c + trnaasp_c --> amp_c + asptrna_c + ppi_c	0	0.0	1000.0	LAR_RS03920	{'from': ['Lreuteri_530', 'gap']}
+ASPt6	asp__L_e + h_e <=> asp__L_c + h_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction']}
+ATPM	atp_c + h2o_c --> adp_c + h_c + pi_c	0	0.36	0.36	None	{'from': ['iML1515', 'gap']}
+ATPS3r	adp_c + 3.0 h_e + pi_c <=> atp_c + h2o_c + 2.0 h_c	0	-1000.0	1000.0	LAR_RS02500 or LAR_RS02485 or LAR_RS02480 or LAR_RS02475 or LAR_RS02470 or LAR_RS02465 or LAR_RS02490 or LAR_RS02495	{'from': ['Lreuteri_530', 'gap']}
+BGLA1	6pgg_c + h2o_c --> g6p_c + glc__D_c	0	0.0	1000.0	LAR_RS10080	{'from': ['iML1515', 'gap']}
+BIOMASS	0.186 CPS_LRE_c + 0.075 DNA_LRE_c + 0.096 LIP_LRE_c + 0.018 LTAtotal_LRE_c + 0.145 PGlac2_c + 3.311 PROT_LRE_c + 0.34 RNA_LRE_c + 1e-05 adeadocbl_c + 10.2 atp_c + 1e-05 btn_c + 0.0002 coa_c + 10.2 h2o_c + 0.0002 nad_c + 1e-06 pydx5p_c + 1e-05 thf_c + 1e-05 thmpp_c + 0.0002 udcpdp_c --> 10.2 adp_c + 10.2 h_c + 10.2 pi_c	1.0	0.0	1000.0		{'from': ['Lreuteri_530', 'biomass']}
+BTDD_RR	btd_RR_c + nad_c <=> actn__R_c + h_c + nadh_c	0	-1000.0	1000.0	LAR_RS07760	{'from': ['Lreuteri_530', 'gap']}
+BTDt1_RR	btd_RR_c <=> btd_RR_e	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction']}
+BTNt2i	btn_e + h_e --> btn_c + h_c	0	0.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction']}
+CBIA	2.0 atp_c + cobya_c + 2.0 gln__L_c + 2.0 h2o_c --> 2.0 adp_c + co2dam_c + 2.0 glu__L_c + 2.0 h_c + 2.0 pi_c	0	0.0	1000.0	LAR_RS09135	{'from': ['Lreuteri_530', 'gap']}
+CBIAT	atp_c + cbi_c + h2o_c <=> adocbi_c + pi_c + ppi_c	0	-1000.0	1000.0	LAR_RS09210 or LAR_RS09150	{'from': ['iML1515', 'gap']}
+CBLAT	atp_c + cbl1_c + h_c <=> adocbl_c + pppi_c	0	-1000.0	1000.0	LAR_RS09210 or LAR_RS09150	{'from': ['iML1515', 'gap']}
+CBMKr	atp_c + co2_c + nh4_c <=> adp_c + cbp_c + 2.0 h_c	0	-1000.0	1000.0	LAR_RS02265	{'from': ['iML1515', 'gap']}
+CBPS	2.0 atp_c + gln__L_c + h2o_c + hco3_c --> 2.0 adp_c + cbp_c + glu__L_c + 2.0 h_c + pi_c	0	0.0	1000.0	(LAR_RS00435 and LAR_RS00440) or (LAR_RS04920 and LAR_RS04925)	{'from': ['iML1515', 'gap']}
+CDPMEK	4c2me_c + atp_c --> 2p4c2me_c + adp_c + h_c	0	0.0	1000.0	LAR_RS01115	{'from': ['iML1515', 'gap']}
+CFAS180	amet_c + octeACP_c --> ahcys_c + cpocdacp_c + h_c	0	0.0	1000.0	LAR_RS00650	{'from': ['Lreuteri_530', 'gap']}
+CHLabc	atp_c + chol_e + h2o_c --> adp_c + chol_c + h_c + pi_c	0	0.0	1000.0	LAR_RS00970 or LAR_RS00965 or LAR_RS00960	{'from': ['Lreuteri_530', 'transport_reaction']}
+CHLt6	chol_e + h_e <=> chol_c + h_c	0	-1000.0	1000.0	LAR_RS00955	{'from': ['Lreuteri_530', 'transport_reaction']}
+CMLDC	4cml_c --> 5odhf2a_c + co2_c + h_c	0	0.0	1000.0	LAR_RS10080	{'from': ['Lreuteri_530', 'gap']}
+CO2t	co2_e <=> co2_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction']}
+COBALTt5	cobalt2_c <=> cobalt2_e	0	-1000.0	1000.0	LAR_RS09665	{'from': ['Lreuteri_530', 'gap']}
+COPREC2MT	amet_c + copre2_c --> ahcys_c + copre3_c + h_c	0	0.0	1000.0	LAR_RS09075	{'from': ['Lreuteri_530', 'gap']}
+COPREC3MT	amet_c + copre3_c --> ahcys_c + copre4_c	0	0.0	1000.0	LAR_RS09095	{'from': ['Lreuteri_530', 'gap']}
+COPREC4MT	amet_c + copre4_c --> ahcys_c + copre5_c + h_c	0	0.0	1000.0	LAR_RS09105	{'from': ['Lreuteri_530', 'gap']}
+COPREC6MT	2.0 amet_c + codhpre6_c --> 2.0 ahcys_c + co2_c + copre8_c + h_c	0	0.0	1000.0	LAR_RS09115 or LAR_RS09110	{'from': ['Lreuteri_530', 'gap']}
+COPREC6R2	copre6_c + h_c + nadph_c --> codhpre6_c + nadp_c	0	0.0	1000.0	LAR_RS09090	{'from': ['Lreuteri_530', 'gap']}
+COPRECI	copre8_c --> cobya_c	0	0.0	1000.0	LAR_RS09125	{'from': ['Lreuteri_530', 'gap']}
+COPRECT	amet_c + copre5_c + h2o_c --> acald_c + ahcys_c + copre6_c + h_c	0	0.0	1000.0	LAR_RS09100 or LAR_RS09120	{'from': ['Lreuteri_530', 'gap']}
+CPSS_LRE	4.0 h2o_c + 4.0 udpg_c <=> CPS_LRE_c + 5.0 h_c + 3.0 udp_c + ump_c	0	-1000.0	1000.0	LAR_RS09320 or LAR_RS07370 or LAR_RS05610 or LAR_RS07380 or LAR_RS07400	{'from': ['Lreuteri_530', 'gap']}
+CSND	csn_c + h2o_c + h_c --> nh4_c + ura_c	0	0.0	1000.0	LAR_RS01710	{'from': ['iML1515', 'gap']}
+CTPS1	atp_c + nh4_c + utp_c --> adp_c + ctp_c + 2.0 h_c + pi_c	0	0.0	1000.0	LAR_RS10225	{'from': ['Lreuteri_530', 'gap']}
+CTPS2	atp_c + gln__L_c + h2o_c + utp_c --> adp_c + ctp_c + glu__L_c + 2.0 h_c + pi_c	0	0.0	1000.0	LAR_RS10225	{'from': ['iML1515', 'gap']}
+CYSDabc	atp_c + cys__D_e + h2o_c --> adp_c + cys__D_c + h_c + pi_c	0	0.0	1000.0	LAR_RS01560 and LAR_RS01565 and LAR_RS01555	{'from': ['Lreuteri_530', 'gap']}
+CYSS	acser_c + h2s_c --> ac_c + cys__L_c + h_c	0	0.0	1000.0	LAR_RS08300 or LAR_RS09480	{'from': ['iML1515', 'gap']}
+CYSTGL	cyst__L_c + h2o_c --> 2obut_c + cys__L_c + nh4_c	0	0.0	1000.0	LAR_RS01550	{'from': ['Lreuteri_530', 'gap']}
+CYSTL	cyst__L_c + h2o_c --> hcys__L_c + nh4_c + pyr_c	0	0.0	1000.0	LAR_RS10090 or LAR_RS01550	{'from': ['iML1515', 'gap']}
+CYSTL2	h2o_c + hcys__L_c --> 2obut_c + h2s_c + nh4_c	0	0.0	1000.0	LAR_RS01550	{'from': ['Lreuteri_530', 'gap']}
+CYSTRS	atp_c + cys__L_c + trnacys_c --> amp_c + cystrna_c + ppi_c	0	0.0	1000.0	LAR_RS01600	{'from': ['Lreuteri_530', 'gap']}
+CYSTS	hcys__L_c + ser__L_c --> cyst__L_c + h2o_c	0	0.0	1000.0	LAR_RS08300	{'from': ['Lreuteri_530', 'gap']}
+CYSabc	atp_c + cys__L_e + h2o_c --> adp_c + cys__L_c + h_c + pi_c	0	0.0	1000.0	LAR_RS01560 and LAR_RS01565 and LAR_RS01555	{'from': ['Lreuteri_530', 'gap']}
+CYSt6	cys__L_e + h_e <=> cys__L_c + h_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction']}
+CYTB_B2	2.0 h_c + mql7_c + 0.5 o2_c --> h2o_c + 2.0 h_e + mqn7_c	0	0.0	1000.0	LAR_RS02690 or LAR_RS02685 or LAR_RS02680 or LAR_RS02695	{'from': ['Lreuteri_530', 'gap']}
+CYTD	cytd_c + h2o_c + h_c --> nh4_c + uri_c	0	0.0	1000.0	LAR_RS03505	{'from': ['iML1515', 'gap']}
+CYTDK1	atp_c + cytd_c --> adp_c + cmp_c + h_c	0	0.0	1000.0	None	{'from': ['iML1515', 'gap']}
+CYTDK2	cytd_c + gtp_c --> cmp_c + gdp_c + h_c	0	0.0	1000.0	LAR_RS06535	{'from': ['iML1515', 'gap']}
+CYTK1	atp_c + cmp_c <=> adp_c + cdp_c	0	-1000.0	1000.0	LAR_RS04110	{'from': ['iML1515', 'gap']}
+CYTK2	atp_c + dcmp_c <=> adp_c + dcdp_c	0	-1000.0	1000.0	LAR_RS04110	{'from': ['iML1515', 'gap']}
+Coabc	atp_c + cobalt2_e + h2o_c --> adp_c + cobalt2_c + h_c + pi_c	0	0.0	1000.0	LAR_RS09065 or LAR_RS09055 or LAR_RS07790 or LAR_RS07785 or LAR_RS09060 or LAR_RS07780	{'from': ['Lreuteri_530', 'gap']}
+Cuabc	atp_c + cu2_e + h2o_c --> adp_c + cu2_c + h_c + pi_c	0	0.0	1000.0	LAR_RS02285 and LAR_RS02280	{'from': ['Lreuteri_530', 'transport_reaction']}
+Cut1	atp_c + cu2_c + h2o_c --> adp_c + cu2_e + h_c + pi_c	0	0.0	1000.0	LAR_RS02290	{'from': ['Lreuteri_530', 'gap']}
+DADA	dad_2_c + h2o_c + h_c --> din_c + nh4_c	0	0.0	1000.0	LAR_RS01710	{'from': ['iML1515', 'gap']}
+DADNK	atp_c + dad_2_c --> adp_c + damp_c + h_c	0	0.0	1000.0	LAR_RS08030 or LAR_RS06910	{'from': ['Lreuteri_530', 'gap']}
+DAPDC	26dap__M_c + h_c --> co2_c + lys__L_c	0	0.0	1000.0	LAR_RS03345	{'from': ['iML1515', 'gap']}
+DAPE	26dap_LL_c <=> 26dap__M_c	0	-1000.0	1000.0	LAR_RS03335	{'from': ['iML1515', 'gap']}
+DB4PS	ru5p__D_c --> db4p_c + for_c + h_c	0	0.0	1000.0	LAR_RS04670	{'from': ['iML1515', 'gap']}
+DCYTD	dcyt_c + h2o_c + h_c --> duri_c + nh4_c	0	0.0	1000.0	LAR_RS03505	{'from': ['iML1515', 'gap']}
+DDMAT5	2tddacp_c + h_c + nadh_c --> ddeacp_c + nad_c	0	0.0	1000.0	LAR_RS05210	{'from': ['Lreuteri_530', 'gap']}
+DEMAT4	2tdeacp_c + h_c + nadh_c --> decacp_c + nad_c	0	0.0	1000.0	LAR_RS05210	{'from': ['Lreuteri_530', 'gap']}
+DGNSK	atp_c + dgsn_c --> adp_c + dgmp_c + h_c	0	0.0	1000.0	LAR_RS08030 or LAR_RS06910	{'from': ['Lreuteri_530', 'gap']}
+DHAt	dha_e <=> dha_c	0	-1000.0	1000.0	LAR_RS09285	{'from': ['Lreuteri_530', 'gap']}
+DHDPRy	23dhdp_c + h_c + nadph_c --> nadp_c + thdp_c	0	0.0	1000.0	LAR_RS03365	{'from': ['iML1515', 'gap']}
+DHDPS	aspsa_c + pyr_c --> 23dhdp_c + 2.0 h2o_c + h_c	0	0.0	1000.0	LAR_RS03360	{'from': ['iML1515', 'gap']}
+DHFOR2	dhf_c + nadp_c <=> fol_c + h_c + nadph_c	0	-1000.0	1000.0	LAR_RS04150	{'from': ['Lreuteri_530', 'gap']}
+DHFR	dhf_c + h_c + nadph_c <=> nadp_c + thf_c	0	-1000.0	1000.0	LAR_RS04150	{'from': ['iML1515', 'gap']}
+DHFS	atp_c + dhpt_c + glu__L_c --> adp_c + dhf_c + h_c + pi_c	0	0.0	1000.0	LAR_RS06850 or LAR_RS02705	{'from': ['iML1515', 'gap']}
+DHNPA	dhnpt_c --> 2ahhmp_c + gcald_c	0	0.0	1000.0	LAR_RS06865	{'from': ['Lreuteri_530', 'gap']}
+DHORD6	dhor__S_c + nad_c <=> h_c + nadh_c + orot_c	0	-1000.0	1000.0	LAR_RS00630	{'from': ['Lreuteri_530', 'gap']}
+DHORTS	dhor__S_c + h2o_c <=> cbasp_c + h_c	0	-1000.0	1000.0	LAR_RS00625	{'from': ['iML1515', 'gap']}
+DHPPDA	25dhpp_c + h2o_c + h_c --> 5apru_c + nh4_c	0	0.0	1000.0	LAR_RS04660	{'from': ['Lreuteri_530', 'gap']}
+DIACTt	diact_c <=> diact_e	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction']}
+DINSK	atp_c + din_c --> adp_c + dimp_c	0	0.0	1000.0	LAR_RS08030 or LAR_RS06910	{'from': ['Lreuteri_530', 'gap']}
+DKGLCNR1	25dkglcn_c + h_c + nadph_c --> 2dhguln_c + nadp_c	0	0.0	1000.0	LAR_RS10025 or LAR_RS09450 or LAR_RS02575 or LAR_RS04980	{'from': ['iML1515', 'gap']}
+DKGLCNR2x	25dkglcn_c + h_c + nadh_c --> 5dglcn_c + nad_c	0	0.0	1000.0	LAR_RS10025 or LAR_RS09450 or LAR_RS02575 or LAR_RS04980	{'from': ['iML1515', 'gap']}
+DKGLCNR2y	25dkglcn_c + h_c + nadph_c --> 5dglcn_c + nadp_c	0	0.0	1000.0	LAR_RS10025 or LAR_RS09450 or LAR_RS02575 or LAR_RS04980	{'from': ['iML1515', 'gap']}
+DMATT	dmpp_c + ipdp_c --> grdp_c + ppi_c	0	0.0	1000.0	LAR_RS06360 or LAR_RS05860	{'from': ['iML1515', 'gap']}
+DM_2ahbut_c	2ahbut_c --> 	0	0.0	1000.0		[]
+DNAS_LRE	1.37 atp_c + 0.310284595735 datp_c + 0.180906354753 dctp_c + 0.207484087701 dgtp_c + 0.301324961811 dttp_c + 1.37 h2o_c --> DNA_LRE_c + 1.37 adp_c + 1.37 h_c + 1.37 pi_c + ppi_c	0	0.0	1000.0	None	{'from': ['Lreuteri_530', 'biomass']}
+DNMPPA	dhpmp_c + h2o_c --> dhnpt_c + pi_c	0	0.0	1000.0	None	{'from': ['iML1515', 'gap']}
+DNTPPA	ahdt_c + h2o_c --> dhpmp_c + h_c + ppi_c	0	0.0	1000.0	LAR_RS06845	{'from': ['iML1515', 'gap']}
+DPCOAK	atp_c + dpcoa_c --> adp_c + coa_c + h_c	0	0.0	1000.0	LAR_RS06685	{'from': ['iML1515', 'gap']}
+DPMVD	5dpmev_c + atp_c --> adp_c + co2_c + ipdp_c + pi_c	0	0.0	1000.0	LAR_RS04840	{'from': ['Lreuteri_530', 'gap']}
+DPR	2dhp_c + h_c + nadph_c --> nadp_c + pant__R_c	0	0.0	1000.0	LAR_RS09870 or LAR_RS01835	{'from': ['iML1515', 'gap']}
+DRBK	atp_c + drib_c --> 2dr5p_c + adp_c + h_c	0	0.0	1000.0	LAR_RS00830 or LAR_RS02150	{'from': ['Lreuteri_530', 'gap']}
+DRIBt2	drib_e + h_e --> drib_c + h_c	0	0.0	1000.0	LAR_RS02160	{'from': ['Lreuteri_530', 'transport_reaction']}
+DRPA	2dr5p_c --> acald_c + g3p_c	0	0.0	1000.0	LAR_RS00565	{'from': ['iML1515', 'gap']}
+DTMPK	atp_c + dtmp_c <=> adp_c + dtdp_c	0	-1000.0	1000.0	LAR_RS01735	{'from': ['iML1515', 'gap']}
+DURADy	56dura_c + nadp_c <=> h_c + nadph_c + ura_c	0	-1000.0	1000.0	LAR_RS07015 or LAR_RS07010	{'from': ['Lreuteri_530', 'gap']}
+DURIK1	atp_c + duri_c --> adp_c + dump_c + h_c	0	0.0	1000.0	LAR_RS02415	{'from': ['iML1515', 'gap']}
+DURIPP	duri_c + pi_c <=> 2dr1p_c + ura_c	0	-1000.0	1000.0	LAR_RS00580	{'from': ['iML1515', 'gap']}
+DUTPDP	dutp_c + h2o_c --> dump_c + h_c + ppi_c	0	0.0	1000.0	LAR_RS01585	{'from': ['iML1515', 'gap']}
+DXPS	g3p_c + h_c + pyr_c --> co2_c + dxyl5p_c	0	0.0	1000.0	LAR_RS05685 or LAR_RS05060	{'from': ['iML1515', 'gap']}
+D_LACt2	2.0 h_e + lac__D_e <=> 2.0 h_c + lac__D_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction']}
+EAR40x	but2eACP_c + h_c + nadh_c --> butACP_c + nad_c	0	0.0	1000.0	LAR_RS05210	{'from': ['iML1515', 'gap']}
+ENO	2pg_c <=> h2o_c + pep_c	0	-1000.0	1000.0	LAR_RS02070	{'from': ['iML1515', 'gap']}
+ETOHt	etoh_e <=> etoh_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction'], 'initial_id': ['ETOHt1']}
+EX_13ppd_e	13ppd_e --> 	0	0.0	0.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_2ahbut_c	2ahbut_c --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'gap']}
+EX_4abz_e	4abz_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_ac_e	ac_e --> 	0	0.0	0.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_acald_e	acald_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_actn__R_e	actn__R_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_ade_e	ade_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_ala__L_e	ala__L_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_arab__L_e	arab__L_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_arg__L_e	arg__L_e <=> 	0	-0.42	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_asn__L_e	asn__L_e <=> 	0	-0.23	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_asp__L_e	asp__L_e <=> 	0	-0.29	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_btd_RR_e	btd_RR_e --> 	0	0.0	0.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_btn_e	btn_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_co2_e	co2_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_cobalt2_e	cobalt2_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_cu2_e	cu2_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_cys__L_e	cys__L_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_dha_e	dha_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_diact_e	diact_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_etoh_e	etoh_e --> 	0	0.0	24.4		{'from': ['Lreuteri_530', 'exchange']}
+EX_fe2_e	fe2_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_for_e	for_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_fru_e	fru_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_gal_e	gal_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_gcald_e	gcald_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_glc__D_e	glc__D_e <=> 	0	-25.2	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_glcn__D_e	glcn__D_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_gln__L_e	gln__L_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_glu__L_e	glu__L_e <=> 	0	-0.47	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_gly_e	gly_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_glyc_e	glyc_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_gua_e	gua_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_h2o_e	h2o_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_h2s_e	h2s_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_h_e	h_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_hdcea_e	hdcea_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_his__L_e	his__L_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_hxan_e	hxan_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_ile__L_e	ile__L_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_ins_e	ins_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_lac__L_e	lac__L_e --> 	0	0.0	11.74		{'from': ['Lreuteri_530', 'exchange']}
+EX_lcts_e	lcts_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_leu__L_e	leu__L_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_lys__L_e	lys__L_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_mal__L_e	mal__L_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_malt_e	malt_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_melib_e	melib_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_met__L_e	met__L_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_mn2_e	mn2_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_mnl_e	mnl_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_nac_e	nac_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_nh3_e	nh3_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_o2_e	o2_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_ocdcea_e	ocdcea_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_ocdctr_e	ocdctr_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_ocdcya_e	ocdcya_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_orn__L_e	orn__L_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_phe__L_e	phe__L_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_pi_e	pi_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_pnto__R_e	pnto__R_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_ppoh_e	ppoh_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_pro__L_e	pro__L_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_pydam_e	pydam_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_pyr_e	pyr_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_rib__D_e	rib__D_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_ribflv_e	ribflv_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_ser__L_e	ser__L_e <=> 	0	-0.34	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_so4_e	so4_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_succ_e	succ_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_sucr_e	sucr_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_thm_e	thm_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_thr__L_e	thr__L_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_tre_e	tre_e --> 	0	0.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_trp__L_e	trp__L_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_tyr__L_e	tyr__L_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_ura_e	ura_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_val__L_e	val__L_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+EX_xan_e	xan_e <=> 	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'exchange']}
+FA120ACPHi	ddcaACP_c + h2o_c <=> ACP_c + ddca_c + h_c	0	-1000.0	1000.0	LAR_RS01760	{'from': ['iML1515', 'gap']}
+FA140ACPHi	h2o_c + myrsACP_c <=> ACP_c + h_c + ttdca_c	0	-1000.0	1000.0	LAR_RS01760	{'from': ['iML1515', 'gap']}
+FA141ACPHi	h2o_c + tdeACP_c <=> ACP_c + h_c + ttdcea_c	0	-1000.0	1000.0	LAR_RS01760	{'from': ['iML1515', 'gap']}
+FA160ACPHi	h2o_c + palmACP_c <=> ACP_c + h_c + hdca_c	0	-1000.0	1000.0	LAR_RS01760	{'from': ['iML1515', 'gap']}
+FA161ACPHi	h2o_c + hdeACP_c <=> ACP_c + h_c + hdcea_c	0	-1000.0	1000.0	LAR_RS01760	{'from': ['iML1515', 'gap']}
+FA161tr	hdcea_e <=> hdcea_c	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'transport_reaction']}
+FA180ACPH	h2o_c + ocdcaACP_c <=> ACP_c + h_c + ocdca_c	0	-1000.0	1000.0	LAR_RS01760	{'from': ['Lreuteri_530', 'gap']}
+FA181ACPH	h2o_c + octeACP_c <=> ACP_c + h_c + ocdcea_c	0	-1000.0	1000.0	LAR_RS01760	{'from': ['Lreuteri_530', 'gap']}
+FA181tr	ocdcea_e <=> ocdcea_c	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'transport_reaction']}
+FA182ACPH	h2o_c + ocdcyaACP_c <=> ACP_c + h_c + ocdcya_c	0	-1000.0	1000.0	LAR_RS01760	{'from': ['Lreuteri_530', 'gap']}
+FA182tr	ocdcya_e <=> ocdcya_c	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'transport_reaction']}
+FA183tr	ocdctr_e <=> ocdctr_c	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'transport_reaction']}
+FBA	fdp_c <=> dhap_c + g3p_c	0	-1000.0	1000.0	LAR_RS01230	{'from': ['iML1515', 'gap']}
+FCLT	fe2_c + ppp9_c --> 2.0 h_c + pheme_c	0	0.0	1000.0	LAR_RS08305	{'from': ['iML1515', 'gap']}
+FLVR	h_c + nadph_c + ribflv_c --> nadp_c + rbflvrd_c	0	0.0	1000.0	LAR_RS08335	{'from': ['iML1515', 'gap']}
+FMETDF	fmet_c + h2o_c --> for_c + met__L_c	0	0.0	1000.0	LAR_RS06580 or LAR_RS03435	{'from': ['Lreuteri_530', 'gap']}
+FMETTRS	10fthf_c + mettrna_c --> fmettrna_c + h_c + thf_c	0	0.0	1000.0	LAR_RS06315	{'from': ['Lreuteri_530', 'gap']}
+FMNAT	atp_c + fmn_c + h_c --> fad_c + ppi_c	0	0.0	1000.0	LAR_RS03800	{'from': ['iML1515', 'gap']}
+FMNRx	fmn_c + h_c + nadh_c <=> fmnh2_c + nad_c	0	-1000.0	1000.0	LAR_RS09155	{'from': ['iML1515', 'gap']}
+FOLD3	2ahhmd_c + 4abz_c --> dhpt_c + ppi_c	0	0.0	1000.0	LAR_RS06840	{'from': ['Lreuteri_530', 'gap']}
+FORt	for_e <=> for_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction']}
+FRD	fum_c + mql7_c --> mqn7_c + succ_c	0	0.0	1000.0	LAR_RS08195 and LAR_RS00460 and LAR_RS01015 and LAR_RS00465	{'from': ['Lreuteri_530', 'gap']}
+FRTT	frdp_c + ipdp_c --> ggdp_c + ppi_c	0	0.0	1000.0	LAR_RS06360 or LAR_RS05860	{'from': ['Lreuteri_530', 'gap']}
+FRUK	atp_c + fru_c --> adp_c + f6p_c + h_c	0	0.0	1000.0	LAR_RS04810	{'from': ['iML1515', 'gap']}
+FRUabc	atp_c + fru_c + h2o_c --> adp_c + fru_e + h_c + pi_c	0	0.0	1000.0	LAR_RS02245	{'from': ['Lreuteri_530', 'transport_reaction']}
+FTHFCL	5fthf_c + atp_c --> adp_c + methf_c + pi_c	0	0.0	1000.0	LAR_RS06285	{'from': ['Lreuteri_530', 'gap']}
+FTHFLi	atp_c + for_c + thf_c --> 10fthf_c + adp_c + pi_c	0	0.0	1000.0	LAR_RS00660	{'from': ['iML1515', 'gap']}
+FUCt	fuc__L_e + h_e <=> fuc__L_c + h_c	0	-1000.0	1000.0	LAR_RS02160	{'from': ['Lreuteri_530', 'transport_reaction']}
+FUM	fum_c + h2o_c <=> mal__L_c	0	-1000.0	1000.0	LAR_RS08200	{'from': ['iML1515', 'gap']}
+G1PACT	accoa_c + gam1p_c --> acgam1p_c + coa_c + h_c	0	0.0	1000.0	LAR_RS01140	{'from': ['iML1515', 'gap']}
+G1PPDM	2.0 g1p_c --> g16bp_c + glc__D_c	0	0.0	1000.0	LAR_RS00285	{'from': ['Lreuteri_530', 'gap']}
+G1PTMT	dttp_c + g1p_c + h_c --> dtdpglu_c + ppi_c	0	0.0	1000.0	LAR_RS07375	{'from': ['Lreuteri_530', 'gap']}
+G1SAT	glu1sa_c <=> 5aop_c	0	-1000.0	1000.0	LAR_RS09025	{'from': ['iML1515', 'gap']}
+G3PCT	ctp_c + glyc3p_c + h_c --> cdpglyc_c + ppi_c	0	0.0	1000.0	LAR_RS03745	{'from': ['Lreuteri_530', 'gap']}
+G3PD1ir	glyc3p_c + nad_c <=> dhap_c + h_c + nadh_c	0	-1000.0	1000.0	LAR_RS01950	{'from': ['Lreuteri_530', 'gap']}
+G5SADs	glu5sa_c --> 1pyr5c_c + h2o_c + h_c	0	0.0	1000.0	None	{'from': ['iML1515', 'gap']}
+G5SD	glu5p_c + h_c + nadph_c --> glu5sa_c + nadp_c + pi_c	0	0.0	1000.0	LAR_RS01815	{'from': ['iML1515', 'gap']}
+G6PDA	gam6p_c + h2o_c --> f6p_c + nh4_c	0	0.0	1000.0	LAR_RS05575	{'from': ['iML1515', 'gap']}
+G6PDH2r	g6p_c + nadp_c <=> 6pgl_c + h_c + nadph_c	0	-1000.0	1000.0	LAR_RS09350	{'from': ['iML1515', 'gap']}
+G6PI	g6p_c <=> g6p_B_c	0	-1000.0	1000.0	LAR_RS02230	{'from': ['Lreuteri_530', 'gap']}
+GALK2	a_gal__D_c + atp_c --> adp_c + gal1p_c + h_c	0	0.0	1000.0	LAR_RS09405	{'from': ['Lreuteri_530', 'gap']}
+GALM	gal_c <=> a_gal__D_c	0	-1000.0	1000.0	LAR_RS08235	{'from': ['Lreuteri_530', 'gap']}
+GALS3	h2o_c + melib_c --> gal_c + glc__D_c	0	0.0	1000.0	LAR_RS04820	{'from': ['iML1515', 'gap']}
+GALT	gal1p_c + h_c + utp_c <=> ppi_c + udpgal_c	0	-1000.0	1000.0	LAR_RS09400	{'from': ['Lreuteri_530', 'gap']}
+GALUi	g1p_c + h_c + utp_c <=> ppi_c + udpg_c	0	-1000.0	1000.0	LAR_RS01955	{'from': ['iML1515', 'gap']}
+GALt2	gal_e + h_e <=> gal_c + h_c	0	-1000.0	1000.0	LAR_RS05870 or LAR_RS09365	{'from': ['Lreuteri_530', 'gap']}
+GAPD	g3p_c + nad_c + pi_c <=> 13dpg_c + h_c + nadh_c	0	-1000.0	1000.0	LAR_RS02055	{'from': ['iML1515', 'gap']}
+GARFT	10fthf_c + gar_c <=> fgam_c + h_c + thf_c	0	-1000.0	1000.0	LAR_RS00720	{'from': ['iML1515', 'gap']}
+GCALDt	gcald_e <=> gcald_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction']}
+GF6PTA	f6p_c + gln__L_c --> gam6p_c + glu__L_c	0	0.0	1000.0	LAR_RS02180	{'from': ['iML1515', 'gap']}
+GGGABAH	gg4abut_c + h2o_c --> 4abut_c + glu__L_c	0	0.0	1000.0	LAR_RS00325	{'from': ['iML1515', 'gap']}
+GHMT2r	ser__L_c + thf_c <=> gly_c + h2o_c + mlthf_c	0	-1000.0	1000.0	LAR_RS01730 or LAR_RS02435	{'from': ['iML1515', 'gap']}
+GK1	atp_c + gmp_c <=> adp_c + gdp_c	0	-1000.0	1000.0	LAR_RS06335	{'from': ['iML1515', 'gap']}
+GLCNt2ir	glcn__D_e + h_e <=> glcn_c + h_c	0	-1000.0	1000.0	LAR_RS04280 or LAR_RS03390	{'from': ['Lreuteri_530', 'gap']}
+GLCt	glc__D_e + h_e --> glc__D_c + h_c	0	0.0	1000.0	LAR_RS02160 or LAR_RS00165 or LAR_RS02220	{'from': ['Lreuteri_530', 'transport_reaction']}
+GLNS	atp_c + glu__L_c + nh4_c --> adp_c + gln__L_c + h_c + pi_c	0	0.0	1000.0	LAR_RS06470	{'from': ['iML1515', 'gap']}
+GLNTAL	atp_c + gln__L_c + glutrna_c + h2o_c <=> adp_c + glntrna_c + glu__L_c + h_c + pi_c	0	-1000.0	1000.0	LAR_RS07715 or LAR_RS07720 or LAR_RS07725	{'from': ['Lreuteri_530', 'gap']}
+GLNabc	atp_c + gln__L_e + h2o_c --> adp_c + gln__L_c + h_c + pi_c	0	0.0	1000.0	LAR_RS08110 or LAR_RS00500 or LAR_RS00505 or LAR_RS03930 or LAR_RS08100 or LAR_RS08105	{'from': ['Lreuteri_530', 'gap']}
+GLU5K	atp_c + glu__L_c --> adp_c + glu5p_c	0	0.0	1000.0	LAR_RS01820	{'from': ['iML1515', 'gap']}
+GLUCYS	atp_c + cys__L_c + glu__L_c --> adp_c + glucys_c + h_c + pi_c	0	0.0	1000.0	LAR_RS00315	{'from': ['iML1515', 'gap']}
+GLUN	gln__L_c + h2o_c --> glu__L_c + nh4_c	0	0.0	1000.0	LAR_RS06730 or Lreu_0246	{'from': ['iML1515', 'gap']}
+GLUPRT	gln__L_c + h2o_c + prpp_c --> glu__L_c + ppi_c + pram_c	0	0.0	1000.0	LAR_RS00710	{'from': ['iML1515', 'gap']}
+GLUR	glu__D_c <=> glu__L_c	0	-1000.0	1000.0	LAR_RS02860	{'from': ['iML1515', 'gap']}
+GLUTRR	glutrna_c + h_c + nadph_c --> glu1sa_c + nadp_c + trnaglu_c	0	0.0	1000.0	LAR_RS09040	{'from': ['iML1515', 'gap']}
+GLUTRS	atp_c + glu__L_c + trnaglu_c --> amp_c + glutrna_c + ppi_c	0	0.0	1000.0	LAR_RS06465	{'from': ['iML1515', 'gap']}
+GLUt2r	glu__L_e + h_e <=> glu__L_c + h_c	0	-1000.0	1000.0	LAR_RS09380	{'from': ['Lreuteri_530', 'transport_reaction']}
+GLYALDDr	glyald_c + h2o_c + nad_c --> glyc__R_c + 2.0 h_c + nadh_c	0	0.0	1000.0	LAR_RS01690	{'from': ['Lreuteri_530', 'gap']}
+GLYBabc	atp_c + glyb_e + h2o_c --> adp_c + glyb_c + h_c + pi_c	0	0.0	1000.0	LAR_RS00970 or LAR_RS00965 or LAR_RS00960	{'from': ['Lreuteri_530', 'transport_reaction']}
+GLYBt2r	glyb_e + h_e <=> glyb_c + h_c	0	-1000.0	1000.0	LAR_RS00955	{'from': ['Lreuteri_530', 'transport_reaction'], 'initial_id': ['GLYBt6']}
+GLYCDH	glyc_c <=> 3hppnl_c + h2o_c	0	-1000.0	1000.0	LAR_RS09250 or LAR_RS09230 or LAR_RS09270 or LAR_RS09245 or LAR_RS09265 or LAR_RS09255 or LAR_RS09260	{'from': ['Lreuteri_530', 'gap']}
+GLYCDx	glyc_c + nad_c --> dha_c + h_c + nadh_c	0	0.0	1000.0	LAR_RS09730	{'from': ['iML1515', 'gap']}
+GLYCK	atp_c + glyc__R_c --> 3pg_c + adp_c + h_c	0	0.0	1000.0	LAR_RS03395	{'from': ['iML1515', 'gap']}
+GLYCt	glyc_c <=> glyc_e	0	-1000.0	1000.0	LAR_RS09285	{'from': ['Lreuteri_530', 'gap']}
+GLYK	atp_c + glyc_c --> adp_c + glyc3p_c + h_c	0	0.0	1000.0	LAR_RS05765	{'from': ['iML1515', 'gap']}
+GLYTRS	atp_c + gly_c + trnagly_c --> amp_c + glytrna_c + ppi_c	0	0.0	1000.0	LAR_RS04000 and LAR_RS04005	{'from': ['Lreuteri_530', 'gap']}
+GLYt2r	gly_e + h_e <=> gly_c + h_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction'], 'initial_id': ['GLYt6']}
+GMPR	gmp_c + 2.0 h_c + nadph_c --> imp_c + nadp_c + nh4_c	0	0.0	1000.0	LAR_RS00350	{'from': ['iML1515', 'gap']}
+GMPS2	atp_c + gln__L_c + h2o_c + xmp_c --> amp_c + glu__L_c + gmp_c + 2.0 h_c + ppi_c	0	0.0	1000.0	LAR_RS08610 or LAR_RS10000	{'from': ['iML1515', 'gap']}
+GND	6pgc_c + nadp_c --> co2_c + nadph_c + ru5p__D_c	0	0.0	1000.0	LAR_0562	{'from': ['iML1515', 'gap']}
+GNK	atp_c + glcn_c --> 6pgc_c + adp_c + h_c	0	0.0	1000.0	LAR_RS04270	{'from': ['iML1515', 'gap']}
+GNNUC	gsn_c + h2o_c --> gua_c + rib__D_c	0	0.0	1000.0	LAR_RS08815	{'from': ['Lreuteri_530', 'gap']}
+GPDDA1	g3pc_c + h2o_c --> chol_c + glyc3p_c + h_c	0	0.0	1000.0	LAR_RS00335	{'from': ['iML1515', 'gap']}
+GPDDA2	g3pe_c + h2o_c --> etha_c + glyc3p_c + h_c	0	0.0	1000.0	LAR_RS00335	{'from': ['iML1515', 'gap']}
+GPDDA3	g3ps_c + h2o_c --> glyc3p_c + h_c + ser__L_c	0	0.0	1000.0	LAR_RS00335	{'from': ['iML1515', 'gap']}
+GPDDA4	g3pg_c + h2o_c --> glyc3p_c + glyc_c + h_c	0	0.0	1000.0	LAR_RS00335	{'from': ['iML1515', 'gap']}
+GPDDA5	g3pi_c + h2o_c --> glyc3p_c + h_c + inost_c	0	0.0	1000.0	LAR_RS00335	{'from': ['iML1515', 'gap']}
+GRTT	grdp_c + ipdp_c --> frdp_c + ppi_c	0	0.0	1000.0	LAR_RS06360 or LAR_RS05860	{'from': ['iML1515', 'gap']}
+GTHOr	2.0 gthrd_c + nadp_c <=> gthox_c + h_c + nadph_c	0	-1000.0	1000.0	Lreu_1411	{'from': ['iML1515', 'gap']}
+GTHS	atp_c + glucys_c + gly_c --> adp_c + gthrd_c + h_c + pi_c	0	0.0	1000.0	LAR_RS00315	{'from': ['iML1515', 'gap']}
+GTPCI	gtp_c + h2o_c --> ahdt_c + for_c + h_c	0	0.0	1000.0	LAR_RS06855	{'from': ['iML1515', 'gap']}
+GTPCII	gtp_c + 3.0 h2o_c --> 25dhpp_c + for_c + 2.0 h_c + ppi_c	0	0.0	1000.0	LAR_RS04670	{'from': ['Lreuteri_530', 'gap']}
+GTPDPK	atp_c + gtp_c --> amp_c + gdptp_c + h_c	0	0.0	1000.0	LAR_RS00295 or LAR_RS03130 or LAR_RS03905	{'from': ['iML1515', 'gap']}
+GUAPRT	gua_c + prpp_c --> gmp_c + ppi_c	0	0.0	1000.0	LAR_RS01375 or LAR_RS10150	{'from': ['iML1515', 'gap']}
+GUAt2r	gua_e + h_e --> gua_c + h_c	0	0.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction'], 'initial_id': ['GUAt2']}
+H2Ot	h2o_e <=> h2o_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction'], 'initial_id': ['H2Ot5']}
+HACD1	aacoa_c + h_c + nadh_c <=> 3hbcoa_c + nad_c	0	-1000.0	1000.0	LAR_RS00525	{'from': ['iML1515', 'gap']}
+HBUHL1	3hbutACP_c --> but2eACP_c + h2o_c	0	0.0	1000.0	LAR_RS07030 or LAR_RS05270 or LAR_RS05230	{'from': ['Lreuteri_530', 'gap']}
+HBUR1	actACP_c + h_c + nadph_c --> 3hbutACP_c + nadp_c	0	0.0	1000.0	LAR_RS00845 or LAR_RS05245	{'from': ['Lreuteri_530', 'gap']}
+HCO3E	co2_c + h2o_c <=> h_c + hco3_c	0	-1000.0	1000.0	None	{'from': ['iML1515', 'gap']}
+HCYSMT	amet_c + hcys__L_c --> ahcys_c + h_c + met__L_c	0	0.0	1000.0	LAR_RS05650	{'from': ['iML1515', 'gap']}
+HDDHL5	3hddacp_c --> 2tddacp_c + h2o_c	0	0.0	1000.0	LAR_RS07030 or LAR_RS05270 or LAR_RS05230	{'from': ['Lreuteri_530', 'gap']}
+HDDR5	3oxddacp_c + h_c + nadph_c --> 3hddacp_c + nadp_c	0	0.0	1000.0	LAR_RS00845 or LAR_RS05245	{'from': ['Lreuteri_530', 'gap']}
+HDEHL4	3hdeacp_c --> 2tdeacp_c + h2o_c	0	0.0	1000.0	LAR_RS07030 or LAR_RS05270 or LAR_RS05230	{'from': ['Lreuteri_530', 'gap']}
+HDER4	3oxdeacp_c + h_c + nadph_c --> 3hdeacp_c + nadp_c	0	0.0	1000.0	LAR_RS00845 or LAR_RS05245	{'from': ['Lreuteri_530', 'gap']}
+HDMAT7	2thdeacp_c + h_c + nadh_c --> nad_c + palmACP_c	0	0.0	1000.0	LAR_RS05210	{'from': ['Lreuteri_530', 'gap']}
+HEMAT2	2theacp_c + h_c + nadh_c --> hexACP_c + nad_c	0	0.0	1000.0	LAR_RS05210	{'from': ['Lreuteri_530', 'gap']}
+HETZK	4mhetz_c + atp_c --> 4mpetz_c + adp_c + h_c	0	0.0	1000.0	LAR_RS05495	{'from': ['iML1515', 'gap']}
+HEX1	atp_c + glc__D_c --> adp_c + g6p_c + h_c	0	0.0	1000.0	LAR_RS06490	{'from': ['iML1515', 'gap']}
+HEXTT	hexdp_c + ipdp_c --> hepdp_c + ppi_c	0	0.0	1000.0	LAR_RS05860	{'from': ['Lreuteri_530', 'gap']}
+HHDHL7	3hpaacp_c --> 2thdeacp_c + h2o_c	0	0.0	1000.0	LAR_RS07030 or LAR_RS05270 or LAR_RS05230	{'from': ['Lreuteri_530', 'gap']}
+HHDR7	3oxhdacp_c + h_c + nadph_c --> 3hpaacp_c + nadp_c	0	0.0	1000.0	LAR_RS00845 or LAR_RS05245	{'from': ['Lreuteri_530', 'gap']}
+HHYHL2	3hhacp_c --> 2theacp_c + h2o_c	0	0.0	1000.0	LAR_RS07030 or LAR_RS05270 or LAR_RS05230	{'from': ['Lreuteri_530', 'gap']}
+HHYR2	3oxhacp_c + h_c + nadph_c --> 3hhacp_c + nadp_c	0	0.0	1000.0	LAR_RS00845 or LAR_RS05245	{'from': ['Lreuteri_530', 'gap']}
+HISDC	h_c + his__L_c --> co2_c + hista_c	0	0.0	1000.0	LAR_RS09695	{'from': ['Lreuteri_530', 'gap']}
+HISTAap	his__L_c + hista_e <=> his__L_e + hista_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction']}
+HISTRS	atp_c + his__L_c + trnahis_c --> amp_c + histrna_c + ppi_c	0	0.0	1000.0	LAR_RS09775 or LAR_RS09685	{'from': ['Lreuteri_530', 'gap']}
+HISabc	atp_c + h2o_c + his__L_e --> adp_c + h_c + his__L_c + pi_c	0	0.0	1000.0	LAR_RS02730 or LAR_RS02735 or LAR_RS01985	{'from': ['Lreuteri_530', 'transport_reaction']}
+HMBS	h2o_c + 4.0 ppbng_c --> hmbil_c + 4.0 nh4_c	0	0.0	1000.0	LAR_RS09035	{'from': ['iML1515', 'gap']}
+HMGCOAR	coa_c + mev__R_c + 2.0 nadp_c <=> 2.0 h_c + hmgcoa_c + 2.0 nadph_c	0	-1000.0	1000.0	LAR_RS01070 or LAR_RS05485	{'from': ['Lreuteri_530', 'gap']}
+HMGCOAS	coa_c + h_c + hmgcoa_c <=> aacoa_c + accoa_c + h2o_c	0	-1000.0	1000.0	LAR_RS03670	{'from': ['Lreuteri_530', 'gap']}
+HMPK1	4ahmmp_c + atp_c --> 4ampm_c + adp_c + h_c	0	0.0	1000.0	LAR_RS05500	{'from': ['iML1515', 'gap']}
+HMPabc	4ahmmp_e + atp_c + h2o_c --> 4ahmmp_c + adp_c + h_c + pi_c	0	0.0	1000.0	LAR_RS08830 and LAR_RS08835	{'from': ['Lreuteri_530', 'transport_reaction']}
+HOCHL3	3hocacp_c --> 2toceacp_c + h2o_c	0	0.0	1000.0	LAR_RS07030 or LAR_RS05270 or LAR_RS05230	{'from': ['Lreuteri_530', 'gap']}
+HOCR3	3oxocacp_c + h_c + nadph_c --> 3hocacp_c + nadp_c	0	0.0	1000.0	LAR_RS00845 or LAR_RS05245	{'from': ['Lreuteri_530', 'gap']}
+HODHL8	3hocdacp_c --> 2tocdacp_c + h2o_c	0	0.0	1000.0	LAR_RS07030 or LAR_RS05270 or LAR_RS05230	{'from': ['Lreuteri_530', 'gap']}
+HODR8	3oxocdacp_c + h_c + nadph_c --> 3hocdacp_c + nadp_c	0	0.0	1000.0	LAR_RS00845 or LAR_RS05245	{'from': ['Lreuteri_530', 'gap']}
+HPPK	2ahhmp_c + atp_c --> 2ahhmd_c + amp_c + h_c	0	0.0	1000.0	LAR_RS06860	{'from': ['Lreuteri_530', 'gap']}
+HSDy	hom__L_c + nadp_c <=> aspsa_c + h_c + nadph_c	0	-1000.0	1000.0	None	{'from': ['iML1515', 'gap']}
+HSERTA	accoa_c + hom__L_c <=> achms_c + coa_c	0	-1000.0	1000.0	LAR_RS09475	{'from': ['Lreuteri_530', 'gap']}
+HTDHL6	3htdacp_c --> 2ttdeacp_c + h2o_c	0	0.0	1000.0	LAR_RS07030 or LAR_RS05270 or LAR_RS05230	{'from': ['Lreuteri_530', 'gap']}
+HTDR6	3oxtdacp_c + h_c + nadph_c --> 3htdacp_c + nadp_c	0	0.0	1000.0	LAR_RS00845 or LAR_RS05245	{'from': ['Lreuteri_530', 'gap']}
+HXANt2r	h_e + hxan_e --> h_c + hxan_c	0	0.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction'], 'initial_id': ['HXANt2']}
+HXPRT	hxan_c + prpp_c --> imp_c + ppi_c	0	0.0	1000.0	LAR_RS01375 or LAR_RS10150	{'from': ['iML1515', 'gap']}
+HYPOE	h2o_c + pyam5p_c --> pi_c + pydam_c	0	0.0	1000.0	None	{'from': ['iML1515', 'gap']}
+ICDHyr	icit_c + nadp_c <=> akg_c + co2_c + nadph_c	0	-1000.0	1000.0	LAR_RS03305	{'from': ['iML1515', 'gap']}
+ILETRS	atp_c + ile__L_c + trnaile_c --> amp_c + iletrna_c + ppi_c	0	0.0	1000.0	LAR_RS03275	{'from': ['Lreuteri_530', 'gap']}
+ILEt2r	h_e + ile__L_e --> h_c + ile__L_c	0	0.0	1000.0	LAR_RS08930 or (LAR_RS09570 or LAR_RS00610 or LAR_RS00605)	{'from': ['Lreuteri_530', 'transport_reaction'], 'initial_id': ['ILEt2']}
+IMPC	h2o_c + imp_c <=> fprica_c	0	-1000.0	1000.0	LAR_RS00725	{'from': ['iML1515', 'gap']}
+INSH	h2o_c + ins_c --> hxan_c + rib__D_c	0	0.0	1000.0	LAR_RS08815	{'from': ['iML1515', 'gap']}
+INSt2	h_e + ins_e <=> h_c + ins_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction'], 'initial_id': ['INSt2r']}
+IPDDI	ipdp_c <=> dmpp_c	0	-1000.0	1000.0	LAR_RS04830	{'from': ['iML1515', 'gap']}
+ITCY	cytd_c + itp_c --> cmp_c + h_c + idp_c	0	0.0	1000.0	LAR_RS06535	{'from': ['Lreuteri_530', 'gap']}
+KAS15	accoa_c + h_c + malACP_c --> actACP_c + co2_c + coa_c	0	0.0	1000.0	LAR_RS05260	{'from': ['iML1515', 'gap']}
+Kabc	atp_c + h2o_c + k_e --> adp_c + h_c + k_c + pi_c	0	0.0	1000.0	LAR_RS08325 or LAR_RS08320	{'from': ['Lreuteri_530', 'gap']}
+LACZ	h2o_c + lcts_c --> gal_c + glc__D_c	0	0.0	1000.0	LAR_RS01530 or LAR_RS05865	{'from': ['iML1515', 'gap']}
+LCTSt	h_e + lcts_e <=> h_c + lcts_c	0	-1000.0	1000.0	LAR_RS05870 or LAR_RS09365	{'from': ['Lreuteri_530', 'gap']}
+LDH_D	lac__D_c + nad_c <=> h_c + nadh_c + pyr_c	0	-1000.0	1000.0	LAR_RS08985 or LAR_RS00220 or LAR_RS03705 or LAR_RS08680	{'from': ['iML1515', 'gap']}
+LDH_L	lac__L_c + nad_c <=> h_c + nadh_c + pyr_c	0	-1000.0	1000.0	LAR_RS06820 or LAR_RS01005 or LAR_RS03870 or LAR_RS04805 or LAR_RS10050 or LAR_RS03875 or (LAR_RS01960 and LAR_RS01965 and LAR_RS01970)	{'from': ['Lreuteri_530', 'gap']}
+LEUTRS	atp_c + leu__L_c + trnaleu_c --> amp_c + leutrna_c + ppi_c	0	0.0	1000.0	LAR_RS06945	{'from': ['Lreuteri_530', 'gap']}
+LEUt2r	h_e + leu__L_e <=> h_c + leu__L_c	0	-1000.0	1000.0	(LAR_RS09570 or LAR_RS00610 or LAR_RS00605) or LAR_RS08930	{'from': ['Lreuteri_530', 'transport_reaction']}
+LIP_LRE	ctp_c + glyc3p_c + h2o_c + 0.23 lystrna_c + pa_LRE_c --> LIP_LRE_c + cmp_c + 0.02 glyc_c + pi_c + ppi_c + 0.23 trnalys_c	0	0	1000.0		{'from': ['Lreuteri_530', 'biomass']}
+LTA_LRE	15.3 ala__D_c + 35.3 atp_c + 20.0 ctp_c + 20.0 glyc3p_c + 21.0 h2o_c + pa_LRE_c + 3.2 udpg_c --> LTAtotal_LRE_c + 35.3 adp_c + 20.0 cmp_c + 23.2 h_c + 36.3 pi_c + 20.0 ppi_c + 3.2 udp_c	0	0	1000.0		{'from': ['Lreuteri_530', 'biomass']}
+LYSDC	h_c + lys__L_c --> 15dap_c + co2_c	0	0.0	1000.0	LAR_RS07485	{'from': ['iML1515', 'gap']}
+LYSTRS	atp_c + lys__L_c + trnalys_c --> amp_c + lystrna_c + ppi_c	0	0.0	1000.0	LAR_RS01395	{'from': ['Lreuteri_530', 'gap']}
+LYSt2r	h_e + lys__L_e <=> h_c + lys__L_c	0	-1000.0	1000.0	LAR_RS08040	{'from': ['Lreuteri_530', 'transport_reaction']}
+L_LACt2	2.0 h_e + lac__L_e <=> 2.0 h_c + lac__L_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction']}
+M1PD	mnl1p_c + nad_c <=> f6p_c + h_c + nadh_c	0	-1000.0	1000.0	LAR_RS09560	{'from': ['iML1515', 'gap']}
+MALLAC	h_c + mal__L_c --> co2_c + lac__L_c	0	0.0	1000.0	LAR_RS08205	{'from': ['Lreuteri_530', 'gap']}
+MALT	h2o_c + malt_c --> 2.0 glc__D_c	0	0.0	1000.0	LAR_RS05515	{'from': ['Lreuteri_530', 'gap']}
+MALTt2	h_e + malt_e <=> h_c + malt_c	0	-1000.0	1000.0	LAR_RS00275	{'from': ['Lreuteri_530', 'transport_reaction']}
+MALt2r	h_e + mal__L_e <=> h_c + mal__L_c	0	-1000.0	1000.0	LAR_RS10100	{'from': ['Lreuteri_530', 'transport_reaction']}
+MAN6PI	man6p_c <=> f6p_c	0	-1000.0	1000.0	LAR_RS08410	{'from': ['iML1515', 'gap']}
+MCMAT2	butACP_c + h_c + malACP_c --> 3oxhacp_c + ACP_c + co2_c	0	0.0	1000.0	LAR_RS05240	{'from': ['Lreuteri_530', 'gap']}
+MCMAT3	h_c + hexACP_c + malACP_c --> 3oxocacp_c + ACP_c + co2_c	0	0.0	1000.0	LAR_RS05240	{'from': ['Lreuteri_530', 'gap']}
+MCMAT4	h_c + malACP_c + ocACP_c --> 3oxdeacp_c + ACP_c + co2_c	0	0.0	1000.0	LAR_RS05240	{'from': ['Lreuteri_530', 'gap']}
+MCMAT5	decacp_c + h_c + malACP_c --> 3oxddacp_c + ACP_c + co2_c	0	0.0	1000.0	LAR_RS05240	{'from': ['Lreuteri_530', 'gap']}
+MCMAT6	ddeacp_c + h_c + malACP_c --> 3oxtdacp_c + ACP_c + co2_c	0	0.0	1000.0	LAR_RS05240	{'from': ['Lreuteri_530', 'gap']}
+MCMAT7	h_c + malACP_c + tdeacp_c --> 3oxhdacp_c + ACP_c + co2_c	0	0.0	1000.0	LAR_RS05240	{'from': ['Lreuteri_530', 'gap']}
+MCMAT8	h_c + malACP_c + palmACP_c --> 3oxocdacp_c + ACP_c + co2_c	0	0.0	1000.0	LAR_RS05240	{'from': ['Lreuteri_530', 'gap']}
+MCOATA	ACP_c + malcoa_c <=> coa_c + malACP_c	0	-1000.0	1000.0	LAR_RS05250	{'from': ['iML1515', 'gap']}
+MDH	mal__L_c + nad_c <=> h_c + nadh_c + oaa_c	0	-1000.0	1000.0	LAR_RS07490	{'from': ['iML1515', 'gap']}
+MELIBt	melib_e <=> melib_c	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'transport_reaction']}
+METAT	atp_c + h2o_c + met__L_c --> amet_c + pi_c + ppi_c	0	0.0	1000.0	LAR_RS06950	{'from': ['iML1515', 'gap']}
+METDabc	atp_c + h2o_c + met__D_e --> adp_c + h_c + met__D_c + pi_c	0	0.0	1000.0	LAR_RS01000 or LAR_RS00995 or LAR_RS00990	{'from': ['Lreuteri_530', 'gap']}
+METTRS	atp_c + met__L_c + trnamet_c --> amp_c + mettrna_c + ppi_c	0	0.0	1000.0	LAR_RS01090	{'from': ['Lreuteri_530', 'gap']}
+METabc	atp_c + h2o_c + met__L_e --> adp_c + h_c + met__L_c + pi_c	0	0.0	1000.0	LAR_RS01000 or LAR_RS00995 or LAR_RS00990	{'from': ['Lreuteri_530', 'gap']}
+METt6	h_e + met__L_e <=> h_c + met__L_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction']}
+MEVK1	atp_c + mev__R_c --> 5pmev_c + adp_c + h_c	0	0.0	1000.0	LAR_RS04845	{'from': ['Lreuteri_530', 'gap']}
+MEVK2	ctp_c + mev__R_c --> 5pmev_c + cdp_c + h_c	0	0.0	1000.0	LAR_RS04845	{'from': ['Lreuteri_530', 'gap']}
+MEVK3	gtp_c + mev__R_c --> 5pmev_c + gdp_c + h_c	0	0.0	1000.0	LAR_RS04845	{'from': ['Lreuteri_530', 'gap']}
+MEVK4	mev__R_c + utp_c --> 5pmev_c + h_c + udp_c	0	0.0	1000.0	LAR_RS04845	{'from': ['Lreuteri_530', 'gap']}
+MGt5	mg2_c <=> mg2_e	0	-1000.0	1000.0	LAR_RS09665	{'from': ['Lreuteri_530', 'gap']}
+MHPGLUT	hcys__L_c + mhpglu_c --> hpglu_c + met__L_c	0	0.0	1000.0	LAR_RS09885 or LAR_RS05845	{'from': ['Lreuteri_530', 'gap']}
+MI1PP	h2o_c + mi1p__D_c --> inost_c + pi_c	0	0.0	1000.0	LAR_RS06920	{'from': ['iML1515', 'gap']}
+MNLabc	atp_c + h2o_c + mnl_c --> adp_c + h_c + mnl_e + pi_c	0	0.0	1000.0	LAR_RS09815 and LAR_RS09820	{'from': ['Lreuteri_530', 'transport_reaction']}
+MNTD	mnl_c + nad_c <=> fru_c + h_c + nadh_c	0	-1000.0	1000.0	LAR_RS09835	{'from': ['Lreuteri_530', 'gap']}
+MNabc	atp_c + h2o_c + mn2_e --> adp_c + h_c + mn2_c + pi_c	0	0.0	1000.0	LAR_RS01130 and LAR_RS01120 and LAR_RS01125	{'from': ['Lreuteri_530', 'transport_reaction']}
+MNt6	h_e + mn2_e <=> h_c + mn2_c	0	-1000.0	1000.0	LAR_RS08310 or LAR_RS09840	{'from': ['Lreuteri_530', 'transport_reaction']}
+MOADCST	MCOOH_c + atp_c + cys__L_c + h2o_c --> MCOSH_c + amp_c + ppi_c + ser__L_c	0	0.0	1000.0	LAR_RS02665 or LAR_RS03300 or LAR_RS04735 or LAR_RS02670	{'from': ['Lreuteri_530', 'gap']}
+MPL	malt_c + pi_c <=> g1p_B_c + glc__D_c	0	-1000.0	1000.0	LAR_RS00280 or LAR_RS10165	{'from': ['Lreuteri_530', 'gap']}
+MTAN	5mta_c + h2o_c --> 5mtr_c + ade_c	0	0.0	1000.0	LAR_RS03295	{'from': ['iML1515', 'gap']}
+MTHFC	h2o_c + methf_c <=> 10fthf_c + h_c	0	-1000.0	1000.0	LAR_RS06375	{'from': ['iML1515', 'gap']}
+MTHFD	mlthf_c + nadp_c <=> methf_c + nadph_c	0	-1000.0	1000.0	LAR_RS06375	{'from': ['iML1515', 'gap']}
+NACt	nac_e --> nac_c	0	0.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction'], 'initial_id': ['NACUP']}
+NADH4	h_c + mqn7_c + nadh_c --> mql7_c + nad_c	0	0.0	1000.0	LAR_RS02700	{'from': ['Lreuteri_530', 'gap']}
+NADK	atp_c + nad_c --> adp_c + h_c + nadp_c	0	0.0	1000.0	LAR_RS04360	{'from': ['iML1515', 'gap']}
+NADN	h2o_c + nad_c --> adprib_c + h_c + ncam_c	0	0.0	1000.0	None	{'from': ['iML1515', 'gap']}
+NADPH12	h_c + nadph_c + q8_c --> nadp_c + q8h2_c	0	0.0	1000.0	LAR_RS08875	{'from': ['Lreuteri_530', 'gap']}
+NADS1	atp_c + dnad_c + nh4_c --> amp_c + h_c + nad_c + ppi_c	0	0.0	1000.0	LAR_RS01505	{'from': ['iML1515', 'gap']}
+NAPRT	h_c + nac_c + prpp_c --> nicrnt_c + ppi_c	0	0.0	1000.0	LAR_RS00810 or LAR_RS01500	{'from': ['Lreuteri_530', 'gap']}
+NAt7	h_e + na1_c <=> h_c + na1_e	0	-1000.0	1000.0	LAR_RS08850 or LAR_RS01040	{'from': ['Lreuteri_530', 'transport_reaction']}
+NDPK1	atp_c + gdp_c <=> adp_c + gtp_c	0	-1000.0	1000.0	LAR_RS01050	{'from': ['iML1515', 'gap']}
+NDPK2	atp_c + udp_c <=> adp_c + utp_c	0	-1000.0	1000.0	LAR_RS01050	{'from': ['iML1515', 'gap']}
+NDPK3	atp_c + cdp_c <=> adp_c + ctp_c	0	-1000.0	1000.0	LAR_RS01050	{'from': ['iML1515', 'gap']}
+NDPK4	atp_c + dtdp_c <=> adp_c + dttp_c	0	-1000.0	1000.0	LAR_RS01050	{'from': ['iML1515', 'gap']}
+NDPK5	atp_c + dgdp_c <=> adp_c + dgtp_c	0	-1000.0	1000.0	LAR_RS01050	{'from': ['iML1515', 'gap']}
+NDPK6	atp_c + dudp_c <=> adp_c + dutp_c	0	-1000.0	1000.0	LAR_RS01050	{'from': ['iML1515', 'gap']}
+NDPK7	atp_c + dcdp_c <=> adp_c + dctp_c	0	-1000.0	1000.0	LAR_RS01050	{'from': ['iML1515', 'gap']}
+NDPK8	atp_c + dadp_c <=> adp_c + datp_c	0	-1000.0	1000.0	LAR_RS01050	{'from': ['iML1515', 'gap']}
+NDPK9	atp_c + idp_c <=> adp_c + itp_c	0	-1000.0	1000.0	LAR_RS01050	{'from': ['Lreuteri_530', 'gap']}
+NH3c	nh4_c <=> h_c + nh3_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'gap']}
+NH3t	nh3_e <=> nh3_c	0	-1000.0	1000.0	LAR_RS07575	{'from': ['Lreuteri_530', 'gap']}
+NH4DISex	nh4_e <=> h_e + nh3_e	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'gap']}
+NNAM	h2o_c + ncam_c --> nac_c + nh4_c	0	0.0	1000.0	LAR_RS00815	{'from': ['iML1515', 'gap']}
+NNATr	atp_c + h_c + nicrnt_c <=> dnad_c + ppi_c	0	-1000.0	1000.0	LAR_RS06635	{'from': ['iML1515', 'gap']}
+NNDMBRT	ade_c + nicrnt_c --> h_c + nac_c + prbade_c	0	0	1000.0	LAR_RS09000	{'from': ['iML1515', 'gap']}
+NOX	h_c + nadh_c + o2_c --> h2o2_c + nad_c	0	0.0	1000.0	LAR_RS08635	{'from': ['Lreuteri_530', 'gap']}
+NOX2	2.0 h_c + 2.0 nadh_c + o2_c --> 2.0 h2o_c + 2.0 nad_c	0	0.0	1000.0	LAR_RS08635	{'from': ['Lreuteri_530', 'gap']}
+NPHS	sbzcoa_c --> coa_c + dhna_c	0	0.0	1000.0	LAR_RS04705	{'from': ['Lreuteri_530', 'gap']}
+NTD1	dump_c + h2o_c --> duri_c + pi_c	0	0.0	1000.0	LAR_RS05590	{'from': ['iML1515', 'gap']}
+NTD10	h2o_c + xmp_c --> pi_c + xtsn_c	0	0.0	1000.0	LAR_RS05590	{'from': ['iML1515', 'gap']}
+NTD11	h2o_c + imp_c --> ins_c + pi_c	0	0.0	1000.0	LAR_RS05590	{'from': ['iML1515', 'gap']}
+NTD2	h2o_c + ump_c --> pi_c + uri_c	0	0.0	1000.0	LAR_RS05590	{'from': ['iML1515', 'gap']}
+NTD3	dcmp_c + h2o_c --> dcyt_c + pi_c	0	0.0	1000.0	LAR_RS05590	{'from': ['iML1515', 'gap']}
+NTD4	cmp_c + h2o_c --> cytd_c + pi_c	0	0.0	1000.0	LAR_RS05590	{'from': ['iML1515', 'gap']}
+NTD5	dtmp_c + h2o_c --> pi_c + thymd_c	0	0.0	1000.0	LAR_RS05590	{'from': ['iML1515', 'gap']}
+NTD6	damp_c + h2o_c --> dad_2_c + pi_c	0	0.0	1000.0	LAR_RS05590	{'from': ['iML1515', 'gap']}
+NTD7	amp_c + h2o_c --> adn_c + pi_c	0	0.0	1000.0	LAR_RS05590	{'from': ['iML1515', 'gap']}
+NTD8	dgmp_c + h2o_c --> dgsn_c + pi_c	0	0.0	1000.0	LAR_RS05590	{'from': ['iML1515', 'gap']}
+NTD9	gmp_c + h2o_c --> gsn_c + pi_c	0	0.0	1000.0	LAR_RS05590	{'from': ['iML1515', 'gap']}
+NTR3B	2.0 h_c + mql7_c + no3_c --> h2o_c + 2.0 h_e + mqn7_c + no2_c	0	0.0	1000.0	LAR_RS07675	{'from': ['Lreuteri_530', 'transport_reaction']}
+OCBT	cbp_c + orn_c <=> citr__L_c + h_c + pi_c	0	-1000.0	1000.0	LAR_RS02260	{'from': ['iML1515', 'gap']}
+OCDMAT8	2tocdacp_c + h_c + nadh_c --> nad_c + ocdacp_c	0	0.0	1000.0	LAR_RS05210	{'from': ['Lreuteri_530', 'gap']}
+OCMAT3	2toceacp_c + h_c + nadh_c --> nad_c + ocACP_c	0	0.0	1000.0	LAR_RS05210	{'from': ['Lreuteri_530', 'gap']}
+OMPDC	h_c + orot5p_c --> co2_c + ump_c	0	0.0	1000.0	LAR_RS00635	{'from': ['iML1515', 'gap']}
+ORNTA	akg_c + orn_c <=> glu5sa_c + glu__L_c	0	-1000.0	1000.0	LAR_RS01030	{'from': ['Lreuteri_530', 'gap']}
+ORNTAC	acorn_c + glu__L_c <=> acglu_c + orn_c	0	-1000.0	1000.0	LAR_RS01030 or LAR_RS09025	{'from': ['Lreuteri_530', 'gap']}
+ORNt2	h_e + orn__L_e --> h_c + orn_c	0	0.0	1000.0	LAR_RS02395	{'from': ['Lreuteri_530', 'transport_reaction']}
+OROATP	h_e + orot_e <=> h_c + orot_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction'], 'initial_id': ['OROt6']}
+ORPT	orot5p_c + ppi_c <=> orot_c + prpp_c	0	-1000.0	1000.0	LAR_RS00640	{'from': ['iML1515', 'gap']}
+P5CR	1pyr5c_c + 2.0 h_c + nadph_c <=> nadp_c + pro__L_c	0	-1000.0	1000.0	LAR_RS01810	{'from': ['iML1515', 'gap']}
+PAPPT5	udcpp_c + ugmdalac_c --> uagmdalac_c + ump_c	0	0.0	1000.0	LAR_RS03225	{'from': ['Lreuteri_530', 'gap']}
+PDH	coa_c + nad_c + pyr_c --> accoa_c + co2_c + nadh_c	0	0.0	1000.0	LAR_RS03455 and LAR_RS03440 and LAR_RS03445 and LAR_RS03450	{'from': ['iML1515', 'gap']}
+PDUL2	3hpcoa_c + pi_c --> 3hppap_c + coa_c	0	0.0	1000.0	LAR_RS09225	{'from': ['Lreuteri_530', 'gap']}
+PDUP	coa_c + nad_c + ppal_c <=> h_c + nadh_c + ppcoa_c	0	-1000.0	1000.0	LAR_RS09200	{'from': ['Lreuteri_530', 'gap']}
+PDUP2	3hppnl_c + coa_c + nad_c --> 3hpcoa_c + h_c + nadh_c	0	0.0	1000.0	LAR_RS01690 or LAR_RS09200	{'from': ['Lreuteri_530', 'gap']}
+PDUW	adp_c + ppap_c <=> atp_c + ppa_c	0	-1000.0	1000.0	LAR_RS09190	{'from': ['Lreuteri_530', 'gap']}
+PDUW2	3hppap_c + adp_c --> 3hpp_c + atp_c	0	0.0	1000.0	LAR_RS09190	{'from': ['Lreuteri_530', 'gap']}
+PFK	atp_c + f6p_c <=> adp_c + fdp_c + h_c	0	-1000.0	2.0	LAR_RS02150	{'from': ['iML1515', 'gap']}
+PGAMT	gam1p_c <=> gam6p_c	0	-1000.0	1000.0	LAR_RS02175	{'from': ['iML1515', 'gap']}
+PGGT4	uaagmdalac_c --> PGlac2_c + udcpdp_c	0	0.0	1000.0	LAR_RS06805 or LAR_RS04870 or LAR_RS03220	{'from': ['Lreuteri_530', 'gap']}
+PGI	g6p_c <=> f6p_c	0	-1000.0	1000.0	LAR_RS02230	{'from': ['iML1515', 'gap']}
+PGK	13dpg_c + adp_c <=> 3pg_c + atp_c	0	-1000.0	1000.0	LAR_RS02060	{'from': ['iML1515', 'gap']}
+PGL	6pgl_c + h2o_c --> 6pgc_c + h_c	0	0.0	1000.0	LAR_RS03180	{'from': ['iML1515', 'gap']}
+PGLYCP	2pglyc_c + h2o_c --> glyclt_c + pi_c	0	0.0	1000.0	LAR_RS08785	{'from': ['iML1515', 'gap']}
+PGM	3pg_c <=> 2pg_c	0	-1000.0	1000.0	LAR_RS01235 or LAR_RS08660 or LAR_RS03315 or LAR_RS00735 or LAR_RS01540 or LAR_RS09175 or LAR_RS09715	{'from': ['iML1515', 'gap']}
+PGMT	g1p_c <=> g6p_c	0	-1000.0	1000.0	LAR_RS01995	{'from': ['iML1515', 'gap']}
+PGMT_B	g6p_B_c <=> g1p_B_c	0	-1000.0	1000.0	LAR_RS00285	{'from': ['Lreuteri_530', 'gap']}
+PHETA1	akg_c + phe__L_c <=> glu__L_c + phpyr_c	0	-1000.0	1000.0	LAR_RS01830	{'from': ['iML1515', 'gap']}
+PHETRS	atp_c + phe__L_c + trnaphe_c --> amp_c + phetrna_c + ppi_c	0	0.0	1000.0	LAR_RS06545 and LAR_RS06550	{'from': ['Lreuteri_530', 'gap']}
+PHEt2r	h_e + phe__L_e <=> h_c + phe__L_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction'], 'initial_id': ['PHEt6']}
+PIabc	atp_c + h2o_c + pi_e --> adp_c + h_c + 2.0 pi_c	0	0.0	1000.0	LAR_RS08375 or LAR_RS08360 or LAR_RS08355 or LAR_RS08365 or LAR_RS08370	{'from': ['Lreuteri_530', 'gap']}
+PIt2r	h_e + pi_e <=> h_c + pi_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction'], 'initial_id': ['PIt6']}
+PKL	pi_c + xu5p__D_c <=> actp_c + g3p_c + h2o_c	0	-1000.0	1000.0	LAR_RS08955	{'from': ['Lreuteri_530', 'gap']}
+PMANM	man1p_c <=> man6p_c	0	-1000.0	1000.0	LAR_RS01995	{'from': ['iML1515', 'gap']}
+PMEVK	5pmev_c + atp_c --> 5dpmev_c + adp_c	0	0.0	1000.0	LAR_RS04835	{'from': ['Lreuteri_530', 'gap']}
+PMPK	4ampm_c + atp_c --> 2mahmp_c + adp_c	0	0.0	1000.0	LAR_RS05500	{'from': ['iML1515', 'gap']}
+PNTK	atp_c + pnto__R_c --> 4ppan_c + adp_c + h_c	0	0.0	1000.0	LAR_RS08620	{'from': ['iML1515', 'gap']}
+PNTOt2	h_e + pnto__R_e <=> h_c + pnto__R_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction']}
+PPA	h2o_c + ppi_c --> h_c + 2.0 pi_c	0	0.0	1000.0	LAR_RS04225	{'from': ['iML1515', 'gap']}
+PPA2	h2o_c + pppi_c --> h_c + pi_c + ppi_c	0	0.0	1000.0	LAR_RS01065 or LAR_RS01775 or LAR_RS01765	{'from': ['iML1515', 'gap']}
+PPBNGS	2.0 5aop_c --> 2.0 h2o_c + h_c + ppbng_c	0	0.0	1000.0	LAR_RS09030	{'from': ['iML1515', 'gap']}
+PPCDC	4ppcys_c + h_c --> co2_c + pan4p_c	0	0.0	1000.0	LAR_RS06325	{'from': ['iML1515', 'gap']}
+PPCK	atp_c + oaa_c --> adp_c + co2_c + pep_c	0	0.0	1000.0	LAR_RS07030	{'from': ['iML1515', 'gap']}
+PPDD	12ppd__R_c --> h2o_c + ppal_c	0	0.0	1000.0	LAR_RS09250 and LAR_RS09255 and LAR_RS09260	{'from': ['Lreuteri_530', 'gap']}
+PPDt1	13ppd_c <=> 13ppd_e	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction']}
+PPGPPDP	h2o_c + ppgpp_c --> gdp_c + ppi_c	0	0.0	1000.0	LAR_RS03905	{'from': ['iML1515', 'gap']}
+PPK2	atp_c + ppi_c <=> adp_c + pppi_c	0	-1000.0	1000.0	LAR_RS01770	{'from': ['iML1515', 'gap']}
+PPM	r1p_c <=> r5p_c	0	-1000.0	1000.0	LAR_RS00570 or LAR_RS00940	{'from': ['iML1515', 'gap']}
+PPM2	2dr1p_c <=> 2dr5p_c	0	-1000.0	1000.0	LAR_RS00570 or LAR_RS00940	{'from': ['iML1515', 'gap']}
+PPN13D	13ppd_c + nad_c <=> 3hppnl_c + h_c + nadh_c	0	-1000.0	1000.0	LAR_RS00160	{'from': ['Lreuteri_530', 'gap']}
+PPNCL	4ppan_c + ctp_c + cys__L_c --> 4ppcys_c + cdp_c + h_c + pi_c	0	0.0	1000.0	LAR_RS06325	{'from': ['Lreuteri_530', 'gap']}
+PPOHt	ppoh_e <=> ppoh_c	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'transport_reaction']}
+PRAGSr	atp_c + gly_c + pram_c <=> adp_c + gar_c + h_c + pi_c	0	-1000.0	1000.0	LAR_RS00730	{'from': ['iML1515', 'gap']}
+PRAIS	atp_c + fpram_c --> adp_c + air_c + 2.0 h_c + pi_c	0	0.0	1000.0	LAR_RS00715	{'from': ['iML1515', 'gap']}
+PRASCSi	5aizc_c + asp__L_c + atp_c <=> 25aics_c + adp_c + h_c + pi_c	0	-1000.0	1000.0	LAR_RS00690	{'from': ['iML1515', 'gap']}
+PRFGS	atp_c + fgam_c + gln__L_c + h2o_c --> adp_c + fpram_c + glu__L_c + h_c + pi_c	0	0.0	1000.0	LAR_RS00705 or LAR_RS00695 or LAR_RS00700	{'from': ['iML1515', 'gap']}
+PROTRS	atp_c + pro__L_c + trnapro_c --> amp_c + ppi_c + protrna_c	0	0.0	1000.0	LAR_RS03755	{'from': ['Lreuteri_530', 'gap']}
+PROTS_LRE	0.0068 alatrna_c + 0.0409 argtrna_c + 0.0768 asntrna_c + 0.0768 asptrna_c + 0.306 atp_c + 0.0095 cystrna_c + 0.0714 glntrna_c + 0.0275 glutrna_c + 0.1058 glytrna_c + 2.0 gtp_c + 2.306 h2o_c + 0.0209 histrna_c + 0.0572 iletrna_c + 0.0849 leutrna_c + 0.0977 lystrna_c + 0.027 mettrna_c + 0.0326 phetrna_c + 0.0401 protrna_c + 0.0543 sertrna_c + 0.0644 thrtrna_c + 0.007 trptrna_c + 0.0281 tyrtrna_c + 0.0705 valtrna_c --> PROT_LRE_c + 0.306 adp_c + 2.0 gdp_c + 2.306 h_c + 2.306 pi_c + 0.0068 trnaala_c + 0.0409 trnaarg_c + 0.0768 trnaasn_c + 0.0768 trnaasp_c + 0.0095 trnacys_c + 0.0989 trnaglu_c + 0.1058 trnagly_c + 0.0209 trnahis_c + 0.0572 trnaile_c + 0.0849 trnaleu_c + 0.0977 trnalys_c + 0.027 trnamet_c + 0.0326 trnaphe_c + 0.0401 trnapro_c + 0.0543 trnaser_c + 0.0644 trnathr_c + 0.007 trnatrp_c + 0.0281 trnatyr_c + 0.0705 trnaval_c	0	0.0	1000.0	None	{'from': ['Lreuteri_530', 'biomass']}
+PROt6	h_e + pro__L_e <=> h_c + pro__L_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction']}
+PRPPS	atp_c + r5p_c <=> amp_c + h_c + prpp_c	0	-1000.0	1000.0	LAR_RS01145 or LAR_RS03330	{'from': ['iML1515', 'gap']}
+PTA2	pi_c + ppcoa_c <=> coa_c + ppap_c	0	-1000.0	1000.0	LAR_RS09225	{'from': ['iML1515', 'gap']}
+PTAr	accoa_c + pi_c <=> actp_c + coa_c	0	-1000.0	1000.0	LAR_RS02120	{'from': ['iML1515', 'gap']}
+PTPATi	atp_c + h_c + pan4p_c <=> dpcoa_c + ppi_c	0	-1000.0	1000.0	LAR_RS03490	{'from': ['iML1515', 'gap']}
+PTRCabc	atp_c + h2o_c + ptrc_e --> adp_c + h_c + pi_c + ptrc_c	0	0.0	1000.0	LAR_RS08750 or LAR_RS08740 or LAR_RS08745 or LAR_RS08755	{'from': ['Lreuteri_530', 'gap']}
+PUNP1	adn_c + pi_c <=> ade_c + r1p_c	0	-1000.0	1000.0	LAR_RS00580	{'from': ['iML1515', 'gap']}
+PUNP2	dad_2_c + pi_c <=> 2dr1p_c + ade_c	0	-1000.0	1000.0	LAR_RS00580	{'from': ['iML1515', 'gap']}
+PUNP3	gsn_c + pi_c <=> gua_c + r1p_c	0	-1000.0	1000.0	LAR_RS00580	{'from': ['iML1515', 'gap']}
+PUNP4	dgsn_c + pi_c <=> 2dr1p_c + gua_c	0	-1000.0	1000.0	LAR_RS00580	{'from': ['iML1515', 'gap']}
+PUNP5	ins_c + pi_c <=> hxan_c + r1p_c	0	-1000.0	1000.0	LAR_RS00580	{'from': ['iML1515', 'gap']}
+PUNP6	din_c + pi_c <=> 2dr1p_c + hxan_c	0	-1000.0	1000.0	LAR_RS00580	{'from': ['iML1515', 'gap']}
+PUNP7	pi_c + xtsn_c <=> r1p_c + xan_c	0	-1000.0	1000.0	LAR_RS00580	{'from': ['iML1515', 'gap']}
+PYDAMK	atp_c + pydam_c --> adp_c + h_c + pyam5p_c	0	0.0	1000.0	LAR_RS05500	{'from': ['iML1515', 'gap']}
+PYDAMt	h_e + pydam_e <=> h_c + pydam_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction']}
+PYDXK	atp_c + pydx_c --> adp_c + h_c + pydx5p_c	0	0.0	1000.0	LAR_RS05500	{'from': ['iML1515', 'gap']}
+PYK	adp_c + h_c + pep_c --> atp_c + pyr_c	0	0.0	1000.0	LAR_RS04055	{'from': ['iML1515', 'gap']}
+PYNP1	csn_c + r1p_c <=> cytd_c + pi_c	0	-1000.0	1000.0	LAR_RS00575	{'from': ['Lreuteri_530', 'gap']}
+PYNP2r	pi_c + uri_c <=> r1p_c + ura_c	0	-1000.0	1000.0	LAR_RS00575	{'from': ['iML1515', 'gap']}
+PYRZAM	h2o_c + malm_c --> male_c + nh4_c	0	0.0	1000.0	LAR_RS00815	{'from': ['Lreuteri_530', 'gap']}
+PYRt2	h_e + pyr_e <=> h_c + pyr_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction']}
+QUIND	pqqox_c + quin_c --> 3dhq_c + h_c + pqqrd_c	0	0.0	1000.0	LAR_RS00855	{'from': ['Lreuteri_530', 'gap']}
+R05218	2.0 co2dam_c + nadh_c --> 2.0 co1dam_c + h_c + nad_c	0	0.0	1000.0	LAR_RS09155	{'from': ['Lreuteri_530', 'gap']}
+R05220	atp_c + co1dam_c + h2o_c --> adcobdam_c + pi_c + ppi_c	0	0.0	1000.0	LAR_RS09210 or LAR_RS09150	{'from': ['Lreuteri_530', 'gap']}
+R05225	adcobdam_c + 4.0 atp_c + 4.0 gln__L_c + 4.0 h2o_c --> adcobhex_c + 4.0 adp_c + 4.0 glu__L_c + 4.0 h_c + 4.0 pi_c	0	0.0	1000.0	LAR_RS09050	{'from': ['Lreuteri_530', 'gap']}
+RAFFINt	raffin_e <=> raffin_c	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'transport_reaction']}
+RAFGH	h2o_c + raffin_c --> gal_c + sucr_c	0	0.0	1000.0	LAR_RS04820	{'from': ['Lreuteri_530', 'gap']}
+RBFK	atp_c + ribflv_c --> adp_c + fmn_c + h_c	0	0.0	1000.0	LAR_RS03800	{'from': ['iML1515', 'gap']}
+RBFSa	4r5au_c + db4p_c --> dmlz_c + 2.0 h2o_c + pi_c	0	0.0	1000.0	LAR_RS04665	{'from': ['iML1515', 'gap']}
+RBK	atp_c + rib__D_c --> adp_c + h_c + r5p_c	0	0.0	1000.0	LAR_RS00830 or LAR_RS02150	{'from': ['iML1515', 'gap']}
+RBK_L1	atp_c + rbl__L_c --> adp_c + h_c + ru5p__L_c	0	0.0	1000.0	LAR_RS02555	{'from': ['iML1515', 'gap']}
+RBLK2	atp_c + rbt_c --> adp_c + h_c + rbt5p_c	0	0.0	1000.0	LAR_RS02555	{'from': ['Lreuteri_530', 'gap']}
+RBP4E	ru5p__L_c <=> xu5p__D_c	0	-1000.0	1000.0	LAR_RS02560	{'from': ['iML1515', 'gap']}
+RHCYS	h2o_c + rhcys_c --> hcys__L_c + rib__D_c	0	0.0	1000.0	LAR_RS08460	{'from': ['Lreuteri_530', 'gap']}
+RIBFLVt2	h_e + ribflv_e --> h_c + ribflv_c	0	0.0	1000.0	Lreu_0758	{'from': ['Lreuteri_530', 'transport_reaction']}
+RIBabc	atp_c + h2o_c + rib__D_e --> adp_c + h_c + pi_c + rib__D_c	0	0.0	1000.0	LAR_RS09625	{'from': ['Lreuteri_530', 'gap']}
+RNAS_LRE	0.710810743235 atp_c + 0.187747387186 ctp_c + 0.21245220899 gtp_c + 0.288989660589 utp_c --> RNA_LRE_c + 0.4 adp_c + 0.4 h_c + 0.4 pi_c + ppi_c	0	0.0	1000.0	None	{'from': ['Lreuteri_530', 'biomass']}
+RNDR1	adp_c + trdrd_c --> dadp_c + h2o_c + trdox_c	0	0.0	1000.0	(LAR_RS01695 and LAR_RS01700 and LAR_RS02850) or (LAR_RS01695 and LAR_RS01700 and LAR_RS06720) or (LAR_RS01695 and LAR_RS01700 and LAR_RS09650)	{'from': ['iML1515', 'gap']}
+RNDR2	gdp_c + trdrd_c --> dgdp_c + h2o_c + trdox_c	0	0.0	1000.0	LAR_RS01695 or LAR_RS01700	{'from': ['iML1515', 'gap']}
+RNDR3	cdp_c + trdrd_c --> dcdp_c + h2o_c + trdox_c	0	0.0	1000.0	LAR_RS01695 or LAR_RS01700	{'from': ['iML1515', 'gap']}
+RNDR4	trdrd_c + udp_c --> dudp_c + h2o_c + trdox_c	0	0.0	1000.0	(LAR_RS01695 and LAR_RS01700 and LAR_RS02850) or (LAR_RS01695 and LAR_RS01700 and LAR_RS06720) or (LAR_RS01695 and LAR_RS01700 and LAR_RS09650)	{'from': ['iML1515', 'gap']}
+RNTR1	atp_c + trdrd_c --> datp_c + h2o_c + trdox_c	0	0.0	1000.0	LAR_RS07050 or LAR_RS04890 or LAR_RS09335	{'from': ['Lreuteri_530', 'gap']}
+RNTR2	gtp_c + trdrd_c --> dgtp_c + h2o_c + trdox_c	0	0.0	1000.0	LAR_RS07050 or LAR_RS04890 or LAR_RS09335	{'from': ['Lreuteri_530', 'gap']}
+RNTR3	ctp_c + trdrd_c --> dctp_c + h2o_c + trdox_c	0	0.0	1000.0	LAR_RS07050 or LAR_RS04890 or LAR_RS09335	{'from': ['Lreuteri_530', 'gap']}
+RNTR4	trdrd_c + utp_c --> dutp_c + h2o_c + trdox_c	0	0.0	1000.0	LAR_RS07050 or LAR_RS04890 or LAR_RS09335	{'from': ['Lreuteri_530', 'gap']}
+RPE	ru5p__D_c <=> xu5p__D_c	0	-1000.0	1000.0	LAR_RS06290	{'from': ['iML1515', 'gap']}
+RPI	r5p_c <=> ru5p__D_c	0	-1000.0	1000.0	LAR_RS01575	{'from': ['iML1515', 'gap']}
+SCRP	pi_c + sucr_c --> fru_c + g1p_c	0	0.0	1000.0	LAR_RS08255	{'from': ['Lreuteri_530', 'gap']}
+SDPDS	h2o_c + sl26da_c --> 26dap_LL_c + succ_c	0	0.0	1000.0	LAR_RS00985 or LAR_RS01980	{'from': ['iML1515', 'gap']}
+SELCYSLY	dtt_c + scys__L_c --> ala__L_c + dttOX_c + h_c + seln_c	0	0.0	1000.0	LAR_RS02665 or LAR_RS03300 or LAR_RS04735	{'from': ['Lreuteri_530', 'gap']}
+SERD_L	ser__L_c --> nh4_c + pyr_c	0	0.0	1000.0	LAR_RS05805 and LAR_RS05810	{'from': ['iML1515', 'gap']}
+SERTRS	atp_c + ser__L_c + trnaser_c --> amp_c + ppi_c + sertrna_c	0	0.0	1000.0	LAR_RS00495	{'from': ['Lreuteri_530', 'gap']}
+SERt2r	h_e + ser__L_e <=> h_c + ser__L_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction'], 'initial_id': ['SERt6']}
+SERt3	h_e + ser__L_c --> h_c + ser__L_e	0	0.0	1000.0	LAR_RS08060 or LAR_RS08180 or LAR_RS08055	{'from': ['Lreuteri_530', 'gap']}
+SHCHD2	dscl_c + nad_c --> h_c + nadh_c + scl_c	0	0.0	1000.0	LAR_RS09045	{'from': ['iML1515', 'gap']}
+SPMDabc	atp_c + h2o_c + spmd_e --> adp_c + h_c + pi_c + spmd_c	0	0.0	1000.0	LAR_RS08750 or LAR_RS08740 or LAR_RS08745 or LAR_RS08755	{'from': ['Lreuteri_530', 'gap']}
+SRCHCOC	cobalt2_c + dscl_c --> copre2_c + 3.0 h_c	0	0.0	1000.0	LAR_RS09080	{'from': ['Lreuteri_530', 'gap']}
+SSALx	h2o_c + nad_c + sucsal_c --> 2.0 h_c + nadh_c + succ_c	0	0.0	1000.0	LAR_RS00180	{'from': ['iML1515', 'gap']}
+SSALy	h2o_c + nadp_c + sucsal_c --> 2.0 h_c + nadph_c + succ_c	0	0.0	1000.0	LAR_RS00180	{'from': ['iML1515', 'gap']}
+SUCBZL	atp_c + coa_c + sucbz_c --> amp_c + ppi_c + sbzcoa_c	0	0.0	1000.0	LAR_RS04710	{'from': ['iML1515', 'gap']}
+SUCCt2r	h_e + succ_e <=> h_c + succ_c	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'transport_reaction']}
+SUCR	h2o_c + sucr_c --> fru_c + glc__D_c	0	0.0	1000.0	LAR_RS05515	{'from': ['Lreuteri_530', 'gap']}
+SUCtpp	sucr_e <=> sucr_c	0	-1000.0	1000.0	LAR_RS08260	{'from': ['Lreuteri_530', 'transport_reaction']}
+SULABC	atp_c + h2o_c + so4_e --> adp_c + h_c + pi_c + so4_c	0	0.0	1000.0	LAR_RS06770	{'from': ['Lreuteri_530', 'gap']}
+SULR	5.0 h_c + 3.0 nadph_c + so3_c --> 3.0 h2o_c + h2s_c + 3.0 nadp_c	0	0.0	1000.0	LAR_RS04990	{'from': ['iML1515', 'gap']}
+TDMAT6	2ttdeacp_c + h_c + nadh_c --> nad_c + tdeacp_c	0	0.0	1000.0	LAR_RS05210	{'from': ['Lreuteri_530', 'gap']}
+TDPDRE	dtdp4d6dg_c --> dtdp4d6dm_c	0	0.0	1000.0	None	{'from': ['iML1515', 'gap']}
+TDPDRR	dtdprmn_c + nadp_c <-- dtdp4d6dm_c + h_c + nadph_c	0	-1000.0	0.0	LAR_RS05705	{'from': ['iML1515', 'gap']}
+TDPGDH	dtdpglu_c --> dtdp4d6dg_c + h2o_c	0	0.0	1000.0	LAR_RS05710	{'from': ['iML1515', 'gap']}
+THDPS	h2o_c + succoa_c + thdp_c --> coa_c + sl2a6o_c	0	0.0	1000.0	LAR_RS03350	{'from': ['iML1515', 'gap']}
+THFGLUS	atp_c + glu__L_c + thf_c <=> adp_c + h_c + pi_c + thfglu_c	0	-1000.0	1000.0	LAR_RS06850 or LAR_RS02705	{'from': ['Lreuteri_530', 'gap']}
+THMDt2	h_e + thymd_e <=> h_c + thymd_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction'], 'initial_id': ['THMDt2r']}
+THMabc	atp_c + h2o_c + thm_e --> adp_c + h_c + pi_c + thm_c	0	0.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction']}
+THRD	nad_c + thr__L_c --> 2aobut_c + h_c + nadh_c	0	0.0	1000.0		{'from': ['iML1515', 'gap']}
+THRPDC	h_c + thrp_c --> applp_c + co2_c	0	0.0	1000.0	LAR_RS09140	{'from': ['Lreuteri_530', 'gap']}
+THRTRS	atp_c + thr__L_c + trnathr_c --> amp_c + ppi_c + thrtrna_c	0	0.0	1000.0	LAR_RS09850	{'from': ['Lreuteri_530', 'gap']}
+THRt2r	h_e + thr__L_e --> h_c + thr__L_c	0	0.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction'], 'initial_id': ['THRt2']}
+THRt3	h_e + thr__L_c --> h_c + thr__L_e	0	0.0	1000.0	LAR_RS08060 or LAR_RS08180 or LAR_RS08055	{'from': ['Lreuteri_530', 'gap']}
+THZPSN	atp_c + cys__L_c + dxyl5p_c + tyr__L_c --> 4hba_c + 4mpetz_c + ala__L_c + amp_c + co2_c + h2o_c + h_c + ppi_c	0	0.0	1000.0	LAR_RS08160	{'from': ['Lreuteri_530', 'gap']}
+THZPSN2	MCOSH_c + dxyl5p_c + gly_c + nadp_c --> 4mpetz_c + MCOOH_c + co2_c + 2.0 h2o_c + 2.0 h_c + nadph_c	0	0.0	1000.0	LAR_RS08160	{'from': ['Lreuteri_530', 'gap']}
+TMDK1	atp_c + thymd_c --> adp_c + dtmp_c + h_c	0	0.0	1000.0	LAR_RS02415	{'from': ['iML1515', 'gap']}
+TMDK2	gtp_c + thymd_c --> dtmp_c + gdp_c + h_c	0	0.0	1000.0	LAR_RS02415	{'from': ['Lreuteri_530', 'gap']}
+TMDPK	atp_c + thm_c --> amp_c + h_c + thmpp_c	0	0.0	1000.0	None	{'from': ['Lreuteri_530', 'gap']}
+TMDPP	2dr1p_c + thym_c <=> pi_c + thymd_c	0	-1000.0	1000.0	LAR_RS00575	{'from': ['iML1515', 'gap']}
+TMDS	dump_c + mlthf_c --> dhf_c + dtmp_c	0	0.0	1000.0	LAR_RS04145	{'from': ['iML1515', 'gap']}
+TMPPP	2mahmp_c + 4mpetz_c + h_c --> ppi_c + thmmp_c	0	0.0	1000.0	LAR_RS05505	{'from': ['iML1515', 'gap']}
+TPI	dhap_c <=> g3p_c	0	-1000.0	1000.0	LAR_RS01225 or LAR_RS00885 or LAR_RS02065	{'from': ['iML1515', 'gap']}
+TRDR	h_c + nadph_c + trdox_c --> nadp_c + trdrd_c	0	0.0	1000.0	LAR_RS05795 or LAR_RS06775 or LAR_RS01975	{'from': ['iML1515', 'gap']}
+TREP	pi_c + tre_c <=> g1p_B_c + glc__D_c	0	-1000.0	1000.0	LAR_RS00280	{'from': ['Lreuteri_530', 'gap']}
+TREt	h_e + tre_e <=> h_c + tre_c	0	-1000.0	1000.0	LAR_RS00275	{'from': ['Lreuteri_530', 'transport_reaction']}
+TRPTRS	atp_c + trnatrp_c + trp__L_c --> amp_c + ppi_c + trptrna_c	0	0.0	1000.0	LAR_RS01060	{'from': ['Lreuteri_530', 'gap']}
+TRPt2r	h_e + trp__L_e <=> h_c + trp__L_c	0	-1000.0	1000.0	None	{'from': ['Lreuteri_530', 'transport_reaction'], 'initial_id': ['TRPt6']}
+TYRTA	akg_c + tyr__L_c <=> 34hpp_c + glu__L_c	0	-1000.0	1000.0	LAR_RS01830	{'from': ['iML1515', 'gap']}
+TYRTRS	atp_c + trnatyr_c + tyr__L_c --> amp_c + ppi_c + tyrtrna_c	0	0.0	1000.0	LAR_RS00745	{'from': ['Lreuteri_530', 'gap']}
+TYRt2r	h_e + tyr__L_e <=> h_c + tyr__L_c	0	-1000.0	1000.0	LAR_RS00865 or LAR_RS09680	{'from': ['Lreuteri_530', 'gap']}
+UAAGDS	26dap__M_c + atp_c + uamag_c --> adp_c + h_c + pi_c + ugmd_c	0	0.0	1000.0	LAR_RS02410	{'from': ['iML1515', 'gap']}
+UAG2E	uacgam_c <=> uacmam_c	0	-1000.0	1000.0	LAR_RS01645 or LAR_RS07460	{'from': ['iML1515', 'gap']}
+UAGCVT	pep_c + uacgam_c --> pi_c + uaccg_c	0	0.0	1000.0	LAR_RS01200 or LAR_RS02510	{'from': ['iML1515', 'gap']}
+UAGDP	acgam1p_c + h_c + utp_c --> ppi_c + uacgam_c	0	0.0	1000.0	LAR_RS01140	{'from': ['iML1515', 'gap']}
+UAGPT5	uacgam_c + uagmdalac_c --> h_c + uaagmdalac_c + udp_c	0	0.0	1000.0	LAR_RS03235	{'from': ['Lreuteri_530', 'gap']}
+UAMAGS	atp_c + glu__D_c + uama_c --> adp_c + h_c + pi_c + uamag_c	0	0.0	1000.0	LAR_RS03230	{'from': ['iML1515', 'gap']}
+UAMAS	ala__L_c + atp_c + uamr_c --> adp_c + h_c + pi_c + uama_c	0	0.0	1000.0	LAR_RS06710	{'from': ['iML1515', 'gap']}
+UAPGR	h_c + nadph_c + uaccg_c --> nadp_c + uamr_c	0	0.0	1000.0	LAR_RS02145	{'from': ['iML1515', 'gap']}
+UDCPDP	h2o_c + udcpdp_c --> h_c + pi_c + udcpp_c	0	0.0	1000.0	None	{'from': ['iML1515', 'gap']}
+UDCPDPS	frdp_c + 8.0 ipdp_c --> 8.0 ppi_c + udcpdp_c	0	0.0	1000.0	LAR_RS05860 or LAR_RS03740 or LAR_RS06360	{'from': ['iML1515', 'gap']}
+UDCPKr	atp_c + udcp_c --> adp_c + h_c + udcpp_c	0	0.0	1000.0	LAR_RS03985	{'from': ['Lreuteri_530', 'gap']}
+UDPDPS	decdp_c + ipdp_c --> ppi_c + udcpdp_c	0	0.0	1000.0	LAR_RS03740	{'from': ['Lreuteri_530', 'gap']}
+UDPG4E	udpg_c <=> udpgal_c	0	-1000.0	1000.0	LAR_RS01780	{'from': ['iML1515', 'gap']}
+UDPGALM	udpgal_c --> udpgalfur_c	0	0.0	1000.0	LAR_RS07385	{'from': ['iML1515', 'gap']}
+UGLDDS1	alaala_c + atp_c + uAgl_c --> adp_c + pi_c + uAgla_c	0	0.0	1000.0	LAR_RS01255	{'from': ['Lreuteri_530', 'gap']}
+UGLDDS2	alaala_c + atp_c + uGgl_c --> adp_c + h_c + pi_c + uGgla_c	0	0.0	1000.0	LAR_RS01255	{'from': ['Lreuteri_530', 'gap']}
+UGMDDS2	alalac_c + atp_c + ugmd_c --> adp_c + h_c + pi_c + ugmdalac_c	0	0.0	1000.0	LAR_RS01255	{'from': ['Lreuteri_530', 'gap']}
+UMPK	atp_c + ump_c <=> adp_c + udp_c	0	-1000.0	1000.0	LAR_RS04110	{'from': ['iML1515', 'gap']}
+UPP3MT	2.0 amet_c + uppg3_c --> 2.0 ahcys_c + dscl_c + h_c	0	0.0	1000.0	LAR_RS09085	{'from': ['iML1515', 'gap']}
+UPP3S	hmbil_c --> h2o_c + uppg3_c	0	0.0	1000.0	LAR_RS09005	{'from': ['iML1515', 'gap']}
+UPPRT	prpp_c + ura_c --> ppi_c + ump_c	0	0.0	1000.0	LAR_RS02440	{'from': ['iML1515', 'gap']}
+URAt2	h_e + ura_e --> h_c + ura_c	0	0.0	1000.0	LAR_RS02460	{'from': ['Lreuteri_530', 'gap']}
+URIDK2r	atp_c + dump_c --> adp_c + dudp_c	0	0.0	1000.0	LAR_RS04110	{'from': ['Lreuteri_530', 'gap']}
+URIH	h2o_c + uri_c --> rib__D_c + ura_c	0	0.0	1000.0	LAR_RS04655	{'from': ['iML1515', 'gap']}
+URIK1	atp_c + uri_c --> adp_c + h_c + ump_c	0	0.0	1000.0	LAR_RS06535	{'from': ['iML1515', 'gap']}
+URIK2	gtp_c + uri_c --> gdp_c + h_c + ump_c	0	0.0	1000.0	LAR_RS06535	{'from': ['iML1515', 'gap']}
+URIK3	itp_c + uri_c --> h_c + idp_c + ump_c	0	0.0	1000.0	LAR_RS06535	{'from': ['Lreuteri_530', 'gap']}
+VALTRS	atp_c + trnaval_c + val__L_c --> amp_c + ppi_c + valtrna_c	0	0.0	1000.0	LAR_RS02675	{'from': ['Lreuteri_530', 'gap']}
+VALt2r	h_e + val__L_e <=> h_c + val__L_c	0	-1000.0	1000.0	LAR_RS09570 or LAR_RS00610 or LAR_RS00605	{'from': ['Lreuteri_530', 'transport_reaction'], 'initial_id': ['VALt6']}
+XANt2	h_e + xan_e --> h_c + xan_c	0	0.0	1000.0	LAR_RS09675	{'from': ['Lreuteri_530', 'gap']}
+XPPT	prpp_c + xan_c --> ppi_c + xmp_c	0	0.0	1000.0	LAR_RS07750	{'from': ['iML1515', 'gap']}
+XTSNH	h2o_c + xtsn_c --> rib__D_c + xan_c	0	0.0	1000.0	LAR_RS08815	{'from': ['iML1515', 'gap']}
+XYLK	atp_c + xylu__D_c --> adp_c + h_c + xu5p__D_c	0	0.0	1000.0	LAR_RS02245	{'from': ['iML1515', 'gap']}
+YUMPS	r5p_c + ura_c <=> h2o_c + psd5p_c	0	-1000.0	1000.0	LAR_RS07775 or LAR_RS08145 or LAR_RS03795 or LAR_RS04915 or LAR_RS09660	{'from': ['iML1515', 'gap']}
+araphe2	3mop_c + phe__L_c <=> ile__L_c + phpyr_c	0	-1000.0	1000.0	LAR_RS03370	{'from': ['Lreuteri_530', 'gap']}
+aratry2	3mop_c + trp__L_c <=> ile__L_c + indpyr_c	0	-1000.0	1000.0	LAR_RS06460	{'from': ['Lreuteri_530', 'gap']}
+aratyr2	3mop_c + tyr__L_c <=> 34hpp_c + ile__L_c	0	-1000.0	1000.0	LAR_RS00225	{'from': ['Lreuteri_530', 'gap']}
+aratyr4	indpyr_c + tyr__L_c <=> 34hpp_c + trp__L_c	0	-1000.0	1000.0	LAR_RS00225	{'from': ['Lreuteri_530', 'gap']}
+tr_fe2	fe2_e <=> fe2_c	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'transport_reaction']}
+tr_h2s	h2s_e <=> h2s_c	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'transport_reaction']}
+tr_o2	o2_e <=> o2_c	0	-1000.0	1000.0		{'from': ['Lreuteri_530', 'transport_reaction']}

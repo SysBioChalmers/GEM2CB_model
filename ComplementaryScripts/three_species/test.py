@@ -103,7 +103,8 @@ print('CB modeing')
 tStart = 0.0  # DefineTime
 tStop = 50
 tStep = 0.5
-tspan = np.linspace(tStart, tStop, (tStop - tStart) / tStep)
+# tspan = np.linspace(tStart, tStop, (tStop - tStart) / tStep)
+tspan = np.linspace(tStart, tStop, int(((tStop - tStart) / tStep) + 1))
 
 n_path = 1
 experiment_data_df = RI_experimet_data[metabObj]
@@ -191,7 +192,7 @@ def cybernetic_var_def(rM, CB_model):
 
 
 sol = Cybernetic_Functions.cb_model_simulate(CB_model, tspan, draw=True)
-np.savetxt('sol_Rint.txt', sol, delimiter=',')
+# np.savetxt('sol_Rint.txt', sol, delimiter=',')
 # # %%
 # CB_model['metas_names'] = ['fru','biomass', 'ac', 'for', 'but','lac' ]
 # para_to_fit = {'kmax': [0, 1, 2, 3, 4,5,6], 'K': [0, 1, 2, 3, 4,5,6]}

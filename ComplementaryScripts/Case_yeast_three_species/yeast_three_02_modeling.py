@@ -19,7 +19,7 @@ import pandas as pd
 import ComplementaryScripts.Cybernetic_Functions as Cybernetic_Functions
 
 # %% < def input:>
-os.chdir('../../ComplementaryData/Branch_work')
+os.chdir('../../ComplementaryData/Case_yeast_three_species')
 
 # time def
 tStart = 0.0
@@ -105,14 +105,12 @@ initial_mets23 = experiment_data_df_23[mets_name].values[0, :]
 # kmax : n_path
 
 kmax1 = np.array(
-    [86.87473132504351, -7.180351070084871, 11.719610466541738, 3.8189253553635503, 1.1963696141971845,
-     9.219651020453082, 2.2909622429966845, 1.257404314401262, 2.684758576688097])
-
-kmax2 = np.array([21.86614290348148, 0.17065441242941126, 1.326898841456579, 20.06796718759682, 11.258023645802034,
-                  6.6270996396176525, 30.478541623176554, 14.853906272941188, 4.026520173320138, 23.261182472049697])
-kmax3 = np.array([17.10535470816518, 12.504046489582976, 23.015571224534284, 2.359498411211777, 6.098064424938098,
-                  0.4190745414983157, 0.5640104244189486, 42.69237408748644, 0.5733612810149844, 8.66268756062857])
-
+    [110.91280957986572, 1.1854850622932065, 13.682176672912881, 2.6167266723859317, 3.932561053042331,
+     11.018377153500872, 0.39686934689377384, 1.4919147628099374, 0.606451588748099, ])
+kmax2 = np.array([23.23092935425619, 0.17319751654601012, 1.2866188498323905, 20.113238231799215, 11.191576816882012,
+                  7.029611542618358, 32.885878446402515, 15.059416224769848, 4.4997263093736635, 19.63780820651631, ])
+kmax3 = np.array([17.869681531987467, 12.630842188798638, 23.948765514322844, 2.333676728126207, 5.6808897607972675,
+                  0.3965147830533877, 0.5685312862222127, 42.021225141220526, 0.5747711617822211, 8.730434600267824])
 # np.around(Smz1,4)
 # K : n_path
 K1 = np.array([
@@ -216,15 +214,19 @@ cb_model_3.experiment_data_df = experiment_data_df_3.copy()
 cb_model_12 = cb_model_1.expend_model(cb_model_2, name='CB model 12')
 cb_model_12.initial_mets = initial_mets12
 cb_model_12.experiment_data_df = experiment_data_df_12.copy()
-
+cb_model_12.K = np.concatenate((cb_model_1.K[0:-1], cb_model_2.K), )
 cb_model_23 = cb_model_2.expend_model(cb_model_3, name='CB model 23')
 cb_model_23.initial_mets = initial_mets23
 cb_model_23.experiment_data_df = experiment_data_df_23.copy()
+cb_model_23.K = np.concatenate((cb_model_2.K[0:-1], cb_model_2.K), )
 
 cb_model_13 = cb_model_1.expend_model(cb_model_3, name='CB model 13')
+cb_model_13.K = np.concatenate((cb_model_1.K[0:-1], cb_model_3.K), )
+
 # cb_model_13.initial_mets = initial_mets13
 
-cb_model_123 = cb_model_12.expend_model(cb_model_23, name='CB model 123')
+cb_model_123 = cb_model_12.expend_model(cb_model_3, name='CB model 123')
+cb_model_123.K = np.concatenate((cb_model_12.K[0:-1], cb_model_3.K), )
 
 
 # cb_model_123.initial_mets = initial_mets123
@@ -321,25 +323,49 @@ def rate_def(self, x):
 
 setattr(Cybernetic_Model_basic, 'rate_def', rate_def)
 
-# def cybernetic_var_def(self,rM,i_index):
-#     # print('def cybernetic_var')
-#     (n_mets, n_path) = self.Smz.shape
-#     # cybernetic_var = abs(Smz[sub_index, :] * rM * n_carbon)
-#     cybernetic_var = rM * self.n_carbon
-#     # cybernetic_var[cybernetic_var==0] = 1
-#     cybernetic_var[cybernetic_var < 0] = 0
-#     if sum(cybernetic_var) > 0:
-#         u = cybernetic_var / sum(cybernetic_var)
-#         v = cybernetic_var / np.max(abs(cybernetic_var))
-#     else:
-#         u = v = np.zeros(n_path)
-#
-#     if self.name in ['CB model for Ecoli reduced matrix ', 'CB model for Ecoli iML1515 matrix ']:
-#         u[-1] = 1.0
-#         v[-1] = 1.0
-#     return u, v
-# setattr(Cybernetic_Model_basic, 'cybernetic_var_def', cybernetic_var_def)
 
+def cybernetic_var_def(self, rM, i_index):
+    name = self.name
+    # print('def cybernetic_var')
+    (n_mets, n_path) = self.Smz.shape
+    # cybernetic_var = abs(Smz[sub_index, :] * rM * n_carbon)
+    cybernetic_var = rM * self.n_carbon
+    # cybernetic_var[cybernetic_var==0] = 1
+    cybernetic_var[cybernetic_var < 0] = 0
+    u = v = np.ones((1, n_path))
+
+    if name in ['CB model 12', 'CB model 13']:
+        fam = [9, 10]
+    elif name in ['CB model 23']:
+        fam = [10, 10]
+    elif name in ['CB model 123']:
+        fam = [9, 10, 10]
+    else:
+        fam = [-1]
+    for index_i in range(0, len(fam)):
+        if index_i == 0:
+            index_strat = 0
+        else:
+            index_strat = fam[index_i - 1]
+        index_end = fam[index_i]
+
+        cybernetic_var_i = cybernetic_var[index_strat:index_end]
+        # u_i = u[index_strat:index_end]
+        # v_i = v[index_strat:index_end]
+
+        if sum(cybernetic_var_i) > 0:
+            u_i = cybernetic_var_i / sum(cybernetic_var_i)
+            v_i = cybernetic_var_i / np.max(abs(cybernetic_var_i))
+        else:
+            u_i = v_i = np.zeros(len(cybernetic_var_i))
+
+        u[index_strat:index_end] = u_i
+        v[index_strat:index_end] = v_i
+
+    return u, v
+
+
+setattr(Cybernetic_Model_basic, 'cybernetic_var_def', cybernetic_var_def)
 
 # CB_model.cybernetic_var_def = cybernetic_var_def
 # %% initial model results:
@@ -349,28 +375,29 @@ sol3 = Cybernetic_Functions.cb_model_simulate(cb_model_3, tspan, draw=True)
 
 sol12 = Cybernetic_Functions.cb_model_simulate(cb_model_12, tspan, draw=True)
 sol23 = Cybernetic_Functions.cb_model_simulate(cb_model_23, tspan, draw=True)
+sol123 = Cybernetic_Functions.cb_model_simulate(cb_model_123, tspan, draw=True)
 weights_of_mets = molar_mass / 1000
 
 # %% model1
 
 if False:
-    cb_model_1.weight_of_method_t_f = 1
-    # cb_model_1.weights_of_mets = weights_of_mets/1000
+    cb_model_1.weight_of_method_t_f = 3
+    cb_model_1.weights_of_mets = np.array([5, 0.1, 2, 0, 2, 2])  # /1000
     cb_models = [cb_model_1, ]
-    experiment_data_dfs = [experiment_data_df_1, ]  # ,[3],[4],[5],[6],[7],[8]]
-    para_to_fit = {'kmax': np.array([[0], [1], [2], [5], [6], [7], [8]]),
+    experiment_data_dfs = [experiment_data_df_1, ]  # [5],[6],[7],[8]]
+    para_to_fit = {'kmax': np.array([[0], [1], [2], [3], [4], [5], [6], [7], [8]]),
                    'K': np.array([])}
 
     minimum_1 = Cybernetic_Functions.parameters_fitting(cb_models, experiment_data_dfs,
                                                         para_to_fit, tspan, draw=True,
                                                         full_output=False,
-                                                        options={'xtol': 0.01, 'ftol': 0.01, 'maxiter': 50,
+                                                        options={'xtol': 1, 'ftol': 0.01, 'maxiter': 100,
                                                                  'disp': True})
 
     CB_models = Cybernetic_Functions.update_paras_func(minimum_1.x, cb_models, para_to_fit,
                                                        retern_model_or_paras='model')
     sol1 = Cybernetic_Functions.cb_model_simulate(CB_models[0], tspan, draw=True)
-    print(a)
+
 
     cb_model_2.weight_of_method_t_f = 3
     cb_models = [cb_model_2, ]
@@ -381,7 +408,7 @@ if False:
     minimum_2 = Cybernetic_Functions.parameters_fitting(cb_models, experiment_data_dfs,
                                                         para_to_fit, tspan, draw=True,
                                                         full_output=False,
-                                                        options={'xtol': 0.01, 'ftol': 0.01, 'maxiter': 50,
+                                                        options={'xtol': 0.5, 'ftol': 0.5, 'maxiter': 50,
                                                                  'disp': True})
 
     CB_models = Cybernetic_Functions.update_paras_func(minimum_2.x, cb_models, para_to_fit,
@@ -397,7 +424,7 @@ if False:
     minimum_3 = Cybernetic_Functions.parameters_fitting(cb_models, experiment_data_dfs,
                                                         para_to_fit, tspan, draw=True,
                                                         full_output=False,
-                                                        options={'xtol': 0.01, 'ftol': 0.01, 'maxiter': 50,
+                                                        options={'xtol': 0.5, 'ftol': 0.1, 'maxiter': 50,
                                                                  'disp': True})
 
     CB_models = Cybernetic_Functions.update_paras_func(minimum_3.x, cb_models, para_to_fit,
@@ -407,24 +434,25 @@ if False:
 # %%  model1 and model2
 
 if False:
-    weight_of_method_t_f = 2
+    weight_of_method_t_f = 3
+    # cb_model_1.weights_of_mets = np.array([5 , 0.1, 2 , 2 , 2 , 2 ])
 
     cb_models = [cb_model_1, cb_model_2, cb_model_12]
     for model_i in cb_models:
         model_i.weight_of_method_t_f = weight_of_method_t_f
-        model_i.weights_of_mets = weights_of_mets
+        model_i.weights_of_mets = np.array([100, 0.1, 1, 1, 2, 2])
 
     experiment_data_dfs = [experiment_data_df_1, experiment_data_df_2, experiment_data_df_12]
     para_to_fit = {'kmax': np.array([
-        # [0, np.nan, 0],
-        # [1, np.nan, 1],
-        # [2, np.nan, 2],
-        # [3, np.nan, 3],
-        # [4, np.nan, 4],
-        # [5, np.nan, 5],
-        # [6, np.nan, 6],
-        # [7, np.nan, 7],
-        # [8, np.nan, 8],
+        [0, np.nan, 0],
+        [1, np.nan, 1],
+        [2, np.nan, 2],
+        [3, np.nan, 3],
+        [4, np.nan, 4],
+        [5, np.nan, 5],
+        [6, np.nan, 6],
+        [7, np.nan, 7],
+        [8, np.nan, 8],
 
         [np.nan, 0, 0 + n_path1],
         [np.nan, 1, 1 + n_path1],
@@ -443,7 +471,7 @@ if False:
     minimum = Cybernetic_Functions.parameters_fitting(cb_models, experiment_data_dfs,
                                                       para_to_fit, tspan, draw=True,
                                                       full_output=False,
-                                                      options={'xtol': 0.01, 'ftol': 0.01, 'maxiter': 100,
+                                                      options={'xtol': 0.5, 'ftol': 0.01, 'maxiter': 50,
                                                                'disp': True})
 
     CB_models = Cybernetic_Functions.update_paras_func(minimum.x, cb_models, para_to_fit,
@@ -451,16 +479,16 @@ if False:
     sol2 = Cybernetic_Functions.cb_model_simulate(CB_models[0], tspan, draw=True)
     sol3 = Cybernetic_Functions.cb_model_simulate(CB_models[1], tspan, draw=True)
     sol23 = Cybernetic_Functions.cb_model_simulate(CB_models[2], tspan, draw=True)
-    print(a)
+    print(stop)
 
 # %% model2 and model3
 
 if False:
-    weight_of_method_t_f = 2
+    weight_of_method_t_f = 3
     cb_models = [cb_model_2, cb_model_3, cb_model_23]
     for model_i in cb_models:
         model_i.weight_of_method_t_f = weight_of_method_t_f
-        model_i.weights_of_mets = weights_of_mets
+        model_i.weights_of_mets = np.array([100, 0.1, 1, 1, 2, 2])
 
     experiment_data_dfs = [experiment_data_df_2, experiment_data_df_3, experiment_data_df_23]
     para_to_fit = {'kmax': np.array([
@@ -492,7 +520,7 @@ if False:
     minimum = Cybernetic_Functions.parameters_fitting(cb_models, experiment_data_dfs,
                                                       para_to_fit, tspan, draw=True,
                                                       full_output=False,
-                                                      options={'xtol': 0.01, 'ftol': 0.01, 'maxiter': 50, 'disp': True})
+                                                      options={'xtol': 0.5, 'ftol': 0.01, 'maxiter': 50, 'disp': True})
 
     CB_models = Cybernetic_Functions.update_paras_func(minimum.x, cb_models, para_to_fit,
                                                        retern_model_or_paras='model')
@@ -509,7 +537,7 @@ if False:
 
     for model_i in cb_models:
         model_i.weight_of_method_t_f = weight_of_method_t_f
-        model_i.weights_of_mets = weights_of_mets
+        model_i.weights_of_mets = np.array([100, 0.1, 1, 1, 2, 2])
     experiment_data_dfs = [experiment_data_df_1, experiment_data_df_2, experiment_data_df_3,
                            experiment_data_df_12, experiment_data_df_23]
 
@@ -550,7 +578,7 @@ if False:
     minimum = Cybernetic_Functions.parameters_fitting(cb_models, experiment_data_dfs,
                                                       para_to_fit, tspan, draw=True,
                                                       full_output=False,
-                                                      options={'xtol': 0.01, 'ftol': 0.01, 'maxiter': 50,
+                                                      options={'xtol': 5, 'ftol': 0.01, 'maxiter': 50,
                                                                'disp': True})
 
     CB_models = Cybernetic_Functions.update_paras_func(minimum.x, cb_models, para_to_fit,
@@ -561,12 +589,81 @@ if False:
 
     sol12 = Cybernetic_Functions.cb_model_simulate(CB_models[3], tspan, draw=True)
     sol23 = Cybernetic_Functions.cb_model_simulate(CB_models[4], tspan, draw=True)
+# %% draw
+sols = [sol1, sol2, sol3, sol12, sol23, sol123]
+experiment_data_dfs_copy = [experiment_data_df_1, experiment_data_df_2, experiment_data_df_3,
+                            experiment_data_df_12, experiment_data_df_23]
+import copy
 
-sols = [sol1, sol2, sol3, sol12, sol23]
-experiment_data_dfs = [experiment_data_df_1, experiment_data_df_2, experiment_data_df_3,
-                       experiment_data_df_12, experiment_data_df_23]
+experiment_data_dfs = copy.deepcopy(experiment_data_dfs_copy)
+
+# experiment_data_dfs = experiment_data_dfs_copy.copy()
+# results = []
+# for sol_i in sols:
+#     result_i = sol_i[:, 0:6] * molar_mass / 1000
+#     results.append(result_i)
+#
+# for experiment_data_df_i in experiment_data_dfs:
+#     experiment_data_df_i.iloc[:, 1:] = experiment_data_df_i.values[:, 1:] * molar_mass / 1000
+#
+# fig = plt.figure(figsize=(5.5, 10))
+# axs = [fig.add_subplot(len(results), 1, i + 1) for i in range(len(results))]
+# results
+# # fig,axs = plt.subplots(len(results), 1,)
+#
+# for i in range(len(results)):
+#     axs[i].plot(tspan, results[i], )
+#     prop_cycle = plt.rcParams['axes.prop_cycle']
+#     colors = prop_cycle.by_key()['color']
+#     color_i = 0
+#     for met_i in mets_name:
+#         axs[i].plot(experiment_data_dfs[i]['t'], experiment_data_dfs[i][met_i], '*', color=colors[color_i])
+#         color_i += 1
+#     # axs[i].set_xlim(-1,90)
+#
+# axs[0].legend(mets_name)
+#
+# plt.show()
+
 # %%
+# experiment_data_dfs = copy.deepcopy(experiment_data_dfs_copy)
+# results = []
+# for sol_i in sols:
+#     result_i = sol_i[:, 0:6] * molar_mass / 1000
+#     results.append(result_i)
+#
+# for experiment_data_df_i in experiment_data_dfs:
+#     experiment_data_df_i.iloc[:, 1:] = experiment_data_df_i.values[:, 1:] * molar_mass / 1000
+#
+# fig = plt.figure(figsize=(5.5, 10))
+# axs = [fig.add_subplot(len(results), 1, i + 1) for i in range(len(results))]
+# results
+# # fig,axs = plt.subplots(len(results), 1,)
+#
+# for i in range(len(results)):
+#     axs[i].plot(tspan, results[i], )
+#     prop_cycle = plt.rcParams['axes.prop_cycle']
+#     colors = prop_cycle.by_key()['color']
+#     color_i = 0
+#     for met_i in mets_name:
+#         axs[i].plot(experiment_data_dfs[i]['t'], experiment_data_dfs[i][met_i], '*', color=colors[color_i])
+#         color_i += 1
+#     # axs[i].set_xlim(-1,90)
+#
+# axs[0].legend(mets_name)
+#
+# plt.show()
 
+# %%
+experiment_data_dfs = copy.deepcopy(experiment_data_dfs_copy)
+figsize = (6, 4)
+# fig = plt.figure(figsize=(6, 2.5))
+fig, axs = plt.subplots(2, 1, figsize=figsize)
+# ax_1 = fig.add_subplot(111)
+ax_0 = axs[0]
+ax_1 = axs[1]
+
+# colors = ['blue', 'teal', 'tab:red', 'tab:orange']
 results = []
 for sol_i in sols:
     result_i = sol_i[:, 0:6] * molar_mass / 1000
@@ -575,26 +672,51 @@ for sol_i in sols:
 for experiment_data_df_i in experiment_data_dfs:
     experiment_data_df_i.iloc[:, 1:] = experiment_data_df_i.values[:, 1:] * molar_mass / 1000
 
-fig = plt.figure(figsize=(5.5, 10))
-axs = [fig.add_subplot(len(results), 1, i + 1) for i in range(len(results))]
-results
-# fig,axs = plt.subplots(len(results), 1,)
+titles = ['$S. cerevisiae$', '$P. stipitis$', '$K. marxianus$',
+          '$S. cerevisiae$ and $P. stipitis$', '$P. stipitis$ and $K. marxianus$',
+          '$S. cerevisiae$ and $P. stipitis$ and $K. marxianus$']
 
-for i in range(len(results)):
-    axs[i].plot(tspan, results[i], )
-    prop_cycle = plt.rcParams['axes.prop_cycle']
-    colors = prop_cycle.by_key()['color']
+for index in range(0, len(results)):
+
+    # color_list = plt.cm.tab10(np.linspace(0, 1, 12))
+    # prop_cycle = plt.rcParams['axes.prop_cycle']
+    # colors = prop_cycle.by_key()['color']
+
+    result = results[index]
     color_i = 0
     for met_i in mets_name:
-        axs[i].plot(experiment_data_dfs[i]['t'], experiment_data_dfs[i][met_i], '*', color=colors[color_i])
+        if met_i == 'BIOM':
+            ax_0.plot(tspan, result[:, mets_name.index(met_i)], color=colors[color_i], label=met_i)
+            ax_0.set_yscale('log')
+            # ax_0.plt.yscale()
+        elif met_i != 'BIOM':
+            ax_1.plot(tspan, result[:, mets_name.index(met_i)], color=colors[color_i], label=met_i)
         color_i += 1
-    # axs[i].set_xlim(-1,90)
 
-axs[0].legend(mets_name)
+    if index < 5:
+        experiment_data_df_i = experiment_data_dfs[index]
+        color_i = 0
+        for met_i in mets_name:
+            if met_i == 'BIOM':
+                ax_0.plot(experiment_data_df_i['t'], experiment_data_df_i[met_i], '*', color=colors[color_i])
+                ax_0.set_yscale('log')
+                # ax_0.plt.yscale()
+            elif met_i != 'BIOM':
+                ax_1.plot(tspan, result[:, mets_name.index(met_i)], color=colors[color_i])
+                ax_1.plot(experiment_data_df_i['t'], experiment_data_df_i[met_i], '*', color=colors[color_i])
+            color_i += 1
 
-plt.show()
+    ax_0.axis(ymin=0.01, ymax=100)
+    ax_0.set_ylabel('Biomass (g/L)', fontsize=12)
+    ax_1.set_xlabel('Time (h)', fontsize=12)
+    ax_1.set_ylabel('Concentration (g/L)', fontsize=12)
 
-# %%
+    ax_0.legend(loc='center left', bbox_to_anchor=(1, 0.5), ncol=1)
+    ax_1.legend(loc='center left', bbox_to_anchor=(1, 0.5), ncol=1)
+    ax_0.set_title(titles[index])
+    # plt.title(titles[index])
+    plt.show()
+
 # CB_model['metas_names'] = ['glc', 'succ', 'for', 'lac', 'ac', 'etoh', 'biomass', ]
 # para_to_fit = {'kmax': [0, 1, 2, 3, 4, 5], 'K': [0, 1, 2, 3, 4, 5]}
 # # minimum = Cybernetic_Functions.parameters_fitting(CB_model, experiment_data_df, para_to_fit, tspan, draw=True)
