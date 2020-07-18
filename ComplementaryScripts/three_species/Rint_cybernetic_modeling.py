@@ -17,24 +17,45 @@ import pandas as pd
 import ComplementaryScripts.Cybernetic_Functions as Cybernetic_Functions
 
 os.chdir('../../ComplementaryData/three_species/')
+'''
+Mono-cultures
+=============
 
+RI: RI_8, RI_14, RI_15, RI_16
+FP: FP_4, FP_14, FP_15 
+BH: BH_14, BH_15, BH_16
+
+Co-cultures
+===========
+
+RI-FP: RI_FP_8, RI_FP_9
+RI-BH with initial acetate: RI_BH_4, RI_BH_6
+RI-BH without initial acetate: RI_BH_5, RI_BH_7 
+FP-BH with initial acetate: FP_BH_1, FP_BH_2
+FP-BH without initial acetate: FP_BH_3
+
+Tri-cultures
+============
+
+RI-FP-BH: RI_FP_BH_10, RI_FP_BH_11, RI_FP_BH_12, RI_FP_BH_13, RI_FP_BH_14, RI_FP_BH_15
+'''
 # %% <experiment data> experiment data ti get initial mets
 print('\n---------- Loading Experiment Data ... ---------- ')
+file_name = 'experiment_data/experiment_data_trimmed.xlsx'
+RI_experimet_data = pd.read_excel(file_name, sheet_name='RI_14', index_col=0, header=0, )
+FP_experimet_data = pd.read_excel(file_name, sheet_name='FP_4', index_col=0, header=0, )
+BH_experimet_data = pd.read_excel(file_name, sheet_name='BH_14', index_col=0, header=0, )
 
-RI_experimet_data = pd.read_excel('experiment_data.xlsx', sheet_name='RI_14', header=0, usecols='A:I')
-FP_experimet_data = pd.read_excel('experiment_data.xlsx', sheet_name='FP_4', header=0, usecols='A:I')
-BH_experimet_data = pd.read_excel('experiment_data.xlsx', sheet_name='BH_14', header=0, usecols='A:I')
-
-RI_BH_experimet_data = pd.read_excel('experiment_data.xlsx', sheet_name='RI_BH_4', header=0, usecols='A:I')
-RI_FP_experimet_data = pd.read_excel('experiment_data.xlsx', sheet_name='RI_FP_8', header=0, usecols='A:I')
-FP_BH_experimet_data = pd.read_excel('experiment_data.xlsx', sheet_name='FP_BH_1', header=0, usecols='A:I')
+RI_BH_experimet_data = pd.read_excel(file_name, sheet_name='RI_BH_4', index_col=0, header=0, )
+RI_FP_experimet_data = pd.read_excel(file_name, sheet_name='RI_FP_8', index_col=0, header=0, )
+FP_BH_experimet_data = pd.read_excel(file_name, sheet_name='FP_BH_1', index_col=0, header=0, )
 
 # data_list = [RI_experimet_data,FP_experimet_data,BH_experimet_data,RI_BH_experimet_data,RI_FP_experimet_data,FP_BH_experimet_data]
 # for data in data_list:
 #     data[['R.i', 'F.p', 'B.h']] = data[['R.i', 'F.p', 'B.h']] / 1e8
 
-mets_name = list(RI_experimet_data.columns[1:-1])
-# mets_name  = ['fru', 'R.i', 'F.p', 'B.h', 'ac', 'for', 'but']
+# mets_name = list(RI_experimet_data.columns[1:-1])
+mets_name = ['fru', 'R.i', 'F.p', 'B.h', 'ac', 'for', 'but']
 
 # %% <Cybernetic model>
 print('\n---------- Loading modes ... ---------- ')
@@ -306,7 +327,7 @@ single_simualte = False
 bi_simualte = True
 weight_of_method_t_f = 0
 weights_of_mets = np.array([1, 5, 5, 5, 1, 2, 1]) ** 2
-weights_of_model = np.array([1, 1, 1, 3, 3, 3]) ** 2
+weights_of_model = np.array([2, 1, 1, 3, 3, 3]) ** 2
 tri_siumlate = False
 n_path1 = 4
 n_path2 = 5
