@@ -82,7 +82,7 @@ def _get_yield_opt(tasks):
 
 
 def get_yield_space_2d(model2, production_rea_ids_2d, carbon_source_rea_ids_2d, steps, carbon_uptake_direction=-1,
-                       draw=False):
+                       draw=False, x_constrain=-1):
     '''
     Get the Yield space of x =p1/s1 y = p2/s2
 
@@ -127,6 +127,10 @@ def get_yield_space_2d(model2, production_rea_ids_2d, carbon_source_rea_ids_2d, 
     p1_yield_value_min, _ = get_yield_opt(model, p1_rea_id, s1_rea_id, max_or_min='min',
                                           carbon_uptake_direction=carbon_uptake_direction)
     print(p1_rea_id, 'yield\t:\t range from \t', p1_yield_value_min, '\tto\t', p1_yield_value_max)
+    if x_constrain != -1:
+        p1_yield_value_min = p1_yield_value_max * float(x_constrain)
+        print('trimmed yield range:')
+        print(p1_rea_id, 'yield\t:\t range from \t', p1_yield_value_min, '\tto\t', p1_yield_value_max)
 
     # < Step2 get yield dataFrame (matrix/ points for MYA/Next function)>
 
@@ -225,7 +229,7 @@ def get_yield_space_2d(model2, production_rea_ids_2d, carbon_source_rea_ids_2d, 
 
 # %% TODO: real multi-dimension?
 def get_yield_space_multi(model2, production_rea_ids_x, production_rea_ids_y, carbon_source_rea_id,
-                          steps, carbon_uptake_direction=-1, draw=False):
+                          steps, carbon_uptake_direction=-1, draw=False, constrains={}):
     '''
     Get the Yield space of x1 =p1/s y1 = p2/s2 ; x2 =p1/s y2 = p2/s
     only for single carbon_source
@@ -246,8 +250,9 @@ def get_yield_space_multi(model2, production_rea_ids_x, production_rea_ids_y, ca
     '''
 
     # <Step1 get production_rea_ids_2d>
-
-    production_rea_ids_2ds = []
+    len_x = len(production_rea_ids_x)
+    len_y = len(production_rea_ids_y)
+    production_rea_ids_2ds = []  # ['BIOMASS_Ecoli_core_w_GAM','EX_ac_e']
     for x_rea_i in production_rea_ids_x:
         for y_rea_i in production_rea_ids_y:
             production_rea_ids_2ds.append([x_rea_i, y_rea_i])
@@ -258,8 +263,38 @@ def get_yield_space_multi(model2, production_rea_ids_x, production_rea_ids_y, ca
     hull_index_all = hull_index_all.astype(int)
     for production_rea_ids_2d in production_rea_ids_2ds:
         model = model2.copy()
+        x_yield_constrain_i = -1
+        if constrains != {}:  # add constrains
+            x_index = production_rea_ids_x.index(production_rea_ids_2d[0])
+            if constrains['x'][x_index] != -1:
+                x_yield_constrain_i = constrains['x'][x_index]
+            y_index = production_rea_ids_y.index(production_rea_ids_2d[1])
+            y_yield_constrain_i = constrains['y_no_obj'].copy()
+            y_yield_constrain_i[0][y_index] = constrains['y_obj'][0][y_index]
+            y_yield_constrain_i[1][y_index] = constrains['y_obj'][1][y_index]
+            for index_i in range(len_y):
+                y_lb = y_yield_constrain_i[0][index_i]
+                y_ub = y_yield_constrain_i[1][index_i]
+                if y_lb > 0:
+                    yield_constraint_lb_i = model.problem.Constraint(
+                        model.reactions.get_by_id(production_rea_ids_y[index_i]
+                                                  ).flux_expression - (-1) * y_lb * model.reactions.get_by_id(
+                            carbon_source_rea_id).flux_expression,
+                        lb=0,
+                        ub=1000)
+                    model.add_cons_vars(yield_constraint_lb_i)
+                if y_ub != 1000:
+                    yield_constraint_ub_i = model.problem.Constraint(
+                        model.reactions.get_by_id(production_rea_ids_y[index_i]
+                                                  ).flux_expression - (-1) * y_ub * model.reactions.get_by_id(
+                            carbon_source_rea_id).flux_expression,
+                        lb=-1000,
+                        ub=0)
+                    model.add_cons_vars(yield_constraint_ub_i)
+
         fluxes_2d, hull_index = get_yield_space_2d(model, production_rea_ids_2d, carbon_source_rea_id, steps=steps,
-                                                   carbon_uptake_direction=carbon_uptake_direction, draw=draw)
+                                                   carbon_uptake_direction=carbon_uptake_direction, draw=draw,
+                                                   x_constrain=x_yield_constrain_i)
         hull_index_temp = hull_index + fluxes_all.shape[1]
         hull_index_all = np.concatenate((hull_index_all, hull_index_temp))
         fluxes_all = pd.concat([fluxes_all, fluxes_2d], axis=1)
@@ -274,9 +309,9 @@ def get_yield_space_multi(model2, production_rea_ids_x, production_rea_ids_y, ca
     yield_df = fluxes_all.loc[index_list, :]  # select reactions
     yield_normalized_df = yield_df.copy()
     # yield_normalized_df = yield_normalized_df.T.drop_duplicates().T
-    yield_df_values  = yield_normalized_df.values      #normalize and sort
-    yield_df_values = yield_df_values/abs(yield_df_values[0,:])
-    yield_normalized_df.loc[:,:] = yield_df_values
+    yield_df_values = yield_normalized_df.values  # normalize and sort
+    yield_df_values = yield_df_values / abs(yield_df_values[0, :])
+    yield_normalized_df.loc[:, :] = yield_df_values
     # yield_normalized_df = yield_normalized_df.sort_values(by = index_list[1:],axis = 1,)
     hull_index_all.sort()
     yield_normalized_df_hull = yield_normalized_df[yield_normalized_df.columns[hull_index_all]]
@@ -338,29 +373,84 @@ def get_yield_space_multi(model2, production_rea_ids_x, production_rea_ids_y, ca
 # %%
 if __name__ == '__main__':
     # load model
-
     e_coli_core = cobra.io.read_sbml_model('../ComplementaryData/Case2_1_ecoli_core/e_coli_core.xml')
     e_coli_core.reactions.get_by_id('EX_o2_e').bounds = (0.0, 1000.0)
     e_coli_core.reactions.get_by_id('EX_glc__D_e').bounds = (-10.0, -0.01)
     steps = 20
-    model = e_coli_core
+    model = e_coli_core.copy()
     draw = True
 
     # %% <get_yield_opt> model, biomass_rea_id,carbon_source_rea_ids,yield_rea_ids,step_of_biomass
     print('----------   get_yield_opt   ----------\n')
     yield_opt, fluxes = get_yield_opt(model, 'EX_ac_e', 'EX_glc__D_e', max_or_min='max', carbon_uptake_direction=-1)
     print(yield_opt)
+    yield_opt, fluxes = get_yield_opt(model, 'EX_ac_e', 'EX_glc__D_e', max_or_min='min', carbon_uptake_direction=-1)
+    print(yield_opt)
+
+    # %% <get_yield_opt with constrain> model, biomass_rea_id,carbon_source_rea_ids,yield_rea_ids,step_of_biomass
+    print('----------   get_yield_opt   ----------\n')
+    # t0:   glc: 11, biomass:0.001, ac:0.35
+    # t8:   glc: 0.7, biomass:0.73, ac:4
+    model = e_coli_core.copy()
+    model.objective = 'EX_ac_e'
+    model.optimize()
+    yield_constraint_lb = model.problem.Constraint(
+        model.reactions.get_by_id(
+            'EX_ac_e').flux_expression - (-1) * 0.6 * model.reactions.get_by_id(
+            'EX_glc__D_e').flux_expression,
+        lb=0,
+        ub=1000)
+    model.add_cons_vars(yield_constraint_lb)
+    yield_constraint_ub = model.problem.Constraint(
+        model.reactions.get_by_id(
+            'EX_ac_e').flux_expression - (-1) * 0.9 * model.reactions.get_by_id(
+            'EX_glc__D_e').flux_expression,
+        lb=-1000,
+        ub=0)
+    model.add_cons_vars(yield_constraint_ub)
+    # f = model.optimize()
+    # print(f.objective_value)
+    # print(f.fluxes['EX_ac_e'])
+    model.objective = 'EX_ac_e'
+    model.optimize()
+
+    yield_opt, fluxes = get_yield_opt(model, 'EX_ac_e', 'EX_glc__D_e', max_or_min='max', carbon_uptake_direction=-1)
+    print(yield_opt)
+    yield_opt, fluxes = get_yield_opt(model, 'EX_ac_e', 'EX_glc__D_e', max_or_min='min', carbon_uptake_direction=-1)
+    print(yield_opt)
 
     # %% < get_yield_space_2d>
     print('----------get_yield_space_2d----------\n')
+    model = e_coli_core.copy()
     fluxes_2d, hull_index = get_yield_space_2d(model, production_rea_ids_2d=['BIOMASS_Ecoli_core_w_GAM', 'EX_ac_e'],
                                                carbon_source_rea_ids_2d=['EX_glc__D_e', 'EX_glc__D_e'], steps=steps,
                                                carbon_uptake_direction=-1, draw=draw)
 
+    # %% < get_yield_space_2d with constrain>
+    print('----------get_yield_space_2d----------\n')
+
+    yield_constraint_lb = model.problem.Constraint(
+        model.reactions.get_by_id(
+            'EX_ac_e').flux_expression - (-1) * 0.6 * model.reactions.get_by_id(
+            'EX_glc__D_e').flux_expression,
+        lb=0,
+        ub=1000)
+
+    yield_constraint_ub = model.problem.Constraint(
+        model.reactions.get_by_id(
+            'EX_ac_e').flux_expression - (-1) * 0.9 * model.reactions.get_by_id(
+            'EX_glc__D_e').flux_expression,
+        lb=-1000,
+        ub=0)
+    model.add_cons_vars(yield_constraint_lb)
+    model.add_cons_vars(yield_constraint_ub)
+    fluxes_2d, hull_index = get_yield_space_2d(model, production_rea_ids_2d=['BIOMASS_Ecoli_core_w_GAM', 'EX_ac_e'],
+                                               carbon_source_rea_ids_2d=['EX_glc__D_e', 'EX_glc__D_e'], steps=steps,
+                                               carbon_uptake_direction=-1, draw=draw, x_constrain=0.1)
     # %% < get_yield_space_multi >
     print('----------get_yield_space_multi----------\n')
     production_rea_ids_x = ['BIOMASS_Ecoli_core_w_GAM']  # , ,, 'EX_ac_e'
-    production_rea_ids_y = ['BIOMASS_Ecoli_core_w_GAM', 'EX_ac_e', 'EX_for_e', 'EX_etoh_e', 'EX_lac__D_e',
+    production_rea_ids_y = ['EX_ac_e', 'EX_for_e', 'EX_etoh_e', 'EX_lac__D_e',
                             'EX_succ_e']  #
     carbon_source_rea_id = 'EX_glc__D_e'
 
@@ -368,6 +458,24 @@ if __name__ == '__main__':
                                                                             production_rea_ids_y, carbon_source_rea_id,
                                                                             steps=steps, carbon_uptake_direction=-1,
                                                                             draw=True)
+    yield_normalized_df_hull = yield_normalized_df[yield_normalized_df.columns[hull_index_all]]
+    # %% < get_yield_space_multi with constrain>
+    print('----------get_yield_space_multi----------\n')
+    model.solver = "cplex"
+    model = e_coli_core.copy()
+    experiment_yield = np.array([4])
+    constrains = {'x': [0.1],
+                  'y_no_obj': [[0.5, 0.8, 0.8, 0.5, 0], [1000] * 5],
+                  'y_obj': [[0.1, 0.2, 0.3, 0.4, 0], [1000] * 5]}
+    production_rea_ids_x = ['BIOMASS_Ecoli_core_w_GAM']  # , ,, 'EX_ac_e'
+    production_rea_ids_y = ['EX_ac_e', 'EX_for_e', 'EX_etoh_e', 'EX_lac__D_e',
+                            'EX_succ_e']  #
+    carbon_source_rea_id = 'EX_glc__D_e'
+
+    yield_normalized_df, fluxes_all, hull_index_all = get_yield_space_multi(model, production_rea_ids_x,
+                                                                            production_rea_ids_y, carbon_source_rea_id,
+                                                                            steps=steps, carbon_uptake_direction=-1,
+                                                                            draw=True, constrains=constrains)
     yield_normalized_df_hull = yield_normalized_df[yield_normalized_df.columns[hull_index_all]]
 
     # %%<test results >
